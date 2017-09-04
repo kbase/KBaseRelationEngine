@@ -3,7 +3,11 @@ A KBase module: KBaseRelationEngine
 */
 
 module KBaseRelationEngine {
+
+    
     /*
-        Insert your typespec information here.
+    	Will init relation data store and upload temporary data for testing
     */
+    funcdef testInit() returns() authentication required;
+    
 };
