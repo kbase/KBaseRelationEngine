@@ -23,7 +23,8 @@ public class OrthologTSV extends TSVFile{
 	static final String ID_PREFIX = "kb_orel"; 
 	static final int DATA_SIZE = GeneTSV.DATA_SIZE;
 	static final String OG_ID_PREDIX = "kb_og";
-	static final int OG_SIZE = 500000;
+//	static final int OG_SIZE = 500000;
+	static final int OG_SIZE = 10000;
 	
 		
 	public OrthologTSV(String fileName) {

@@ -34,7 +34,8 @@ public class ConditionsTSV extends TSVFile{
 		Plasmid, Mutant, Other_Label}
 	
 	static final String ID_PREFIX = "kb_cnd"; 
-	static final int DATA_SIZE = 500000;
+//	static final int DATA_SIZE = 500000;
+	static final int DATA_SIZE = 10000;
 		
 	public ConditionsTSV(String fileName) {
 		super(fileName, ID_PREFIX, DATA_SIZE, H.class);

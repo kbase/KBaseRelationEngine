@@ -30,7 +30,8 @@ public class GeneTSV extends TSVFile{
 
 	
 	static final String ID_PREFIX = "kb_gen"; 
-	static final int GENES_PER_TAXON = 5000;
+//	static final int GENES_PER_TAXON = 5000;
+	static final int GENES_PER_TAXON = 500;
 	static final int MAX_ONTOLOGY_IDS_PER_GENE = 3;
 	static final int DATA_SIZE = TaxonomyTSV.GENOME_NUMBER*GENES_PER_TAXON;	
 	

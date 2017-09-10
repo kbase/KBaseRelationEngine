@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.commons.csv.CSVRecord;
 
 public class GeneOntologyTSV extends TSVFile{
-	enum H{kbgoid, space, name, synonyms}
+	enum H{kbgoid, space, parents, name, synonyms}
 	 
 	static final String ID_PREFIX = "kb_go";
 	static final String[] ONTOLOGY_SPACES = new String[]{"biological_process", "cellular_componenet", "molecular_function"};
@@ -27,6 +27,8 @@ public class GeneOntologyTSV extends TSVFile{
 		record.add(ID_PREFIX + index);
 //		space
 		record.add(ONTOLOGY_SPACES[ (int)(Math.random()*3) ]);
+//		parents
+		record.add("name" + index);
 //		name
 		record.add("name" + index);
 //		synonyms		

@@ -19,7 +19,8 @@ public class BiclustersTSV extends TSVFile{
 	 */
 	enum H{kbbicid, kbcmpid, method, row_order, col_order}
 	static final String ID_PREFIX = "kb_bcl"; 
-	static final int DATA_SIZE = 500000;	
+//	static final int DATA_SIZE = 500000;	
+	static final int DATA_SIZE = 10000;	
 	static final int MIN_ROW_SIZE = 10;
 	static final int MAX_ROW_SIZE = 100;
 	static final int MIN_COL_SIZE = 10;
