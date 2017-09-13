@@ -2,6 +2,7 @@
 CREATE INDEX ON:Taxon(kbid);
 
 
+
 USING PERIODIC COMMIT 10000
 LOAD CSV WITH HEADERS FROM
 'file:///taxonomy.tsv' AS line

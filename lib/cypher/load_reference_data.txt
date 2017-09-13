@@ -1,0 +1,110 @@
+>Load taxonomy: create index
+CREATE INDEX ON :Taxon(guid);
+
+>#Load taxonomy: create nodes
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_TAXONOMY}' AS line FIELDTERMINATOR '\t'
+WITH line
+create (t:Taxon {
+	guid: line.kbid, 
+	ottid: line.ottid, 
+	name: line.name, 
+	rank: line.rank, 
+	ncbi:line.ncbi, 
+	gbif: line.gbif,
+	irmng: line.irmng,
+	worms: line.worms,
+	silva: line.silva
+	});
+	
+>#Load taxonomy: create relations
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_TAXONOMY}' AS line FIELDTERMINATOR '\t'
+WITH line
+MATCH (childTaxon:Taxon  {guid: line.kbid})
+WITH line, childTaxon, split(line.parents,";")  as parents
+MATCH (parentTaxon:Taxon  {guid: parents[0]})
+create (childTaxon)-[r:MY_PARENT]->(parentTaxon);
+
+>Load GO Terms: create index
+CREATE INDEX ON :GOTerm(guid);
+
+
+>#Load GO Terms: create nodes
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_GO}' AS line FIELDTERMINATOR '\t'
+WITH line
+create (t:GOTerm {
+	guid: line.guid, 
+	space: line.space, 
+	goid: line.goid, 
+	name: line.name
+	});
+
+
+>#Load GO Terms: create relations
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_GO}' AS line FIELDTERMINATOR '\t'
+WITH line
+MATCH (n:GOTerm), (p:GOTerm)
+WHERE n.guid = line.guid AND p.guid in split(line.parents,";")
+CREATE (n)-[:MY_PARENT]->(p);
+
+>Load Features: create index (by guid)
+CREATE INDEX ON :Feature(guid);
+
+>Load Features: create index (by sourceid)
+CREATE INDEX ON :Feature(sourceid);
+
+>#Load Features: create nodes and references
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_FEATURES}' AS line FIELDTERMINATOR '\t'
+WITH line
+create (f:Feature {
+	guid: line.kbid, 
+	seqsource: line.seqsource ,
+	sourceid: line.sourceid ,
+	gi: line.gi ,
+	refseq: line.refseq ,
+	uniprot: line.uniprot ,
+	ncbitaxon: line.ncbitaxon ,
+	replicon: line.replicon ,
+	location: line.location ,
+	annotation: line.annotation 
+	})
+WITH line, f
+MATCH (taxon:Taxon  {guid: line.kbtaxon})
+create (f)-[r:MY_TAXON]->(taxon)
+WITH line, f
+MATCH  (oterm:GOTerm)
+WHERE  oterm.guid in split(line.ontologyids,";")
+CREATE (f)-[:MY_OTERM]->(oterm);
+
+>Load Features: load sequences
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_FEATURE_SEQUENCES}' AS line FIELDTERMINATOR '\t'
+WITH line
+match(f:Feature{sourceid:line.sourceid})
+set f.sequence = line.sequence;
+
+>Load OrthologGroups: create index
+CREATE INDEX ON :OrthologGroup(guid);
+
+>#Load OrthologGroups: create nodes
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_ORTHOLOGOUS_GROUPS}' AS line FIELDTERMINATOR '\t'
+WITH line
+create (og:OrthologGroup {
+	guid: line.kbgrpid, 
+	source: line.source ,
+	sourceid: line.sourceid
+});
+
+>#Load OrthologGroups: create relations
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_FEATURE_2_ORTHOLOGS}' AS line FIELDTERMINATOR '\t'
+WITH line
+match (f:Feature{guid:line.geneguid}), (og:OrthologGroup{guid:line.ogguid})
+CREATE (f)-[:MY_ORTHOLOG_GROUP]->(og);
+
