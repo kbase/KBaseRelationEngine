@@ -231,7 +231,7 @@ FeatureSequence is a reference to a hash where the following keys are defined:
 {
     my($self, @args) = @_;
 
-# Authentication: none
+# Authentication: required
 
     if ((my $n = @args) != 1)
     {
@@ -331,7 +331,7 @@ CompendiumDescriptor is a reference to a hash where the following keys are defin
 {
     my($self, @args) = @_;
 
-# Authentication: none
+# Authentication: required
 
     if ((my $n = @args) != 1)
     {
@@ -375,6 +375,106 @@ CompendiumDescriptor is a reference to a hash where the following keys are defin
  
 
 
+=head2 storeKEAppDescriptor
+
+  $obj->storeKEAppDescriptor($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.StoreKEAppDescriptorParams
+StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
+	keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+KEAppDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	version has a value which is a string
+	last_run_epoch has a value which is an int
+	nodes_created has a value which is an int
+	relations_created has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.StoreKEAppDescriptorParams
+StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
+	keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+KEAppDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	version has a value which is a string
+	last_run_epoch has a value which is an int
+	nodes_created has a value which is an int
+	relations_created has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub storeKEAppDescriptor
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function storeKEAppDescriptor (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to storeKEAppDescriptor:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'storeKEAppDescriptor');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.storeKEAppDescriptor",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'storeKEAppDescriptor',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return;
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeKEAppDescriptor",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'storeKEAppDescriptor',
+				       );
+    }
+}
+ 
+
+
 =head2 storeBiclusters
 
   $obj->storeBiclusters($params)
@@ -390,6 +490,7 @@ $params is a KBaseRelationEngine.StoreBiclustersParams
 StoreBiclustersParams is a reference to a hash where the following keys are defined:
 	biclusters has a value which is a reference to a list where each element is a KBaseRelationEngine.Bicluster
 Bicluster is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
@@ -405,6 +506,7 @@ $params is a KBaseRelationEngine.StoreBiclustersParams
 StoreBiclustersParams is a reference to a hash where the following keys are defined:
 	biclusters has a value which is a reference to a list where each element is a KBaseRelationEngine.Bicluster
 Bicluster is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
@@ -425,7 +527,7 @@ Bicluster is a reference to a hash where the following keys are defined:
 {
     my($self, @args) = @_;
 
-# Authentication: none
+# Authentication: required
 
     if ((my $n = @args) != 1)
     {
@@ -722,6 +824,7 @@ data_type has a value which is a string
 a reference to a hash where the following keys are defined:
 guid has a value which is a string
 name has a value which is a string
+version has a value which is a string
 last_run_epoch has a value which is an int
 nodes_created has a value which is an int
 relations_created has a value which is an int
@@ -736,10 +839,41 @@ properties_set has a value which is an int
 a reference to a hash where the following keys are defined:
 guid has a value which is a string
 name has a value which is a string
+version has a value which is a string
 last_run_epoch has a value which is an int
 nodes_created has a value which is an int
 relations_created has a value which is an int
 properties_set has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 StoreKEAppDescriptorParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
 
 
 =end text
@@ -760,6 +894,7 @@ properties_set has a value which is an int
 
 <pre>
 a reference to a hash where the following keys are defined:
+guid has a value which is a string
 keapp_guid has a value which is a string
 compendium_guid has a value which is a string
 feature_guids has a value which is a reference to a list where each element is a string
@@ -772,6 +907,7 @@ condition_guids has a value which is a reference to a list where each element is
 =begin text
 
 a reference to a hash where the following keys are defined:
+guid has a value which is a string
 keapp_guid has a value which is a string
 compendium_guid has a value which is a string
 feature_guids has a value which is a reference to a list where each element is a string

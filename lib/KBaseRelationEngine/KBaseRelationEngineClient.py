@@ -68,13 +68,26 @@ class KBaseRelationEngine(object):
             'KBaseRelationEngine.getCompendiumDescriptors',
             [params], self._service_ver, context)
 
+    def storeKEAppDescriptor(self, params, context=None):
+        """
+        :param params: instance of type "StoreKEAppDescriptorParams" ->
+           structure: parameter "keapp" of type "KEAppDescriptor" ->
+           structure: parameter "guid" of String, parameter "name" of String,
+           parameter "version" of String, parameter "last_run_epoch" of Long,
+           parameter "nodes_created" of Long, parameter "relations_created"
+           of Long, parameter "properties_set" of Long
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.storeKEAppDescriptor',
+            [params], self._service_ver, context)
+
     def storeBiclusters(self, params, context=None):
         """
         :param params: instance of type "StoreBiclustersParams" -> structure:
            parameter "biclusters" of list of type "Bicluster" -> structure:
-           parameter "keapp_guid" of String, parameter "compendium_guid" of
-           String, parameter "feature_guids" of list of String, parameter
-           "condition_guids" of list of String
+           parameter "guid" of String, parameter "keapp_guid" of String,
+           parameter "compendium_guid" of String, parameter "feature_guids"
+           of list of String, parameter "condition_guids" of list of String
         """
         return self._client.call_method(
             'KBaseRelationEngine.storeBiclusters',

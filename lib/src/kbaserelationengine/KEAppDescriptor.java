@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "guid",
     "name",
+    "version",
     "last_run_epoch",
     "nodes_created",
     "relations_created",
@@ -32,6 +33,8 @@ public class KEAppDescriptor {
     private String guid;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("version")
+    private String version;
     @JsonProperty("last_run_epoch")
     private Long lastRunEpoch;
     @JsonProperty("nodes_created")
@@ -69,6 +72,21 @@ public class KEAppDescriptor {
 
     public KEAppDescriptor withName(String name) {
         this.name = name;
+        return this;
+    }
+
+    @JsonProperty("version")
+    public String getVersion() {
+        return version;
+    }
+
+    @JsonProperty("version")
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public KEAppDescriptor withVersion(String version) {
+        this.version = version;
         return this;
     }
 
@@ -144,7 +162,7 @@ public class KEAppDescriptor {
 
     @Override
     public String toString() {
-        return ((((((((((((((("KEAppDescriptor"+" [guid=")+ guid)+", name=")+ name)+", lastRunEpoch=")+ lastRunEpoch)+", nodesCreated=")+ nodesCreated)+", relationsCreated=")+ relationsCreated)+", propertiesSet=")+ propertiesSet)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((("KEAppDescriptor"+" [guid=")+ guid)+", name=")+ name)+", version=")+ version)+", lastRunEpoch=")+ lastRunEpoch)+", nodesCreated=")+ nodesCreated)+", relationsCreated=")+ relationsCreated)+", propertiesSet=")+ propertiesSet)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

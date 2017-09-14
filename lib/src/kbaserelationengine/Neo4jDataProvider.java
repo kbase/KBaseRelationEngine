@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -21,12 +22,13 @@ import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.summary.ResultSummary;
 
 public class Neo4jDataProvider {
-	static final String NEO4J_HOST = System.getenv("NEO4J_HOST");
-	static final String NEO4J_PORT = System.getenv("NEO4J_PORT");
-	static final String NEO4J_URL = "bolt://" + NEO4J_HOST + ":" + NEO4J_PORT;
+
+	String NEO4J_HOST = System.getenv("NEO4J_HOST");
+	String NEO4J_PORT = System.getenv("NEO4J_PORT");
+	String NEO4J_URL = "bolt://" + NEO4J_HOST + ":" + NEO4J_PORT;
 	
-	static final String NEO4J_USER = System.getenv("NEO4J_USER");
-	static final String NEO4J_PWD = System.getenv("NEO4J_PWD");
+	String NEO4J_USER = System.getenv("NEO4J_USER");
+	String NEO4J_PWD = System.getenv("NEO4J_PWD");
 	private static final String TSV_FILE_NAMES_CONFIG = "tsv_files.config";
 		
 	private final String LAOD_REFERNCE_DATA_CYPHER_FILE_NAME = "lib/cypher/load_reference_data.txt";
@@ -47,11 +49,25 @@ public class Neo4jDataProvider {
 		}		
 	}
 	
+	public Neo4jDataProvider(Map<String,String> config) {
+		NEO4J_HOST = getConfigValue(config,"NEO4J_HOST");
+		NEO4J_PORT = getConfigValue(config,"NEO4J_PORT");
+		NEO4J_URL = "bolt://" + NEO4J_HOST + ":" + NEO4J_PORT;
+		
+		NEO4J_USER = getConfigValue(config,"NEO4J_USER");
+		NEO4J_PWD = getConfigValue(config,"NEO4J_PWD");		
+	}
+	
+	private String getConfigValue(Map<String,String> config, String key){
+		String value = config == null ? null : config.get(key);
+		return value == null ? System.getenv(key): value;
+	}
+	
 	private Session getSession(){
 		return driver.session();
 	}
 	
-	private void loadReferenceData() throws IOException{
+	public void loadReferenceData() throws IOException{
 		List<CypherStatement> cypherStatements = loadCypherStatements();
 		Session session = getSession();
 		try{
@@ -130,7 +146,6 @@ public class Neo4jDataProvider {
 		}
 	}
 	
-	
 	public List<FeatureSequence> getFeatureSequences(GetFeatureSequencesParams params){
 		List<FeatureSequence> fss = new ArrayList<FeatureSequence>();
 		Session session = getSession();
@@ -167,70 +182,50 @@ public class Neo4jDataProvider {
 		return fss;
 	} 
 
+	public void storeKEAppDescriptor(StoreKEAppDescriptorParams params){
+		Session session = getSession();
+		KEAppDescriptor app = params.getKeapp();
+		try{
+			session.run("merge(a:KEApp{ guid:{guid},name:{name},version:{version},last_run_epoch:{last_run_epoch},nodes_created: {nodes_created},relations_created: {relations_created},properties_set:{properties_set}});",
+					parameters(
+							"guid",app.getGuid(),
+							"name",app.getName(),
+							"version",app.getVersion(),
+							"last_run_epoch",app.getLastRunEpoch(),
+							"nodes_created",app.getNodesCreated(),
+							"relations_created",app.getRelationsCreated(),
+							"properties_set",app.getPropertiesSet())
+			);
+		} finally {
+			session.close();
+		}		
+	}
 	
 	public void storeBiclusters(StoreBiclustersParams params){
 		Session session = getSession();
 		Transaction tr = session.beginTransaction();
 		try{
 			for(Bicluster bc: params.getBiclusters()){
-				tr.run("create (b:Bicluster{})",
-						bc.getCompendiumGuid()
-						bc.getKeappGuid()
-						bc.getFeatureGuids()
-						bc.getConditionGuids()
-						
-						parameters(""));
+				
+				tr.run(
+					"create(b:Bicluster:AppResult{guid:{bGuid}, _appGuid:{appGuid}})" 
+						+" with b" 
+						+" match(a:KEApp{guid:{appGuid}})"
+						+" create (b)-[:MY_APP]->(a)"
+						+" with b"
+						+" MATCH  (f:Feature)"
+						+" WHERE  f.guid in {featureGuids}"
+						+" CREATE (f)-[:MY_BICLUSTER]->(b);",				
+					parameters(
+						"bGuid",bc.getGuid()
+						,"appGuid",bc.getKeappGuid()
+						,"featureGuids",bc.getFeatureGuids()));				
 			}
 			tr.success();
 		} finally {
 			tr.close();
 			session.close();
 		}
-	}
-	
-	
-	public void _test(){
-		
-		Session session = getSession(); 
-//
-//		session.run( "CREATE (a:Person {name: {name}, title: {title}})",
-//		        parameters( "name", "Arthur", "title", "King" ) );
-//
-//		StatementResult result = session.run( "MATCH (a:Person) WHERE a.name = {name} " +
-//		                                      "RETURN a.name AS name, a.title AS title",
-//		        parameters( "name", "Arthur" ) );
-		
-//		StatementResult result = session.run( "MATCH (t:Taxon) with t limit 5 return t.guid, t.name ");
-//		StatementResult result = session.run( "MATCH (t:Taxon{guid:{tguid}})-[]-(f:Feature) with f limit 10 return f ",
-//				parameters( "tguid", "KBaseTax2926246" ));
-		
-		StatementResult result = session.run( "MATCH (f0:Feature{guid:{fguid}})-[]-(t:Taxon)-[]-(f:Feature) with f limit 10 return f.guid, f.annotation ",
-				parameters( "fguid", "KBaseGen0" ));
-		
-		while ( result.hasNext() )
-		{
-		    Record record = result.next();
-		    System.out.println(record);
-//		    System.out.println( record.get( "t.guid" ).asString() + " " + record.get( "t.name" ).asString() );
-		}
-
-		session.close();
-		driver.close();		
-	}
-	
-	public static void main(String[] args) throws IOException {
-//		new Neo4jDataProvider().loadReferenceData();
-		List<FeatureSequence> fss = new Neo4jDataProvider().getFeatureSequences(
-				new GetFeatureSequencesParams()
-//				.withTaxonomyGuid("KBaseTax9222")
-//				.withOrthologGuid("KBaseHgp455296")
-				.withGotermGuid("GO:0000002")				
-				
-				);
-		for(FeatureSequence fs: fss){
-			System.out.println(fs);
-		}
-		
 	}
 	
 }

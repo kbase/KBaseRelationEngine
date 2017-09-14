@@ -23,14 +23,16 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "9825c61eb6fcb89a2ae4bff29d5f103abc12b81d";
+    private static final String gitCommitHash = "28a11478696bc0cc7c3ef9342ddecb4b8d9cdb63";
 
     //BEGIN_CLASS_HEADER
+    Neo4jDataProvider dataProvider;
     //END_CLASS_HEADER
 
     public KBaseRelationEngineServer() throws Exception {
         super("KBaseRelationEngine");
         //BEGIN_CONSTRUCTOR
+        dataProvider = new Neo4jDataProvider(config);
         //END_CONSTRUCTOR
     }
 
@@ -42,6 +44,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     @JsonServerMethod(rpc = "KBaseRelationEngine.initReferenceData", async=true)
     public void initReferenceData(AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         //BEGIN initReferenceData
+//    	dataProvider.loadReferenceData();
         //END initReferenceData
     }
 
@@ -53,9 +56,10 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
      * @return   instance of list of type {@link kbaserelationengine.FeatureSequence FeatureSequence}
      */
     @JsonServerMethod(rpc = "KBaseRelationEngine.getFeatureSequences", async=true)
-    public List<FeatureSequence> getFeatureSequences(GetFeatureSequencesParams params, RpcContext jsonRpcContext) throws Exception {
+    public List<FeatureSequence> getFeatureSequences(GetFeatureSequencesParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         List<FeatureSequence> returnVal = null;
         //BEGIN getFeatureSequences
+        returnVal = dataProvider.getFeatureSequences(params);
         //END getFeatureSequences
         return returnVal;
     }
@@ -68,11 +72,25 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
      * @return   instance of list of type {@link kbaserelationengine.CompendiumDescriptor CompendiumDescriptor}
      */
     @JsonServerMethod(rpc = "KBaseRelationEngine.getCompendiumDescriptors", async=true)
-    public List<CompendiumDescriptor> getCompendiumDescriptors(GetCompendiumDescriptorsParams params, RpcContext jsonRpcContext) throws Exception {
+    public List<CompendiumDescriptor> getCompendiumDescriptors(GetCompendiumDescriptorsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         List<CompendiumDescriptor> returnVal = null;
         //BEGIN getCompendiumDescriptors
+//        returnVal = dataProvider.get
         //END getCompendiumDescriptors
         return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: storeKEAppDescriptor</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.StoreKEAppDescriptorParams StoreKEAppDescriptorParams}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.storeKEAppDescriptor", async=true)
+    public void storeKEAppDescriptor(StoreKEAppDescriptorParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        //BEGIN storeKEAppDescriptor
+    	dataProvider.storeKEAppDescriptor(params);
+        //END storeKEAppDescriptor
     }
 
     /**
@@ -82,8 +100,9 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
      * @param   params   instance of type {@link kbaserelationengine.StoreBiclustersParams StoreBiclustersParams}
      */
     @JsonServerMethod(rpc = "KBaseRelationEngine.storeBiclusters", async=true)
-    public void storeBiclusters(StoreBiclustersParams params, RpcContext jsonRpcContext) throws Exception {
+    public void storeBiclusters(StoreBiclustersParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         //BEGIN storeBiclusters
+    	dataProvider.storeBiclusters(params);
         //END storeBiclusters
     }
     @JsonServerMethod(rpc = "KBaseRelationEngine.status")

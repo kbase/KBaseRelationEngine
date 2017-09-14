@@ -23,7 +23,7 @@ module KBaseRelationEngine {
     	string goterm_guid;
 	}GetFeatureSequencesParams;
 
-	funcdef getFeatureSequences(GetFeatureSequencesParams params) returns(list<FeatureSequence>);
+	funcdef getFeatureSequences(GetFeatureSequencesParams params) returns(list<FeatureSequence>) authentication required;
 	
 	typedef structure{
 		string guid;
@@ -42,19 +42,27 @@ module KBaseRelationEngine {
     	string data_type;
 	}GetCompendiumDescriptorsParams;
 
-	funcdef getCompendiumDescriptors(GetCompendiumDescriptorsParams params) returns(list<CompendiumDescriptor>);
+	funcdef getCompendiumDescriptors(GetCompendiumDescriptorsParams params) returns(list<CompendiumDescriptor>) authentication required;
 	
 	typedef structure{
 		string guid;
 		string name;
+		string version;
 		int last_run_epoch;
 		int nodes_created;
 		int relations_created;
 		int properties_set;
 		
 	} KEAppDescriptor;
-
+	
 	typedef structure{
+		KEAppDescriptor keapp;
+	}StoreKEAppDescriptorParams; 
+
+	funcdef storeKEAppDescriptor(StoreKEAppDescriptorParams params) returns () authentication required; 
+	
+	typedef structure{
+		string guid; 
 		string keapp_guid;
 		string compendium_guid;
 		list<string> feature_guids;
@@ -66,6 +74,6 @@ module KBaseRelationEngine {
 	} StoreBiclustersParams; 
 	
 	
-	funcdef storeBiclusters(StoreBiclustersParams params) returns();
+	funcdef storeBiclusters(StoreBiclustersParams params) returns() authentication required;
     
 };

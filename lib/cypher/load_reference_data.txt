@@ -108,3 +108,11 @@ WITH line
 match (f:Feature{guid:line.geneguid}), (og:OrthologGroup{guid:line.ogguid})
 CREATE (f)-[:MY_ORTHOLOG_GROUP]->(og);
 
+>Build indeces: KEApp
+CREATE INDEX ON :KEApp(guid);
+ 
+>Build indeces: Bicluster
+CREATE INDEX ON :Bicluster(guid);
+ 
+ 
+ 

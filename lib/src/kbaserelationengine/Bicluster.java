@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
+    "guid",
     "keapp_guid",
     "compendium_guid",
     "feature_guids",
@@ -27,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class Bicluster {
 
+    @JsonProperty("guid")
+    private java.lang.String guid;
     @JsonProperty("keapp_guid")
     private java.lang.String keappGuid;
     @JsonProperty("compendium_guid")
@@ -36,6 +39,21 @@ public class Bicluster {
     @JsonProperty("condition_guids")
     private List<String> conditionGuids;
     private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
+
+    @JsonProperty("guid")
+    public java.lang.String getGuid() {
+        return guid;
+    }
+
+    @JsonProperty("guid")
+    public void setGuid(java.lang.String guid) {
+        this.guid = guid;
+    }
+
+    public Bicluster withGuid(java.lang.String guid) {
+        this.guid = guid;
+        return this;
+    }
 
     @JsonProperty("keapp_guid")
     public java.lang.String getKeappGuid() {
@@ -109,7 +127,7 @@ public class Bicluster {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((("Bicluster"+" [keappGuid=")+ keappGuid)+", compendiumGuid=")+ compendiumGuid)+", featureGuids=")+ featureGuids)+", conditionGuids=")+ conditionGuids)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((("Bicluster"+" [guid=")+ guid)+", keappGuid=")+ keappGuid)+", compendiumGuid=")+ compendiumGuid)+", featureGuids=")+ featureGuids)+", conditionGuids=")+ conditionGuids)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
