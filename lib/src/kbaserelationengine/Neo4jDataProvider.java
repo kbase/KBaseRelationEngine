@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -29,8 +31,9 @@ public class Neo4jDataProvider {
 	
 	private String NEO4J_USER = System.getenv("NEO4J_USER");
 	private String NEO4J_PWD = System.getenv("NEO4J_PWD");
-	private static final String TSV_FILE_NAMES_CONFIG = "tsv_files.config";
-		
+//	private static final String TSV_FILE_NAMES_CONFIG = "tsv_files.config";
+	private static final String TSV_FILE_NAMES_CONFIG = "tsv_remote_files.config";
+			
 	private final String LAOD_REFERNCE_DATA_CYPHER_FILE_NAME = "lib/cypher/load_reference_data.txt";
 	
 	private Driver driver = null;
@@ -212,7 +215,7 @@ public class Neo4jDataProvider {
 			for(Bicluster bc: params.getBiclusters()){
 				
 				tr.run(
-					"create(b:Bicluster:AppResult{guid:{bGuid}, _appGuid:{appGuid}})" 
+					"create(b:Bicluster:AppResult{guid:{bGuid}, _appGuid:{appGuid}, featureGuids:{featureGuids}})" 
 						+" with b" 
 						+" match(a:KEApp{guid:{appGuid}})"
 						+" create (b)-[:MY_APP]->(a)"
@@ -232,16 +235,113 @@ public class Neo4jDataProvider {
 		}
 	}
 	
-	public static void main(String[] args) {
-		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
-		.withKeapp(new KEAppDescriptor()
-				.withGuid("KEApp1")
-				.withLastRunEpoch(System.currentTimeMillis())
-				.withName("Expression Biclusters")
-				.withNodesCreated(12342134L)
-				.withPropertiesSet(242342L)
-				.withRelationsCreated(145234L)
-				.withVersion("1.0")
-		));	
+	public List<CompendiumDescriptor> getCompendiumDescriptors(GetCompendiumDescriptorsParams params) {
+		Session session = getSession();
+		
+		List<CompendiumDescriptor> cds = new ArrayList<CompendiumDescriptor>();
+		try{
+			String matchStatement = "";
+			Value matchParameters = null;
+			if(params.getTaxonomyGuid() != null){
+				matchStatement = "match(t:Taxon{guid:{tguid}})-[:MY_TAXON]-(c:Compendium) ";
+				matchParameters = parameters( "tguid", params.getTaxonomyGuid() );
+			} else if (params.getDataType()!= null){
+				matchStatement = "match(t:Taxon)-[:MY_TAXON]-(c:Compendium{type:{ctype}}) ";
+				matchParameters = parameters( "ctype", params.getDataType() );
+			}
+			
+			if(matchStatement.length() > 0){
+				String statement = matchStatement + " return t.guid,c.guid,c.type,c.name,c.ws_id";
+				StatementResult result = session.run( statement, matchParameters);				
+				while ( result.hasNext() )
+				{
+				    Record record = result.next();
+				    cds.add(new CompendiumDescriptor()
+				    		.withDataType(record.get( "c.type" ).asString())
+				    		.withGuid(record.get( "c.guid" ).asString())
+				    		.withName(record.get( "c.name" ).asString())
+				    		.withTaxonomyGuid(record.get( "t.guid" ).asString())
+				    		.withWsNdarrayId(record.get( "c.ws_id" ).asString()));
+				}				
+			}
+			
+		}finally {
+			session.close();
+		}
+		return cds;
+	
 	}
+
+	public List<Bicluster> getBiclusters(GetBiclustersParams params) {
+		Session session = getSession();
+		
+		Hashtable<String,Bicluster> guid2bicluster = new Hashtable<String,Bicluster>(); 
+		
+		List<CompendiumDescriptor> cds = new ArrayList<CompendiumDescriptor>();
+		try{			
+			StringBuffer sb = new StringBuffer();
+			for(String guid: params.getBiclusterGuids()){
+				if(sb.length() > 0){
+					sb.append(",");
+				}
+				sb.append("'" + guid + "'");
+			}
+			String guidArray = sb.toString();			
+			
+			// Get biclusters metadata 
+			StatementResult result = session.run( "match(b:Bicluster) where b.guid in [" + guidArray + "] return b.guid, b._appGuid, b.featureGuids;");
+			while ( result.hasNext() )
+			{
+			    Record record = result.next();
+			    Bicluster b = new Bicluster()
+			    		.withCompendiumGuid(null)
+			    		.withConditionGuids(null)
+			    		.withFeatureGuids(new ArrayList(record.get("b.featureGuids").asList()))
+			    		.withGuid(record.get( "b.guid" ).asString())
+			    		.withKeappGuid(record.get( "b._appGuid" ).asString());
+			    					    	
+			    System.out.println(record.get("b.featureGuids").getClass().getName()); 			    
+			    guid2bicluster.put(b.getGuid(), b);
+			}				
+		}finally {
+			session.close();
+		}
+		return new ArrayList<Bicluster>(guid2bicluster.values());
+	}
+
+	public List<BiclusterDescriptor> getBiclusterDescriptors(GetBiclusterDescriptorsParams params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public static void main(String[] args) throws IOException {
+//		new Neo4jDataProvider(null).loadReferenceData();
+//		String[][] _bis = new String[][]{
+//			{"BIC:1234","KEApp1", "KBaseGen123;KBaseGen120;KBaseGen121"},
+//			{"BIC:3422","KEApp1", "KBaseGen101;KBaseGen100;KBaseGen104;KBaseGen111"},
+//			{"BIC:3451","KEApp1", "KBaseGen101;KBaseGen101;KBaseGen104;KBaseGen121"}
+//		};
+//		List<Bicluster> biclusters = new ArrayList<Bicluster>();
+//		for(String[] vals: _bis){
+//			biclusters.add(new Bicluster()
+//					.withGuid(vals[0])
+//					.withKeappGuid(vals[1])
+//					.withFeatureGuids(Arrays.asList(vals[2].split(";"))));			
+//		}
+//		new Neo4jDataProvider(null).storeBiclusters(new StoreBiclustersParams().withBiclusters(biclusters) );		
+		
+//		List<Bicluster> items = new Neo4jDataProvider(null).getBiclusters(new GetBiclustersParams().withBiclusterGuids(
+//				Arrays.asList(new String[]{"BIC:1234", "BIC:3422"})
+//				));
+//		for(Bicluster b: items){
+//			System.out.println(b);
+//		}
+		
+		List<CompendiumDescriptor> items = new Neo4jDataProvider(null).getCompendiumDescriptors(new GetCompendiumDescriptorsParams()
+				.withDataType("gene expression"));
+		for(CompendiumDescriptor item: items){
+			System.out.println(item);
+		}
+		
+	}	
 }

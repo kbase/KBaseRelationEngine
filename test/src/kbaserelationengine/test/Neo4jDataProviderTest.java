@@ -10,7 +10,9 @@ import java.util.List;
 import org.junit.Test;
 
 import kbaserelationengine.Bicluster;
+import kbaserelationengine.CompendiumDescriptor;
 import kbaserelationengine.FeatureSequence;
+import kbaserelationengine.GetCompendiumDescriptorsParams;
 import kbaserelationengine.GetFeatureSequencesParams;
 import kbaserelationengine.KEAppDescriptor;
 import kbaserelationengine.Neo4jDataProvider;
@@ -19,11 +21,12 @@ import kbaserelationengine.StoreKEAppDescriptorParams;
 
 public class Neo4jDataProviderTest {
 
-	@Test
+	//@Test
 	public void testLoadReferenceData() throws IOException {
 		new Neo4jDataProvider(null).loadReferenceData();		
 	}
-	@Test
+	
+	//@Test
 	public void testCreateApp() {
 		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
 		.withKeapp(new KEAppDescriptor()
@@ -37,7 +40,7 @@ public class Neo4jDataProviderTest {
 		));		
 	}
 	
-	@Test
+	//@Test
 	public void testCreateBiclusters() {
 		String[][] _bis = new String[][]{
 			{"BIC:1234","KEApp1", "KBaseGen123;KBaseGen120;KBaseGen121"},
@@ -53,7 +56,8 @@ public class Neo4jDataProviderTest {
 		}
 		new Neo4jDataProvider(null).storeBiclusters(new StoreBiclustersParams().withBiclusters(biclusters) );		
 	}
-	@Test
+	
+	//@Test
 	public void testGetFeatureSequences() {
 		List<FeatureSequence> fss = new Neo4jDataProvider(null).getFeatureSequences(
 		new GetFeatureSequencesParams()
@@ -67,5 +71,15 @@ public class Neo4jDataProviderTest {
 		}	
 	}
 
+	//@Test
+	public void testGetCompendiumDescriptors() {
+//		List<CompendiumDescriptor> items = new Neo4jDataProvider(null).getCompendiumDescriptors(new GetCompendiumDescriptorsParams().withDataType("gene expression"));
+		List<CompendiumDescriptor> items = new Neo4jDataProvider(null).getCompendiumDescriptors(new GetCompendiumDescriptorsParams().withTaxonomyGuid("KBaseTax3163218"));
+		for(CompendiumDescriptor item: items){
+			System.out.println(item);
+		}
+	}	
+	
+	
 
 }

@@ -1,4 +1,4 @@
->Load taxonomy: create index
+>#Load taxonomy: create index
 CREATE INDEX ON :Taxon(guid);
 
 >#Load taxonomy: create nodes
@@ -19,7 +19,6 @@ create (t:Taxon {
 	
 >#Load taxonomy: create relations
 USING PERIODIC COMMIT 10000
-LOAD CSV WITH HEADERS FROM
 LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_TAXONOMY}' AS line FIELDTERMINATOR '\t'
 WITH line
 MATCH (childTaxon:Taxon  {guid: line.kbid})
@@ -27,7 +26,7 @@ WITH line, childTaxon, split(line.parents,";")  as parents
 MATCH (parentTaxon:Taxon  {guid: parents[0]})
 create (childTaxon)-[r:MY_PARENT]->(parentTaxon);
 
->Load GO Terms: create index
+>#Load GO Terms: create index
 CREATE INDEX ON :GOTerm(guid);
 
 
@@ -51,10 +50,10 @@ MATCH (n:GOTerm), (p:GOTerm)
 WHERE n.guid = line.guid AND p.guid in split(line.parents,";")
 CREATE (n)-[:MY_PARENT]->(p);
 
->Load Features: create index (by guid)
+>#Load Features: create index (by guid)
 CREATE INDEX ON :Feature(guid);
 
->Load Features: create index (by sourceid)
+>#Load Features: create index (by sourceid)
 CREATE INDEX ON :Feature(sourceid);
 
 >#Load Features: create nodes and references
@@ -81,14 +80,14 @@ MATCH  (oterm:GOTerm)
 WHERE  oterm.guid in split(line.ontologyids,";")
 CREATE (f)-[:MY_OTERM]->(oterm);
 
->Load Features: load sequences
+>#Load Features: load sequences
 USING PERIODIC COMMIT 10000
 LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_FEATURE_SEQUENCES}' AS line FIELDTERMINATOR '\t'
 WITH line
 match(f:Feature{sourceid:line.sourceid})
 set f.sequence = line.sequence;
 
->Load OrthologGroups: create index
+>#Load OrthologGroups: create index
 CREATE INDEX ON :OrthologGroup(guid);
 
 >#Load OrthologGroups: create nodes
@@ -108,11 +107,33 @@ WITH line
 match (f:Feature{guid:line.geneguid}), (og:OrthologGroup{guid:line.ogguid})
 CREATE (f)-[:MY_ORTHOLOG_GROUP]->(og);
 
->Build indeces: KEApp
+>#Build indeces: KEApp
 CREATE INDEX ON :KEApp(guid);
  
->Build indeces: Bicluster
+>#Build indeces: Bicluster
 CREATE INDEX ON :Bicluster(guid);
  
+>#Load Colombos Compendium: build index
+ CREATE INDEX ON :Compendium(guid);
  
- 
+>#Load Colombos Compendium: create nodes and relations
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_COLOMBOS}' AS line FIELDTERMINATOR '\t'
+WITH line
+create (c:Compendium {
+	guid: line.guid ,
+	source:line.source ,
+	ws_id: line.ws_id,
+	name:line.name ,
+	description:line.description ,
+	type:line.type 
+	})
+WITH line, c
+MATCH(f0:Feature)-[:MY_TAXON]-(t:Taxon)
+WHERE f0.guid = split(line.feature_guids,";")[0]
+CREATE (c)-[:MY_TAXON]->(t)
+
+WITH line, c
+MATCH  (f:Feature)
+WHERE  f.guid in split(line.feature_guids,";")
+CREATE (f)-[:MY_COMPENDIUM]->(c);

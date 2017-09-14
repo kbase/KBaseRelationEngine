@@ -33,11 +33,6 @@ class KBaseRelationEngine(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
-    def initReferenceData(self, context=None):
-        return self._client.call_method(
-            'KBaseRelationEngine.initReferenceData',
-            [], self._service_ver, context)
-
     def getFeatureSequences(self, params, context=None):
         """
         :param params: instance of type "GetFeatureSequencesParams" (* One of
@@ -93,13 +88,31 @@ class KBaseRelationEngine(object):
             'KBaseRelationEngine.storeBiclusters',
             [params], self._service_ver, context)
 
-    def testConfig(self, context=None):
+    def getBiclusterDescriptors(self, params, context=None):
         """
-        :returns: instance of mapping from String to String
+        :param params: instance of type "GetBiclusterDescriptorsParams" ->
+           structure: parameter "taxonomy_guid" of String, parameter
+           "keapp_guid" of String, parameter "compendium_guid" of String
+        :returns: instance of list of type "BiclusterDescriptor" ->
+           structure: parameter "guid" of String, parameter "keapp_guid" of
+           String, parameter "compendium_guid" of String
         """
         return self._client.call_method(
-            'KBaseRelationEngine.testConfig',
-            [], self._service_ver, context)
+            'KBaseRelationEngine.getBiclusterDescriptors',
+            [params], self._service_ver, context)
+
+    def getBiclusters(self, params, context=None):
+        """
+        :param params: instance of type "GetBiclustersParams" -> structure:
+           parameter "bicluster_guids" of list of String
+        :returns: instance of list of type "Bicluster" -> structure:
+           parameter "guid" of String, parameter "keapp_guid" of String,
+           parameter "compendium_guid" of String, parameter "feature_guids"
+           of list of String, parameter "condition_guids" of list of String
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.getBiclusters',
+            [params], self._service_ver, context)
 
     def status(self, context=None):
         return self._client.call_method('KBaseRelationEngine.status',

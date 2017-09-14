@@ -163,19 +163,6 @@ public class KBaseRelationEngineClient {
     }
 
     /**
-     * <p>Original spec-file function name: initReferenceData</p>
-     * <pre>
-     * </pre>
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public void initReferenceData(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        TypeReference<Object> retType = new TypeReference<Object>() {};
-        caller.jsonrpcCall("KBaseRelationEngine.initReferenceData", args, retType, false, true, jsonRpcContext, this.serviceVersion);
-    }
-
-    /**
      * <p>Original spec-file function name: getFeatureSequences</p>
      * <pre>
      * </pre>
@@ -240,17 +227,36 @@ public class KBaseRelationEngineClient {
     }
 
     /**
-     * <p>Original spec-file function name: testConfig</p>
+     * <p>Original spec-file function name: getBiclusterDescriptors</p>
      * <pre>
      * </pre>
-     * @return   instance of mapping from String to String
+     * @param   params   instance of type {@link kbaserelationengine.GetBiclusterDescriptorsParams GetBiclusterDescriptorsParams}
+     * @return   instance of list of type {@link kbaserelationengine.BiclusterDescriptor BiclusterDescriptor}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public Map<String,String> testConfig(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public List<BiclusterDescriptor> getBiclusterDescriptors(GetBiclusterDescriptorsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
-        TypeReference<List<Map<String,String>>> retType = new TypeReference<List<Map<String,String>>>() {};
-        List<Map<String,String>> res = caller.jsonrpcCall("KBaseRelationEngine.testConfig", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        args.add(params);
+        TypeReference<List<List<BiclusterDescriptor>>> retType = new TypeReference<List<List<BiclusterDescriptor>>>() {};
+        List<List<BiclusterDescriptor>> res = caller.jsonrpcCall("KBaseRelationEngine.getBiclusterDescriptors", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: getBiclusters</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetBiclustersParams GetBiclustersParams}
+     * @return   instance of list of type {@link kbaserelationengine.Bicluster Bicluster}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public List<Bicluster> getBiclusters(GetBiclustersParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<List<Bicluster>>> retType = new TypeReference<List<List<Bicluster>>>() {};
+        List<List<Bicluster>> res = caller.jsonrpcCall("KBaseRelationEngine.getBiclusters", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

@@ -22,10 +22,10 @@ import us.kbase.auth.ConfigurableAuthService;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.UObject;
-import us.kbase.workspace.CreateWorkspaceParams;
-import us.kbase.workspace.ProvenanceAction;
-import us.kbase.workspace.WorkspaceClient;
-import us.kbase.workspace.WorkspaceIdentity;
+import workspace.CreateWorkspaceParams;
+import workspace.ProvenanceAction;
+import workspace.WorkspaceClient;
+import workspace.WorkspaceIdentity;
 
 public class KBaseRelationEngineServerTest {
     private static AuthToken token = null;
