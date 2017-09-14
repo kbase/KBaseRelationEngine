@@ -569,6 +569,75 @@ Bicluster is a reference to a hash where the following keys are defined:
     }
 }
  
+
+
+=head2 testConfig
+
+  $return = $obj->testConfig()
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$return is a reference to a hash where the key is a string and the value is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$return is a reference to a hash where the key is a string and the value is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub testConfig
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 0)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function testConfig (received $n, expecting 0)");
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.testConfig",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'testConfig',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method testConfig",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'testConfig',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -612,16 +681,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'storeBiclusters',
+                method_name => 'testConfig',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method storeBiclusters",
+            error => "Error invoking method testConfig",
             status_line => $self->{client}->status_line,
-            method_name => 'storeBiclusters',
+            method_name => 'testConfig',
         );
     }
 }

@@ -23,7 +23,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "28a11478696bc0cc7c3ef9342ddecb4b8d9cdb63";
+    private static final String gitCommitHash = "4f00b704d984f4502c88da7774075ca4c0a37dae";
 
     //BEGIN_CLASS_HEADER
     Neo4jDataProvider dataProvider;
@@ -104,6 +104,21 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
         //BEGIN storeBiclusters
     	dataProvider.storeBiclusters(params);
         //END storeBiclusters
+    }
+
+    /**
+     * <p>Original spec-file function name: testConfig</p>
+     * <pre>
+     * </pre>
+     * @return   instance of mapping from String to String
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.testConfig", async=true)
+    public Map<String,String> testConfig(AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        Map<String,String> returnVal = null;
+        //BEGIN testConfig
+        returnVal = config;
+        //END testConfig
+        return returnVal;
     }
     @JsonServerMethod(rpc = "KBaseRelationEngine.status")
     public Map<String, Object> status() {
