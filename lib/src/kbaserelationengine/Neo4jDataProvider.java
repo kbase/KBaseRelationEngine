@@ -228,4 +228,16 @@ public class Neo4jDataProvider {
 		}
 	}
 	
+	public static void main(String[] args) {
+		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
+		.withKeapp(new KEAppDescriptor()
+				.withGuid("KEApp1")
+				.withLastRunEpoch(System.currentTimeMillis())
+				.withName("Expression Biclusters")
+				.withNodesCreated(12342134L)
+				.withPropertiesSet(242342L)
+				.withRelationsCreated(145234L)
+				.withVersion("1.0")
+		));	
+	}
 }
