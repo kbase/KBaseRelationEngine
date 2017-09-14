@@ -93,6 +93,14 @@ class KBaseRelationEngine(object):
             'KBaseRelationEngine.storeBiclusters',
             [params], self._service_ver, context)
 
+    def testConfig(self, context=None):
+        """
+        :returns: instance of mapping from String to String
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.testConfig',
+            [], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('KBaseRelationEngine.status',
                                         [], self._service_ver, context)

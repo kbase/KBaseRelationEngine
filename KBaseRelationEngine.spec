@@ -76,4 +76,5 @@ module KBaseRelationEngine {
 	
 	funcdef storeBiclusters(StoreBiclustersParams params) returns() authentication required;
     
+    funcdef testConfig() returns (mapping<string,string>) authentication required;
 };

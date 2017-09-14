@@ -239,6 +239,21 @@ public class KBaseRelationEngineClient {
         caller.jsonrpcCall("KBaseRelationEngine.storeBiclusters", args, retType, false, true, jsonRpcContext, this.serviceVersion);
     }
 
+    /**
+     * <p>Original spec-file function name: testConfig</p>
+     * <pre>
+     * </pre>
+     * @return   instance of mapping from String to String
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public Map<String,String> testConfig(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        TypeReference<List<Map<String,String>>> retType = new TypeReference<List<Map<String,String>>>() {};
+        List<Map<String,String>> res = caller.jsonrpcCall("KBaseRelationEngine.testConfig", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
     public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<List<Map<String, Object>>> retType = new TypeReference<List<Map<String, Object>>>() {};
