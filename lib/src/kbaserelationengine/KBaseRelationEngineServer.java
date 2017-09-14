@@ -116,6 +116,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     public Map<String,String> testConfig(AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         Map<String,String> returnVal = null;
         //BEGIN testConfig
+        config.put("test", "test1");
         returnVal = config;
         //END testConfig
         return returnVal;
