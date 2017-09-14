@@ -1,5 +1,10 @@
 package kbaserelationengine.io.tsv;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.csv.CSVRecord;
@@ -30,7 +35,8 @@ public class GeneTSV extends TSVFile{
 
 	
 	static final String ID_PREFIX = "kb_gen"; 
-	static final int GENES_PER_TAXON = 5000;
+//	static final int GENES_PER_TAXON = 5000;
+	static final int GENES_PER_TAXON = 500;
 	static final int MAX_ONTOLOGY_IDS_PER_GENE = 3;
 	static final int DATA_SIZE = TaxonomyTSV.GENOME_NUMBER*GENES_PER_TAXON;	
 	
@@ -88,6 +94,42 @@ public class GeneTSV extends TSVFile{
 		int taxonId = index % GENES_PER_TAXON;
 		return TaxonomyTSV.ID_PREFIX + taxonId;
 	}
-	
-	
+		
+	public void convertFasta2TSV(String fastFileName, String tsvFileName) throws IOException{
+		BufferedReader br = new BufferedReader(new FileReader(fastFileName));
+		BufferedWriter bw = new BufferedWriter(new FileWriter(tsvFileName));
+		
+		bw.write("sourceid\tsequence\n");
+		
+		String geneId = null;
+		StringBuffer seq = new StringBuffer();
+		
+		for(String line = br.readLine(); line != null; line = br.readLine()){
+			line = line.trim();
+			if(line.startsWith(">")){
+				if(geneId != null){
+					// process previous record
+					bw.write(geneId + "\t" + seq.toString() + "\n");
+					geneId = null;
+					seq.setLength(0);
+				}
+				geneId = line.substring(1).trim();
+			} else{
+				seq.append(line);
+			}
+		}
+		
+		// check the last record
+		if(geneId != null){
+			bw.write(geneId + "\t" + seq.toString() + "\n");
+		}
+		br.close();
+		bw.close();
+	}
+
+	public static void main(String[] args) throws IOException {
+		new GeneTSV("").convertFasta2TSV(
+				"/Volumes/PavelsBackup/tsv_from_Adam/oma-seqs.fa",
+				"/Volumes/PavelsBackup/tsv_from_Adam/processed/oma-seqs.tsv");
+	}
 }

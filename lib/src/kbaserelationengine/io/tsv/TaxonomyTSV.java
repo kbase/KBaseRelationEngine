@@ -24,7 +24,8 @@ public class TaxonomyTSV extends TSVFile{
 	enum H{kbid, source, ottid, parents, name, rank, ncbi, gbif, irmng, worms, silva}
 	
 	static final String ID_PREFIX = "kb_tax"; 
-	static final int DATA_SIZE = 3594551;
+//	static final int DATA_SIZE = 3594551;
+	static final int DATA_SIZE = 100000;
 	static final int GENOME_NUMBER = 2085;
 	public TaxonomyTSV(String fileName) {
 		super(fileName, ID_PREFIX, DATA_SIZE, H.class);

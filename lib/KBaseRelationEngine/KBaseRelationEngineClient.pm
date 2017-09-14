@@ -108,9 +108,9 @@ sub new
 
 
 
-=head2 testInit
+=head2 initReferenceData
 
-  $obj->testInit()
+  $obj->initReferenceData()
 
 =over 4
 
@@ -132,13 +132,13 @@ sub new
 
 =item Description
 
-Will init relation data store and upload temporary data for testing
+
 
 =back
 
 =cut
 
- sub testInit
+ sub initReferenceData
 {
     my($self, @args) = @_;
 
@@ -147,28 +147,424 @@ Will init relation data store and upload temporary data for testing
     if ((my $n = @args) != 0)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function testInit (received $n, expecting 0)");
+							       "Invalid argument count for function initReferenceData (received $n, expecting 0)");
     }
 
     my $url = $self->{url};
     my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "KBaseRelationEngine.testInit",
+	    method => "KBaseRelationEngine.initReferenceData",
 	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
 	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
 					       code => $result->content->{error}->{code},
-					       method_name => 'testInit',
+					       method_name => 'initReferenceData',
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
 	    return;
 	}
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method testInit",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method initReferenceData",
 					    status_line => $self->{client}->status_line,
-					    method_name => 'testInit',
+					    method_name => 'initReferenceData',
+				       );
+    }
+}
+ 
+
+
+=head2 getFeatureSequences
+
+  $return = $obj->getFeatureSequences($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetFeatureSequencesParams
+$return is a reference to a list where each element is a KBaseRelationEngine.FeatureSequence
+GetFeatureSequencesParams is a reference to a hash where the following keys are defined:
+	taxonomy_guid has a value which is a string
+	ortholog_guid has a value which is a string
+	goterm_guid has a value which is a string
+FeatureSequence is a reference to a hash where the following keys are defined:
+	taxonomy_guid has a value which is a string
+	feature_guid has a value which is a string
+	proteinSequence has a value which is a string
+	nucleotideSequence has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetFeatureSequencesParams
+$return is a reference to a list where each element is a KBaseRelationEngine.FeatureSequence
+GetFeatureSequencesParams is a reference to a hash where the following keys are defined:
+	taxonomy_guid has a value which is a string
+	ortholog_guid has a value which is a string
+	goterm_guid has a value which is a string
+FeatureSequence is a reference to a hash where the following keys are defined:
+	taxonomy_guid has a value which is a string
+	feature_guid has a value which is a string
+	proteinSequence has a value which is a string
+	nucleotideSequence has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getFeatureSequences
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getFeatureSequences (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getFeatureSequences:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getFeatureSequences');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getFeatureSequences",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getFeatureSequences',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getFeatureSequences",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getFeatureSequences',
+				       );
+    }
+}
+ 
+
+
+=head2 getCompendiumDescriptors
+
+  $return = $obj->getCompendiumDescriptors($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetCompendiumDescriptorsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.CompendiumDescriptor
+GetCompendiumDescriptorsParams is a reference to a hash where the following keys are defined:
+	taxonomy_guid has a value which is a string
+	data_type has a value which is a string
+CompendiumDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	data_type has a value which is a string
+	taxonomy_guid has a value which is a string
+	ws_ndarray_id has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetCompendiumDescriptorsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.CompendiumDescriptor
+GetCompendiumDescriptorsParams is a reference to a hash where the following keys are defined:
+	taxonomy_guid has a value which is a string
+	data_type has a value which is a string
+CompendiumDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	data_type has a value which is a string
+	taxonomy_guid has a value which is a string
+	ws_ndarray_id has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getCompendiumDescriptors
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getCompendiumDescriptors (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getCompendiumDescriptors:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getCompendiumDescriptors');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getCompendiumDescriptors",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getCompendiumDescriptors',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getCompendiumDescriptors",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getCompendiumDescriptors',
+				       );
+    }
+}
+ 
+
+
+=head2 storeKEAppDescriptor
+
+  $obj->storeKEAppDescriptor($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.StoreKEAppDescriptorParams
+StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
+	keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+KEAppDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	version has a value which is a string
+	last_run_epoch has a value which is an int
+	nodes_created has a value which is an int
+	relations_created has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.StoreKEAppDescriptorParams
+StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
+	keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+KEAppDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	version has a value which is a string
+	last_run_epoch has a value which is an int
+	nodes_created has a value which is an int
+	relations_created has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub storeKEAppDescriptor
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function storeKEAppDescriptor (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to storeKEAppDescriptor:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'storeKEAppDescriptor');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.storeKEAppDescriptor",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'storeKEAppDescriptor',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return;
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeKEAppDescriptor",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'storeKEAppDescriptor',
+				       );
+    }
+}
+ 
+
+
+=head2 storeBiclusters
+
+  $obj->storeBiclusters($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.StoreBiclustersParams
+StoreBiclustersParams is a reference to a hash where the following keys are defined:
+	biclusters has a value which is a reference to a list where each element is a KBaseRelationEngine.Bicluster
+Bicluster is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	compendium_guid has a value which is a string
+	feature_guids has a value which is a reference to a list where each element is a string
+	condition_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.StoreBiclustersParams
+StoreBiclustersParams is a reference to a hash where the following keys are defined:
+	biclusters has a value which is a reference to a list where each element is a KBaseRelationEngine.Bicluster
+Bicluster is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	compendium_guid has a value which is a string
+	feature_guids has a value which is a reference to a list where each element is a string
+	condition_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub storeBiclusters
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function storeBiclusters (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to storeBiclusters:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'storeBiclusters');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.storeBiclusters",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'storeBiclusters',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return;
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeBiclusters",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'storeBiclusters',
 				       );
     }
 }
@@ -216,16 +612,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'testInit',
+                method_name => 'storeBiclusters',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method testInit",
+            error => "Error invoking method storeBiclusters",
             status_line => $self->{client}->status_line,
-            method_name => 'testInit',
+            method_name => 'storeBiclusters',
         );
     }
 }
@@ -259,6 +655,298 @@ sub _validate_version {
 }
 
 =head1 TYPES
+
+
+
+=head2 FeatureSequence
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+taxonomy_guid has a value which is a string
+feature_guid has a value which is a string
+proteinSequence has a value which is a string
+nucleotideSequence has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+taxonomy_guid has a value which is a string
+feature_guid has a value which is a string
+proteinSequence has a value which is a string
+nucleotideSequence has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetFeatureSequencesParams
+
+=over 4
+
+
+
+=item Description
+
+*
+One of guids should provided.
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+taxonomy_guid has a value which is a string
+ortholog_guid has a value which is a string
+goterm_guid has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+taxonomy_guid has a value which is a string
+ortholog_guid has a value which is a string
+goterm_guid has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 CompendiumDescriptor
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+name has a value which is a string
+data_type has a value which is a string
+taxonomy_guid has a value which is a string
+ws_ndarray_id has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+name has a value which is a string
+data_type has a value which is a string
+taxonomy_guid has a value which is a string
+ws_ndarray_id has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetCompendiumDescriptorsParams
+
+=over 4
+
+
+
+=item Description
+
+*
+data_type - one of ["expression","fitness"]
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+taxonomy_guid has a value which is a string
+data_type has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+taxonomy_guid has a value which is a string
+data_type has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 KEAppDescriptor
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+name has a value which is a string
+version has a value which is a string
+last_run_epoch has a value which is an int
+nodes_created has a value which is an int
+relations_created has a value which is an int
+properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+name has a value which is a string
+version has a value which is a string
+last_run_epoch has a value which is an int
+nodes_created has a value which is an int
+relations_created has a value which is an int
+properties_set has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 StoreKEAppDescriptorParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+
+
+=end text
+
+=back
+
+
+
+=head2 Bicluster
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+keapp_guid has a value which is a string
+compendium_guid has a value which is a string
+feature_guids has a value which is a reference to a list where each element is a string
+condition_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+keapp_guid has a value which is a string
+compendium_guid has a value which is a string
+feature_guids has a value which is a reference to a list where each element is a string
+condition_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 StoreBiclustersParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+biclusters has a value which is a reference to a list where each element is a KBaseRelationEngine.Bicluster
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+biclusters has a value which is a reference to a list where each element is a KBaseRelationEngine.Bicluster
+
+
+=end text
+
+=back
 
 
 

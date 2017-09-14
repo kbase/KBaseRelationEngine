@@ -163,17 +163,80 @@ public class KBaseRelationEngineClient {
     }
 
     /**
-     * <p>Original spec-file function name: testInit</p>
+     * <p>Original spec-file function name: initReferenceData</p>
      * <pre>
-     * Will init relation data store and upload temporary data for testing
      * </pre>
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public void testInit(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public void initReferenceData(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<Object> retType = new TypeReference<Object>() {};
-        caller.jsonrpcCall("KBaseRelationEngine.testInit", args, retType, false, true, jsonRpcContext, this.serviceVersion);
+        caller.jsonrpcCall("KBaseRelationEngine.initReferenceData", args, retType, false, true, jsonRpcContext, this.serviceVersion);
+    }
+
+    /**
+     * <p>Original spec-file function name: getFeatureSequences</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetFeatureSequencesParams GetFeatureSequencesParams}
+     * @return   instance of list of type {@link kbaserelationengine.FeatureSequence FeatureSequence}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public List<FeatureSequence> getFeatureSequences(GetFeatureSequencesParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<List<FeatureSequence>>> retType = new TypeReference<List<List<FeatureSequence>>>() {};
+        List<List<FeatureSequence>> res = caller.jsonrpcCall("KBaseRelationEngine.getFeatureSequences", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: getCompendiumDescriptors</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetCompendiumDescriptorsParams GetCompendiumDescriptorsParams}
+     * @return   instance of list of type {@link kbaserelationengine.CompendiumDescriptor CompendiumDescriptor}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public List<CompendiumDescriptor> getCompendiumDescriptors(GetCompendiumDescriptorsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<List<CompendiumDescriptor>>> retType = new TypeReference<List<List<CompendiumDescriptor>>>() {};
+        List<List<CompendiumDescriptor>> res = caller.jsonrpcCall("KBaseRelationEngine.getCompendiumDescriptors", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: storeKEAppDescriptor</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.StoreKEAppDescriptorParams StoreKEAppDescriptorParams}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public void storeKEAppDescriptor(StoreKEAppDescriptorParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<Object> retType = new TypeReference<Object>() {};
+        caller.jsonrpcCall("KBaseRelationEngine.storeKEAppDescriptor", args, retType, false, true, jsonRpcContext, this.serviceVersion);
+    }
+
+    /**
+     * <p>Original spec-file function name: storeBiclusters</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.StoreBiclustersParams StoreBiclustersParams}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public void storeBiclusters(StoreBiclustersParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<Object> retType = new TypeReference<Object>() {};
+        caller.jsonrpcCall("KBaseRelationEngine.storeBiclusters", args, retType, false, true, jsonRpcContext, this.serviceVersion);
     }
 
     public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {

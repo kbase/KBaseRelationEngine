@@ -10,7 +10,8 @@ public class CompoundsTSV extends TSVFile{
 		FEBA_carbon, FEBA_nitrogen, FEBA_stress, All_star}
 	
 	static final String ID_PREFIX = "kb_cnp"; 
-	static final int DATA_SIZE = 500000;
+//	static final int DATA_SIZE = 500000;
+	static final int DATA_SIZE = 100000;
 	
 	public CompoundsTSV(String fileName) {
 		super(fileName, ID_PREFIX, DATA_SIZE, H.class);
