@@ -108,73 +108,6 @@ sub new
 
 
 
-=head2 initReferenceData
-
-  $obj->initReferenceData()
-
-=over 4
-
-=item Parameter and return types
-
-=begin html
-
-<pre>
-
-</pre>
-
-=end html
-
-=begin text
-
-
-
-=end text
-
-=item Description
-
-
-
-=back
-
-=cut
-
- sub initReferenceData
-{
-    my($self, @args) = @_;
-
-# Authentication: required
-
-    if ((my $n = @args) != 0)
-    {
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function initReferenceData (received $n, expecting 0)");
-    }
-
-    my $url = $self->{url};
-    my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "KBaseRelationEngine.initReferenceData",
-	    params => \@args,
-    });
-    if ($result) {
-	if ($result->is_error) {
-	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-					       code => $result->content->{error}->{code},
-					       method_name => 'initReferenceData',
-					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-					      );
-	} else {
-	    return;
-	}
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method initReferenceData",
-					    status_line => $self->{client}->status_line,
-					    method_name => 'initReferenceData',
-				       );
-    }
-}
- 
-
-
 =head2 getFeatureSequences
 
   $return = $obj->getFeatureSequences($params)
@@ -571,9 +504,9 @@ Bicluster is a reference to a hash where the following keys are defined:
  
 
 
-=head2 testConfig
+=head2 getBiclusterDescriptors
 
-  $return = $obj->testConfig()
+  $return = $obj->getBiclusterDescriptors($params)
 
 =over 4
 
@@ -582,7 +515,16 @@ Bicluster is a reference to a hash where the following keys are defined:
 =begin html
 
 <pre>
-$return is a reference to a hash where the key is a string and the value is a string
+$params is a KBaseRelationEngine.GetBiclusterDescriptorsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.BiclusterDescriptor
+GetBiclusterDescriptorsParams is a reference to a hash where the following keys are defined:
+	taxonomy_guid has a value which is a string
+	keapp_guid has a value which is a string
+	compendium_guid has a value which is a string
+BiclusterDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	compendium_guid has a value which is a string
 
 </pre>
 
@@ -590,7 +532,16 @@ $return is a reference to a hash where the key is a string and the value is a st
 
 =begin text
 
-$return is a reference to a hash where the key is a string and the value is a string
+$params is a KBaseRelationEngine.GetBiclusterDescriptorsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.BiclusterDescriptor
+GetBiclusterDescriptorsParams is a reference to a hash where the following keys are defined:
+	taxonomy_guid has a value which is a string
+	keapp_guid has a value which is a string
+	compendium_guid has a value which is a string
+BiclusterDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	compendium_guid has a value which is a string
 
 
 =end text
@@ -603,37 +554,146 @@ $return is a reference to a hash where the key is a string and the value is a st
 
 =cut
 
- sub testConfig
+ sub getBiclusterDescriptors
 {
     my($self, @args) = @_;
 
 # Authentication: required
 
-    if ((my $n = @args) != 0)
+    if ((my $n = @args) != 1)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function testConfig (received $n, expecting 0)");
+							       "Invalid argument count for function getBiclusterDescriptors (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getBiclusterDescriptors:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getBiclusterDescriptors');
+	}
     }
 
     my $url = $self->{url};
     my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "KBaseRelationEngine.testConfig",
+	    method => "KBaseRelationEngine.getBiclusterDescriptors",
 	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
 	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
 					       code => $result->content->{error}->{code},
-					       method_name => 'testConfig',
+					       method_name => 'getBiclusterDescriptors',
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
 	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method testConfig",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getBiclusterDescriptors",
 					    status_line => $self->{client}->status_line,
-					    method_name => 'testConfig',
+					    method_name => 'getBiclusterDescriptors',
+				       );
+    }
+}
+ 
+
+
+=head2 getBiclusters
+
+  $return = $obj->getBiclusters($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetBiclustersParams
+$return is a reference to a list where each element is a KBaseRelationEngine.Bicluster
+GetBiclustersParams is a reference to a hash where the following keys are defined:
+	bicluster_guids has a value which is a reference to a list where each element is a string
+Bicluster is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	compendium_guid has a value which is a string
+	feature_guids has a value which is a reference to a list where each element is a string
+	condition_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetBiclustersParams
+$return is a reference to a list where each element is a KBaseRelationEngine.Bicluster
+GetBiclustersParams is a reference to a hash where the following keys are defined:
+	bicluster_guids has a value which is a reference to a list where each element is a string
+Bicluster is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	compendium_guid has a value which is a string
+	feature_guids has a value which is a reference to a list where each element is a string
+	condition_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getBiclusters
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getBiclusters (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getBiclusters:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getBiclusters');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getBiclusters",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getBiclusters',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getBiclusters",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getBiclusters',
 				       );
     }
 }
@@ -681,16 +741,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'testConfig',
+                method_name => 'getBiclusters',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method testConfig",
+            error => "Error invoking method getBiclusters",
             status_line => $self->{client}->status_line,
-            method_name => 'testConfig',
+            method_name => 'getBiclusters',
         );
     }
 }
@@ -1011,6 +1071,104 @@ biclusters has a value which is a reference to a list where each element is a KB
 
 a reference to a hash where the following keys are defined:
 biclusters has a value which is a reference to a list where each element is a KBaseRelationEngine.Bicluster
+
+
+=end text
+
+=back
+
+
+
+=head2 BiclusterDescriptor
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+keapp_guid has a value which is a string
+compendium_guid has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+keapp_guid has a value which is a string
+compendium_guid has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetBiclusterDescriptorsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+taxonomy_guid has a value which is a string
+keapp_guid has a value which is a string
+compendium_guid has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+taxonomy_guid has a value which is a string
+keapp_guid has a value which is a string
+compendium_guid has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetBiclustersParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+bicluster_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+bicluster_guids has a value which is a reference to a list where each element is a string
 
 
 =end text

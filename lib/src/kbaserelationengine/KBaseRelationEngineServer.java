@@ -1,9 +1,13 @@
 package kbaserelationengine;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
@@ -23,29 +27,26 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "4f00b704d984f4502c88da7774075ca4c0a37dae";
+    private static final String gitCommitHash = "09f902c230b05769e5837e38fe7358d6eff52ec3";
 
     //BEGIN_CLASS_HEADER
+    Set<String> admins  = new HashSet<String>();
     Neo4jDataProvider dataProvider;
+    
+    private void checkAdmin(AuthToken authPart) {
+    	if( !admins.contains(authPart.getUserName()) ){
+    		new IllegalStateException("User " + authPart.getUserName() + " should be admin to perform this operation");
+    	}
+	}
+    
     //END_CLASS_HEADER
 
     public KBaseRelationEngineServer() throws Exception {
         super("KBaseRelationEngine");
         //BEGIN_CONSTRUCTOR
+        admins.addAll(Arrays.asList(config.get("admins").split(",")));
         dataProvider = new Neo4jDataProvider(config);
         //END_CONSTRUCTOR
-    }
-
-    /**
-     * <p>Original spec-file function name: initReferenceData</p>
-     * <pre>
-     * </pre>
-     */
-    @JsonServerMethod(rpc = "KBaseRelationEngine.initReferenceData", async=true)
-    public void initReferenceData(AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        //BEGIN initReferenceData
-//    	dataProvider.loadReferenceData();
-        //END initReferenceData
     }
 
     /**
@@ -75,7 +76,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     public List<CompendiumDescriptor> getCompendiumDescriptors(GetCompendiumDescriptorsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         List<CompendiumDescriptor> returnVal = null;
         //BEGIN getCompendiumDescriptors
-//        returnVal = dataProvider.get
+        returnVal = dataProvider.getCompendiumDescriptors(params);
         //END getCompendiumDescriptors
         return returnVal;
     }
@@ -89,11 +90,13 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     @JsonServerMethod(rpc = "KBaseRelationEngine.storeKEAppDescriptor", async=true)
     public void storeKEAppDescriptor(StoreKEAppDescriptorParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         //BEGIN storeKEAppDescriptor
+    	checkAdmin(authPart);
     	dataProvider.storeKEAppDescriptor(params);
         //END storeKEAppDescriptor
     }
 
-    /**
+
+	/**
      * <p>Original spec-file function name: storeBiclusters</p>
      * <pre>
      * </pre>
@@ -102,23 +105,40 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     @JsonServerMethod(rpc = "KBaseRelationEngine.storeBiclusters", async=true)
     public void storeBiclusters(StoreBiclustersParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         //BEGIN storeBiclusters
+    	checkAdmin(authPart);    	
     	dataProvider.storeBiclusters(params);
         //END storeBiclusters
     }
 
     /**
-     * <p>Original spec-file function name: testConfig</p>
+     * <p>Original spec-file function name: getBiclusterDescriptors</p>
      * <pre>
      * </pre>
-     * @return   instance of mapping from String to String
+     * @param   params   instance of type {@link kbaserelationengine.GetBiclusterDescriptorsParams GetBiclusterDescriptorsParams}
+     * @return   instance of list of type {@link kbaserelationengine.BiclusterDescriptor BiclusterDescriptor}
      */
-    @JsonServerMethod(rpc = "KBaseRelationEngine.testConfig", async=true)
-    public Map<String,String> testConfig(AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        Map<String,String> returnVal = null;
-        //BEGIN testConfig
-        config.put("test", "test2");
-        returnVal = config;
-        //END testConfig
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getBiclusterDescriptors", async=true)
+    public List<BiclusterDescriptor> getBiclusterDescriptors(GetBiclusterDescriptorsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        List<BiclusterDescriptor> returnVal = null;
+        //BEGIN getBiclusterDescriptors
+        returnVal = dataProvider.getBiclusterDescriptors(params);
+        //END getBiclusterDescriptors
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: getBiclusters</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetBiclustersParams GetBiclustersParams}
+     * @return   instance of list of type {@link kbaserelationengine.Bicluster Bicluster}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getBiclusters", async=true)
+    public List<Bicluster> getBiclusters(GetBiclustersParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        List<Bicluster> returnVal = null;
+        //BEGIN getBiclusters
+        returnVal = dataProvider.getBiclusters(params);        
+        //END getBiclusters
         return returnVal;
     }
     @JsonServerMethod(rpc = "KBaseRelationEngine.status")

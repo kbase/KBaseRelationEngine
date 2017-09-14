@@ -4,9 +4,6 @@ A KBase module: KBaseRelationEngine
 
 module KBaseRelationEngine {
 
-    funcdef initReferenceData() returns() authentication required;
-
-
     typedef structure{
     	string taxonomy_guid;
     	string feature_guid;
@@ -68,13 +65,30 @@ module KBaseRelationEngine {
 		list<string> feature_guids;
 		list<string> condition_guids;
 	} Bicluster;
-	
+		
 	typedef structure{
 		list<Bicluster> biclusters;
 	} StoreBiclustersParams; 
-	
-	
+		
 	funcdef storeBiclusters(StoreBiclustersParams params) returns() authentication required;
-    
-    funcdef testConfig() returns (mapping<string,string>) authentication required;
+	
+	typedef structure{
+		string guid; 
+		string keapp_guid;
+		string compendium_guid;
+	} BiclusterDescriptor;
+			
+	typedef structure{
+		string taxonomy_guid;
+		string keapp_guid;
+		string compendium_guid;
+	}GetBiclusterDescriptorsParams;
+	
+	funcdef getBiclusterDescriptors(GetBiclusterDescriptorsParams params) returns (list<BiclusterDescriptor>) authentication required;
+	
+	typedef structure{
+		list<string> bicluster_guids;
+	} GetBiclustersParams;
+	
+	funcdef getBiclusters(GetBiclustersParams params) returns (list<Bicluster>) authentication required;
 };
