@@ -33,7 +33,7 @@ public class Neo4jDataProvider {
 		
 	private final String LAOD_REFERNCE_DATA_CYPHER_FILE_NAME = "lib/cypher/load_reference_data.txt";
 	
-	private Driver driver;
+	private Driver driver = null;
 
 	class CypherStatement{
 		String name;
@@ -56,7 +56,6 @@ public class Neo4jDataProvider {
 		
 		NEO4J_USER = getConfigValue(config,"NEO4J_USER");
 		NEO4J_PWD = getConfigValue(config,"NEO4J_PWD");		
-		driver = GraphDatabase.driver( NEO4J_URL, AuthTokens.basic( NEO4J_USER, NEO4J_PWD ) );
 	}
 	
 	private String getConfigValue(Map<String,String> config, String key){
@@ -65,6 +64,10 @@ public class Neo4jDataProvider {
 	}
 	
 	private Session getSession(){
+		if(driver == null){
+			driver = GraphDatabase.driver( NEO4J_URL, AuthTokens.basic( NEO4J_USER, NEO4J_PWD ) );
+		}
+		
 		return driver.session();
 	}
 	
