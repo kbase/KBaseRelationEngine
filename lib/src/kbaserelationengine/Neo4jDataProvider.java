@@ -23,17 +23,17 @@ import org.neo4j.driver.v1.summary.ResultSummary;
 
 public class Neo4jDataProvider {
 
-	String NEO4J_HOST = System.getenv("NEO4J_HOST");
-	String NEO4J_PORT = System.getenv("NEO4J_PORT");
-	String NEO4J_URL = "bolt://" + NEO4J_HOST + ":" + NEO4J_PORT;
+	private String NEO4J_HOST = System.getenv("NEO4J_HOST");
+	private String NEO4J_PORT = System.getenv("NEO4J_PORT");
+	private String NEO4J_URL = "bolt://" + NEO4J_HOST + ":" + NEO4J_PORT;
 	
-	String NEO4J_USER = System.getenv("NEO4J_USER");
-	String NEO4J_PWD = System.getenv("NEO4J_PWD");
+	private String NEO4J_USER = System.getenv("NEO4J_USER");
+	private String NEO4J_PWD = System.getenv("NEO4J_PWD");
 	private static final String TSV_FILE_NAMES_CONFIG = "tsv_files.config";
 		
 	private final String LAOD_REFERNCE_DATA_CYPHER_FILE_NAME = "lib/cypher/load_reference_data.txt";
 	
-	private final Driver driver = GraphDatabase.driver( NEO4J_URL, AuthTokens.basic( NEO4J_USER, NEO4J_PWD ) );
+	private Driver driver;
 
 	class CypherStatement{
 		String name;
@@ -56,6 +56,7 @@ public class Neo4jDataProvider {
 		
 		NEO4J_USER = getConfigValue(config,"NEO4J_USER");
 		NEO4J_PWD = getConfigValue(config,"NEO4J_PWD");		
+		driver = GraphDatabase.driver( NEO4J_URL, AuthTokens.basic( NEO4J_USER, NEO4J_PWD ) );
 	}
 	
 	private String getConfigValue(Map<String,String> config, String key){
