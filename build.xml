@@ -37,9 +37,18 @@
     <include name="kbase/workspace/WorkspaceClient-0.6.0.jar"/>
   </fileset>
 
-  <path id="compile.classpath">
-    <fileset refid="lib"/>
-  </path>
+	  <fileset dir="lib/jars" id="lib2">
+	    <include name="apache_commons/commons-csv-1.4.jar"/>
+	    <include name="neo4j/neo4j-java-driver-1.2.1.jar"/>
+	  </fileset>
+
+	  <path id="compile.classpath">
+	    <fileset refid="lib"/>
+	    <fileset refid="lib2"/>
+	  </path>	
+	
+	
+	
 
   <path id="src.path">
     <pathelement location="${src}" />
