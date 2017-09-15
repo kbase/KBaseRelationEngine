@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "f9447c16c6c8bca97698aa9710c1387ce8bfabe9";
+    private static final String gitCommitHash = "7af4617e8a427f03f7d3cfdfe7d73a1b8849030f";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();

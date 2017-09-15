@@ -24,20 +24,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class CleanKEAppResultsParams {
 
     @JsonProperty("appGuid")
-    private Long appGuid;
+    private String appGuid;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("appGuid")
-    public Long getAppGuid() {
+    public String getAppGuid() {
         return appGuid;
     }
 
     @JsonProperty("appGuid")
-    public void setAppGuid(Long appGuid) {
+    public void setAppGuid(String appGuid) {
         this.appGuid = appGuid;
     }
 
-    public CleanKEAppResultsParams withAppGuid(Long appGuid) {
+    public CleanKEAppResultsParams withAppGuid(String appGuid) {
         this.appGuid = appGuid;
         return this;
     }
