@@ -431,7 +431,7 @@ GraphUpdateStat is a reference to a hash where the following keys are defined:
 <pre>
 $params is a KBaseRelationEngine.CleanKEAppResultsParams
 CleanKEAppResultsParams is a reference to a hash where the following keys are defined:
-	appGuid has a value which is a string
+	app_guid has a value which is a string
 
 </pre>
 
@@ -441,7 +441,7 @@ CleanKEAppResultsParams is a reference to a hash where the following keys are de
 
 $params is a KBaseRelationEngine.CleanKEAppResultsParams
 CleanKEAppResultsParams is a reference to a hash where the following keys are defined:
-	appGuid has a value which is a string
+	app_guid has a value which is a string
 
 
 =end text
@@ -516,7 +516,7 @@ CleanKEAppResultsParams is a reference to a hash where the following keys are de
 $params is a KBaseRelationEngine.GetKEAppDescriptorParams
 $return is a KBaseRelationEngine.KEAppDescriptor
 GetKEAppDescriptorParams is a reference to a hash where the following keys are defined:
-	appGuid has a value which is a string
+	app_guid has a value which is a string
 KEAppDescriptor is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	name has a value which is a string
@@ -535,7 +535,7 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 $params is a KBaseRelationEngine.GetKEAppDescriptorParams
 $return is a KBaseRelationEngine.KEAppDescriptor
 GetKEAppDescriptorParams is a reference to a hash where the following keys are defined:
-	appGuid has a value which is a string
+	app_guid has a value which is a string
 KEAppDescriptor is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	name has a value which is a string
@@ -1263,7 +1263,7 @@ keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
 
 <pre>
 a reference to a hash where the following keys are defined:
-appGuid has a value which is a string
+app_guid has a value which is a string
 
 </pre>
 
@@ -1272,7 +1272,7 @@ appGuid has a value which is a string
 =begin text
 
 a reference to a hash where the following keys are defined:
-appGuid has a value which is a string
+app_guid has a value which is a string
 
 
 =end text
@@ -1293,7 +1293,7 @@ appGuid has a value which is a string
 
 <pre>
 a reference to a hash where the following keys are defined:
-appGuid has a value which is a string
+app_guid has a value which is a string
 
 </pre>
 
@@ -1302,7 +1302,7 @@ appGuid has a value which is a string
 =begin text
 
 a reference to a hash where the following keys are defined:
-appGuid has a value which is a string
+app_guid has a value which is a string
 
 
 =end text

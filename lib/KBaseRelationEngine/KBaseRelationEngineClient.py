@@ -82,7 +82,7 @@ class KBaseRelationEngine(object):
     def cleanKEAppResults(self, params, context=None):
         """
         :param params: instance of type "CleanKEAppResultsParams" ->
-           structure: parameter "appGuid" of String
+           structure: parameter "app_guid" of String
         """
         return self._client.call_method(
             'KBaseRelationEngine.cleanKEAppResults',
@@ -91,7 +91,7 @@ class KBaseRelationEngine(object):
     def getKEAppDescriptor(self, params, context=None):
         """
         :param params: instance of type "GetKEAppDescriptorParams" ->
-           structure: parameter "appGuid" of String
+           structure: parameter "app_guid" of String
         :returns: instance of type "KEAppDescriptor" -> structure: parameter
            "guid" of String, parameter "name" of String, parameter "version"
            of String, parameter "last_run_epoch" of Long, parameter

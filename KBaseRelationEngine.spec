@@ -64,12 +64,12 @@ module KBaseRelationEngine {
 	funcdef storeKEAppDescriptor(StoreKEAppDescriptorParams params) returns (GraphUpdateStat) authentication required; 
 	
 	typedef structure{
-		string appGuid;
+		string app_guid;
 	}CleanKEAppResultsParams;	
 	funcdef cleanKEAppResults(CleanKEAppResultsParams params) returns () authentication required;
 	
 	typedef structure{
-		string appGuid;
+		string app_guid;
 	}GetKEAppDescriptorParams;	
 	funcdef getKEAppDescriptor(GetKEAppDescriptorParams params) returns (KEAppDescriptor) authentication required;
 	
