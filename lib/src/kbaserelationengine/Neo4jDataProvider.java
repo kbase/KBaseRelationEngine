@@ -229,11 +229,12 @@ public class Neo4jDataProvider {
 						parameters("appGuid", params.getAppGuid()));
 				nodesCount = res.consume().counters().nodesDeleted();				
 			}
-			session.run("match(a:KEApp{appGuid:{appGuid}}) "
+			session.run("match(a:KEApp{guid:{appGuid}}) "
 					+ " set a.last_run_epoch = 0,"
 					+ " a.nodes_created = 0, "
 					+ " a.relations_created = 0,"
-					+ " a.properties_set = 0");
+					+ " a.properties_set = 0",
+					parameters("appGuid", params.getAppGuid()));
 					
 		} finally {
 			session.close();
@@ -411,11 +412,16 @@ public class Neo4jDataProvider {
 //			System.out.println(b);
 //		}
 		
-		List<CompendiumDescriptor> items = new Neo4jDataProvider(null).getCompendiumDescriptors(new GetCompendiumDescriptorsParams()
-				.withDataType("gene expression"));
-		for(CompendiumDescriptor item: items){
-			System.out.println(item);
-		}
+//		List<CompendiumDescriptor> items = new Neo4jDataProvider(null).getCompendiumDescriptors(new GetCompendiumDescriptorsParams()
+//				.withDataType("gene expression"));
+//		for(CompendiumDescriptor item: items){
+//			System.out.println(item);
+//		}
+
+		new Neo4jDataProvider(null).cleanKEAppResults(new CleanKEAppResultsParams().withAppGuid("KEApp1"));
+		
+		KEAppDescriptor res = new Neo4jDataProvider(null).getKEAppDescriptor(new GetKEAppDescriptorParams().withAppGuid("KEApp1"));
+		System.out.println(res);
 		
 	}
 }

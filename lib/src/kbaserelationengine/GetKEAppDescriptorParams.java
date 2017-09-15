@@ -24,20 +24,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class GetKEAppDescriptorParams {
 
     @JsonProperty("appGuid")
-    private Long appGuid;
+    private String appGuid;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("appGuid")
-    public Long getAppGuid() {
+    public String getAppGuid() {
         return appGuid;
     }
 
     @JsonProperty("appGuid")
-    public void setAppGuid(Long appGuid) {
+    public void setAppGuid(String appGuid) {
         this.appGuid = appGuid;
     }
 
-    public GetKEAppDescriptorParams withAppGuid(Long appGuid) {
+    public GetKEAppDescriptorParams withAppGuid(String appGuid) {
         this.appGuid = appGuid;
         return this;
     }
