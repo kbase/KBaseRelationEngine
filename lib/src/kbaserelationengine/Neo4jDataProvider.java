@@ -245,7 +245,7 @@ public class Neo4jDataProvider {
 		Session session = getSession();
 		try{			
 			StatementResult result = session.run( "match(a:KEApp{guid:{appGuid}}) "
-					+ " return ",
+					+ " return a.guid, a.name, a.version,a.last_run_epoch,a.nodes_created,a.relations_created,a.properties_set",
 					parameters("appGuid", params.getAppGuid()));
 			
 			while ( result.hasNext() )
