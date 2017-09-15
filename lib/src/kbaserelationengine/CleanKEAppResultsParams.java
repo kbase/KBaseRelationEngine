@@ -19,20 +19,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "appGuid"
+    "app_guid"
 })
 public class CleanKEAppResultsParams {
 
-    @JsonProperty("appGuid")
+    @JsonProperty("app_guid")
     private String appGuid;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("appGuid")
+    @JsonProperty("app_guid")
     public String getAppGuid() {
         return appGuid;
     }
 
-    @JsonProperty("appGuid")
+    @JsonProperty("app_guid")
     public void setAppGuid(String appGuid) {
         this.appGuid = appGuid;
     }
