@@ -4,6 +4,12 @@ A KBase module: KBaseRelationEngine
 
 module KBaseRelationEngine {
 
+	typedef structure{
+		int nodes_created;
+		int relationships_created;
+		int properties_set;		
+	} GraphUpdateStat;
+
     typedef structure{
     	string taxonomy_guid;
     	string feature_guid;
@@ -55,8 +61,17 @@ module KBaseRelationEngine {
 	typedef structure{
 		KEAppDescriptor keapp;
 	}StoreKEAppDescriptorParams; 
-
-	funcdef storeKEAppDescriptor(StoreKEAppDescriptorParams params) returns () authentication required; 
+	funcdef storeKEAppDescriptor(StoreKEAppDescriptorParams params) returns (GraphUpdateStat) authentication required; 
+	
+	typedef structure{
+		int appGuid;
+	}CleanKEAppResultsParams;	
+	funcdef cleanKEAppResults(CleanKEAppResultsParams params) returns () authentication required;
+	
+	typedef structure{
+		int appGuid;
+	}GetKEAppDescriptorParams;	
+	funcdef getKEAppDescriptor(GetKEAppDescriptorParams params) returns (KEAppDescriptor) authentication required;
 	
 	typedef structure{
 		string guid; 
@@ -64,13 +79,12 @@ module KBaseRelationEngine {
 		string compendium_guid;
 		list<string> feature_guids;
 		list<string> condition_guids;
-	} Bicluster;
+	} Bicluster;		
 		
 	typedef structure{
 		list<Bicluster> biclusters;
-	} StoreBiclustersParams; 
-		
-	funcdef storeBiclusters(StoreBiclustersParams params) returns() authentication required;
+	} StoreBiclustersParams; 		
+	funcdef storeBiclusters(StoreBiclustersParams params) returns(GraphUpdateStat) authentication required;
 	
 	typedef structure{
 		string guid; 
@@ -82,13 +96,11 @@ module KBaseRelationEngine {
 		string taxonomy_guid;
 		string keapp_guid;
 		string compendium_guid;
-	}GetBiclusterDescriptorsParams;
-	
+	}GetBiclusterDescriptorsParams;	
 	funcdef getBiclusterDescriptors(GetBiclusterDescriptorsParams params) returns (list<BiclusterDescriptor>) authentication required;
 	
 	typedef structure{
 		list<string> bicluster_guids;
-	} GetBiclustersParams;
-	
+	} GetBiclustersParams;	
 	funcdef getBiclusters(GetBiclustersParams params) returns (list<Bicluster>) authentication required;
 };

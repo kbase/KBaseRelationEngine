@@ -310,7 +310,7 @@ CompendiumDescriptor is a reference to a hash where the following keys are defin
 
 =head2 storeKEAppDescriptor
 
-  $obj->storeKEAppDescriptor($params)
+  $return = $obj->storeKEAppDescriptor($params)
 
 =over 4
 
@@ -320,6 +320,7 @@ CompendiumDescriptor is a reference to a hash where the following keys are defin
 
 <pre>
 $params is a KBaseRelationEngine.StoreKEAppDescriptorParams
+$return is a KBaseRelationEngine.GraphUpdateStat
 StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
 	keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
 KEAppDescriptor is a reference to a hash where the following keys are defined:
@@ -330,6 +331,10 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
 	relations_created has a value which is an int
 	properties_set has a value which is an int
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
 
 </pre>
 
@@ -338,6 +343,7 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 =begin text
 
 $params is a KBaseRelationEngine.StoreKEAppDescriptorParams
+$return is a KBaseRelationEngine.GraphUpdateStat
 StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
 	keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
 KEAppDescriptor is a reference to a hash where the following keys are defined:
@@ -347,6 +353,10 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 	last_run_epoch has a value which is an int
 	nodes_created has a value which is an int
 	relations_created has a value which is an int
+	properties_set has a value which is an int
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -396,7 +406,7 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
-	    return;
+	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
         Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeKEAppDescriptor",
@@ -408,9 +418,195 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
  
 
 
+=head2 cleanKEAppResults
+
+  $obj->cleanKEAppResults($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.CleanKEAppResultsParams
+CleanKEAppResultsParams is a reference to a hash where the following keys are defined:
+	appGuid has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.CleanKEAppResultsParams
+CleanKEAppResultsParams is a reference to a hash where the following keys are defined:
+	appGuid has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub cleanKEAppResults
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function cleanKEAppResults (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to cleanKEAppResults:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'cleanKEAppResults');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.cleanKEAppResults",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'cleanKEAppResults',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return;
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method cleanKEAppResults",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'cleanKEAppResults',
+				       );
+    }
+}
+ 
+
+
+=head2 getKEAppDescriptor
+
+  $return = $obj->getKEAppDescriptor($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetKEAppDescriptorParams
+$return is a KBaseRelationEngine.KEAppDescriptor
+GetKEAppDescriptorParams is a reference to a hash where the following keys are defined:
+	appGuid has a value which is an int
+KEAppDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	version has a value which is a string
+	last_run_epoch has a value which is an int
+	nodes_created has a value which is an int
+	relations_created has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetKEAppDescriptorParams
+$return is a KBaseRelationEngine.KEAppDescriptor
+GetKEAppDescriptorParams is a reference to a hash where the following keys are defined:
+	appGuid has a value which is an int
+KEAppDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	version has a value which is a string
+	last_run_epoch has a value which is an int
+	nodes_created has a value which is an int
+	relations_created has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getKEAppDescriptor
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getKEAppDescriptor (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getKEAppDescriptor:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getKEAppDescriptor');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getKEAppDescriptor",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getKEAppDescriptor',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getKEAppDescriptor",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getKEAppDescriptor',
+				       );
+    }
+}
+ 
+
+
 =head2 storeBiclusters
 
-  $obj->storeBiclusters($params)
+  $return = $obj->storeBiclusters($params)
 
 =over 4
 
@@ -420,6 +616,7 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 
 <pre>
 $params is a KBaseRelationEngine.StoreBiclustersParams
+$return is a KBaseRelationEngine.GraphUpdateStat
 StoreBiclustersParams is a reference to a hash where the following keys are defined:
 	biclusters has a value which is a reference to a list where each element is a KBaseRelationEngine.Bicluster
 Bicluster is a reference to a hash where the following keys are defined:
@@ -428,6 +625,10 @@ Bicluster is a reference to a hash where the following keys are defined:
 	compendium_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
 
 </pre>
 
@@ -436,6 +637,7 @@ Bicluster is a reference to a hash where the following keys are defined:
 =begin text
 
 $params is a KBaseRelationEngine.StoreBiclustersParams
+$return is a KBaseRelationEngine.GraphUpdateStat
 StoreBiclustersParams is a reference to a hash where the following keys are defined:
 	biclusters has a value which is a reference to a list where each element is a KBaseRelationEngine.Bicluster
 Bicluster is a reference to a hash where the following keys are defined:
@@ -444,6 +646,10 @@ Bicluster is a reference to a hash where the following keys are defined:
 	compendium_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
 
 
 =end text
@@ -492,7 +698,7 @@ Bicluster is a reference to a hash where the following keys are defined:
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
-	    return;
+	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
         Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeBiclusters",
@@ -787,6 +993,40 @@ sub _validate_version {
 
 
 
+=head2 GraphUpdateStat
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+nodes_created has a value which is an int
+relationships_created has a value which is an int
+properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+nodes_created has a value which is an int
+relationships_created has a value which is an int
+properties_set has a value which is an int
+
+
+=end text
+
+=back
+
+
+
 =head2 FeatureSequence
 
 =over 4
@@ -1003,6 +1243,66 @@ keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
 
 a reference to a hash where the following keys are defined:
 keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+
+
+=end text
+
+=back
+
+
+
+=head2 CleanKEAppResultsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+appGuid has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+appGuid has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 GetKEAppDescriptorParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+appGuid has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+appGuid has a value which is an int
 
 
 =end text
