@@ -1,8 +1,8 @@
 package kbaserelationengine;
 
-
 import java.io.File;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonServerMethod;
@@ -10,11 +10,12 @@ import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
 
-
 //BEGIN_HEADER
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 //END_HEADER
 
@@ -28,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "09f902c230b05769e5837e38fe7358d6eff52ec3";
+    private static final String gitCommitHash = "f9447c16c6c8bca97698aa9710c1387ce8bfabe9";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -87,28 +88,63 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
      * <pre>
      * </pre>
      * @param   params   instance of type {@link kbaserelationengine.StoreKEAppDescriptorParams StoreKEAppDescriptorParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
      */
     @JsonServerMethod(rpc = "KBaseRelationEngine.storeKEAppDescriptor", async=true)
-    public void storeKEAppDescriptor(StoreKEAppDescriptorParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+    public GraphUpdateStat storeKEAppDescriptor(StoreKEAppDescriptorParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GraphUpdateStat returnVal = null;
         //BEGIN storeKEAppDescriptor
     	checkAdmin(authPart);
-    	dataProvider.storeKEAppDescriptor(params);
+    	returnVal = dataProvider.storeKEAppDescriptor(params);
         //END storeKEAppDescriptor
+        return returnVal;
     }
 
+    /**
+     * <p>Original spec-file function name: cleanKEAppResults</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.CleanKEAppResultsParams CleanKEAppResultsParams}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.cleanKEAppResults", async=true)
+    public void cleanKEAppResults(CleanKEAppResultsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        //BEGIN cleanKEAppResults
+    	checkAdmin(authPart);
+    	dataProvider.cleanKEAppResults(params);
+        //END cleanKEAppResults
+    }
 
-	/**
+    /**
+     * <p>Original spec-file function name: getKEAppDescriptor</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetKEAppDescriptorParams GetKEAppDescriptorParams}
+     * @return   instance of type {@link kbaserelationengine.KEAppDescriptor KEAppDescriptor}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getKEAppDescriptor", async=true)
+    public KEAppDescriptor getKEAppDescriptor(GetKEAppDescriptorParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        KEAppDescriptor returnVal = null;
+        //BEGIN getKEAppDescriptor
+        returnVal = dataProvider.getKEAppDescriptor(params);
+        //END getKEAppDescriptor
+        return returnVal;
+    }
+
+    /**
      * <p>Original spec-file function name: storeBiclusters</p>
      * <pre>
      * </pre>
      * @param   params   instance of type {@link kbaserelationengine.StoreBiclustersParams StoreBiclustersParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
      */
     @JsonServerMethod(rpc = "KBaseRelationEngine.storeBiclusters", async=true)
-    public void storeBiclusters(StoreBiclustersParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+    public GraphUpdateStat storeBiclusters(StoreBiclustersParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GraphUpdateStat returnVal = null;
         //BEGIN storeBiclusters
     	checkAdmin(authPart);    	
-    	dataProvider.storeBiclusters(params);
+    	returnVal = dataProvider.storeBiclusters(params);
         //END storeBiclusters
+        return returnVal;
     }
 
     /**

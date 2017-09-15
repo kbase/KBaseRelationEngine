@@ -71,9 +71,35 @@ class KBaseRelationEngine(object):
            parameter "version" of String, parameter "last_run_epoch" of Long,
            parameter "nodes_created" of Long, parameter "relations_created"
            of Long, parameter "properties_set" of Long
+        :returns: instance of type "GraphUpdateStat" -> structure: parameter
+           "nodes_created" of Long, parameter "relationships_created" of
+           Long, parameter "properties_set" of Long
         """
         return self._client.call_method(
             'KBaseRelationEngine.storeKEAppDescriptor',
+            [params], self._service_ver, context)
+
+    def cleanKEAppResults(self, params, context=None):
+        """
+        :param params: instance of type "CleanKEAppResultsParams" ->
+           structure: parameter "appGuid" of Long
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.cleanKEAppResults',
+            [params], self._service_ver, context)
+
+    def getKEAppDescriptor(self, params, context=None):
+        """
+        :param params: instance of type "GetKEAppDescriptorParams" ->
+           structure: parameter "appGuid" of Long
+        :returns: instance of type "KEAppDescriptor" -> structure: parameter
+           "guid" of String, parameter "name" of String, parameter "version"
+           of String, parameter "last_run_epoch" of Long, parameter
+           "nodes_created" of Long, parameter "relations_created" of Long,
+           parameter "properties_set" of Long
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.getKEAppDescriptor',
             [params], self._service_ver, context)
 
     def storeBiclusters(self, params, context=None):
@@ -83,6 +109,9 @@ class KBaseRelationEngine(object):
            parameter "guid" of String, parameter "keapp_guid" of String,
            parameter "compendium_guid" of String, parameter "feature_guids"
            of list of String, parameter "condition_guids" of list of String
+        :returns: instance of type "GraphUpdateStat" -> structure: parameter
+           "nodes_created" of Long, parameter "relationships_created" of
+           Long, parameter "properties_set" of Long
         """
         return self._client.call_method(
             'KBaseRelationEngine.storeBiclusters',

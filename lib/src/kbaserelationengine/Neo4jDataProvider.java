@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +21,7 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.summary.ResultSummary;
+import org.neo4j.driver.v1.summary.SummaryCounters;
 
 public class Neo4jDataProvider {
 
@@ -189,11 +189,20 @@ public class Neo4jDataProvider {
 		return fss;
 	} 
 
-	public void storeKEAppDescriptor(StoreKEAppDescriptorParams params){
+	public GraphUpdateStat storeKEAppDescriptor(StoreKEAppDescriptorParams params){
+		GraphUpdateStat stat = new GraphUpdateStat();
+		
 		Session session = getSession();
 		KEAppDescriptor app = params.getKeapp();
 		try{
-			session.run("merge(a:KEApp{ guid:{guid},name:{name},version:{version},last_run_epoch:{last_run_epoch},nodes_created: {nodes_created},relations_created: {relations_created},properties_set:{properties_set}});",
+			StatementResult res = session.run(
+						"merge(a:KEApp{ "
+						+ "guid:{guid},name:{name},"
+						+ "version:{version},"
+						+ "last_run_epoch:{last_run_epoch},"
+						+ "nodes_created: {nodes_created},"
+						+ "relations_created: {relations_created},"
+						+ "properties_set:{properties_set}});",
 					parameters(
 							"guid",app.getGuid(),
 							"name",app.getName(),
@@ -201,24 +210,85 @@ public class Neo4jDataProvider {
 							"last_run_epoch",app.getLastRunEpoch(),
 							"nodes_created",app.getNodesCreated(),
 							"relations_created",app.getRelationsCreated(),
-							"properties_set",app.getPropertiesSet())
-			);
+							"properties_set",app.getPropertiesSet()));
+			
+			setCounters(stat, res.consume().counters());			
 		} finally {
 			session.close();
-		}		
+		}	
+		return stat;
+	}
+		
+	public void cleanKEAppResults(CleanKEAppResultsParams params) {
+		
+		Session session = getSession();
+		try{
+			int nodesCount = 1;
+			while(nodesCount > 0){
+				StatementResult res = session.run("match(r:AppResult{_appGuid:{appGuid}}) detach delete r", 
+						parameters("appGuid", params.getAppGuid()));
+				nodesCount = res.consume().counters().nodesDeleted();				
+			}
+			session.run("match(a:KEApp{appGuid:{appGuid}}) "
+					+ " set a.last_run_epoch = 0,"
+					+ " a.nodes_created = 0, "
+					+ " a.relations_created = 0,"
+					+ " a.properties_set = 0");
+					
+		} finally {
+			session.close();
+		}
+	}		
+	
+	public KEAppDescriptor getKEAppDescriptor(GetKEAppDescriptorParams params) {
+		KEAppDescriptor app = new KEAppDescriptor();
+		Session session = getSession();
+		try{			
+			StatementResult result = session.run( "match(a:KEApp{guid:{appGuid}}) "
+					+ " return ",
+					parameters("appGuid", params.getAppGuid()));
+			
+			while ( result.hasNext() )
+			{
+			    Record record = result.next();
+			    app
+			    	.withGuid(record.get( "a.guid" ).asString())
+			    	.withLastRunEpoch(record.get( "a.last_run_epoch" ).asLong())
+			    	.withName(record.get( "a.name" ).asString())
+			    	.withNodesCreated(record.get( "a.nodes_created" ).asLong())
+			    	.withPropertiesSet(record.get( "a.properties_set" ).asLong())
+			    	.withRelationsCreated(record.get( "a.relations_created" ).asLong())
+			    	.withVersion(record.get( "a.version" ).asString());
+			}				
+		}finally {
+			session.close();
+		}
+		return app;
 	}
 	
-	public void storeBiclusters(StoreBiclustersParams params){
+	private void setCounters(GraphUpdateStat stat, SummaryCounters counters){
+		stat
+			.withNodesCreated((long)counters.nodesCreated())
+			.withRelationshipsCreated((long)counters.relationshipsCreated())
+			.withPropertiesSet((long) counters.propertiesSet());
+	}
+	
+	public GraphUpdateStat storeBiclusters(StoreBiclustersParams params){
+		GraphUpdateStat stat = new GraphUpdateStat();
+		
 		Session session = getSession();
 		Transaction tr = session.beginTransaction();
 		try{
 			for(Bicluster bc: params.getBiclusters()){
 				
-				tr.run(
+				StatementResult res = tr.run(
 					"create(b:Bicluster:AppResult{guid:{bGuid}, _appGuid:{appGuid}, featureGuids:{featureGuids}})" 
 						+" with b" 
 						+" match(a:KEApp{guid:{appGuid}})"
 						+" create (b)-[:MY_APP]->(a)"
+						+" with b"
+						+" MATCH (c:Compendium{guid:{cmpGuid}})"
+						+" CREATE (b)-[:MY_COMPENDIUM]->(c)"
 						+" with b"
 						+" MATCH  (f:Feature)"
 						+" WHERE  f.guid in {featureGuids}"
@@ -226,13 +296,16 @@ public class Neo4jDataProvider {
 					parameters(
 						"bGuid",bc.getGuid()
 						,"appGuid",bc.getKeappGuid()
-						,"featureGuids",bc.getFeatureGuids()));				
+						,"cmpGuid", bc.getCompendiumGuid()
+						,"featureGuids",bc.getFeatureGuids()));			
+				setCounters(stat, res.consume().counters());			
 			}
 			tr.success();
 		} finally {
 			tr.close();
 			session.close();
 		}
+		return stat;		
 	}
 	
 	public List<CompendiumDescriptor> getCompendiumDescriptors(GetCompendiumDescriptorsParams params) {
@@ -308,7 +381,8 @@ public class Neo4jDataProvider {
 		}
 		return new ArrayList<Bicluster>(guid2bicluster.values());
 	}
-
+	
+	
 	public List<BiclusterDescriptor> getBiclusterDescriptors(GetBiclusterDescriptorsParams params) {
 		// TODO Auto-generated method stub
 		return null;
@@ -343,5 +417,5 @@ public class Neo4jDataProvider {
 			System.out.println(item);
 		}
 		
-	}	
+	}
 }
