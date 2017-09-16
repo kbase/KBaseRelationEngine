@@ -322,7 +322,7 @@ CompendiumDescriptor is a reference to a hash where the following keys are defin
 $params is a KBaseRelationEngine.StoreKEAppDescriptorParams
 $return is a KBaseRelationEngine.GraphUpdateStat
 StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
-	keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+	app has a value which is a KBaseRelationEngine.KEAppDescriptor
 KEAppDescriptor is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	name has a value which is a string
@@ -345,7 +345,7 @@ GraphUpdateStat is a reference to a hash where the following keys are defined:
 $params is a KBaseRelationEngine.StoreKEAppDescriptorParams
 $return is a KBaseRelationEngine.GraphUpdateStat
 StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
-	keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+	app has a value which is a KBaseRelationEngine.KEAppDescriptor
 KEAppDescriptor is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	name has a value which is a string
@@ -412,6 +412,116 @@ GraphUpdateStat is a reference to a hash where the following keys are defined:
         Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeKEAppDescriptor",
 					    status_line => $self->{client}->status_line,
 					    method_name => 'storeKEAppDescriptor',
+				       );
+    }
+}
+ 
+
+
+=head2 updateKEAppDescriptor
+
+  $return = $obj->updateKEAppDescriptor($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.StoreKEAppDescriptorParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
+	app has a value which is a KBaseRelationEngine.KEAppDescriptor
+KEAppDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	version has a value which is a string
+	last_run_epoch has a value which is an int
+	nodes_created has a value which is an int
+	relations_created has a value which is an int
+	properties_set has a value which is an int
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.StoreKEAppDescriptorParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
+	app has a value which is a KBaseRelationEngine.KEAppDescriptor
+KEAppDescriptor is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	version has a value which is a string
+	last_run_epoch has a value which is an int
+	nodes_created has a value which is an int
+	relations_created has a value which is an int
+	properties_set has a value which is an int
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub updateKEAppDescriptor
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function updateKEAppDescriptor (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to updateKEAppDescriptor:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'updateKEAppDescriptor');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.updateKEAppDescriptor",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'updateKEAppDescriptor',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method updateKEAppDescriptor",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'updateKEAppDescriptor',
 				       );
     }
 }
@@ -1525,7 +1635,7 @@ properties_set has a value which is an int
 
 <pre>
 a reference to a hash where the following keys are defined:
-keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+app has a value which is a KBaseRelationEngine.KEAppDescriptor
 
 </pre>
 
@@ -1534,7 +1644,7 @@ keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
 =begin text
 
 a reference to a hash where the following keys are defined:
-keapp has a value which is a KBaseRelationEngine.KEAppDescriptor
+app has a value which is a KBaseRelationEngine.KEAppDescriptor
 
 
 =end text

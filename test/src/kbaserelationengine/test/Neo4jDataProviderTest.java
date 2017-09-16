@@ -1,13 +1,9 @@
 package kbaserelationengine.test;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.junit.Test;
 
 import kbaserelationengine.Bicluster;
 import kbaserelationengine.CompendiumDescriptor;
@@ -29,7 +25,7 @@ public class Neo4jDataProviderTest {
 	//@Test
 	public void testCreateApp() {
 		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
-		.withKeapp(new KEAppDescriptor()
+		.withApp(new KEAppDescriptor()
 				.withGuid("KEApp1")
 				.withLastRunEpoch(System.currentTimeMillis())
 				.withName("Expression Biclusters")

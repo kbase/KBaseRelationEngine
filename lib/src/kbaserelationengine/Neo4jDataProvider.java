@@ -193,7 +193,7 @@ public class Neo4jDataProvider {
 		GraphUpdateStat stat = new GraphUpdateStat();
 		
 		Session session = getSession();
-		KEAppDescriptor app = params.getKeapp();
+		KEAppDescriptor app = params.getApp();
 		try{
 			StatementResult res = session.run(
 						"merge(a:KEApp{guid:{guid}}) "
@@ -512,7 +512,7 @@ public class Neo4jDataProvider {
 //		System.out.println(stat);
 		
 		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
-		.withKeapp(new KEAppDescriptor()
+		.withApp(new KEAppDescriptor()
 				.withGuid("KEApp2")
 				.withLastRunEpoch(System.currentTimeMillis())
 				.withName("Expression Biclusters")
