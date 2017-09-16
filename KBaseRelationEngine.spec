@@ -102,5 +102,29 @@ module KBaseRelationEngine {
 	typedef structure{
 		list<string> bicluster_guids;
 	} GetBiclustersParams;	
-	funcdef getBiclusters(GetBiclustersParams params) returns (list<Bicluster>) authentication required;
+	funcdef getBiclusters(GetBiclustersParams params) returns (list<Bicluster>) authentication required;	
+
+
+	typedef string ws_genome_obj_ref;
+	typedef string ws_feature_guid;
+	typedef string ref_ontology_term_guid;
+
+
+	typedef structure{
+		ws_genome_obj_ref genome_ref;
+		list<ws_feature_guid> feature_guids;				
+	} StoreWSGenomeParams;	
+	funcdef storeWSGenome(StoreWSGenomeParams params) returns (GraphUpdateStat) authentication required;
+
+	typedef structure{
+		mapping<string,string> ws2ref_feature_guids;		
+	} ConnectWSFeatures2RefOrthologsParams;
+	funcdef connectWSFeatures2RefOrthologs(ConnectWSFeatures2RefOrthologsParams params) returns (GraphUpdateStat) authentication required;
+
+	typedef structure{
+		mapping<ws_feature_guid,list<ref_ontology_term_guid>> feature2term_list;		
+	} ConnectWSFeatures2RefOTermsParams;
+	funcdef connectWSFeatures2RefOTerms(ConnectWSFeatures2RefOTermsParams params) returns (GraphUpdateStat) authentication required;
+
+	
 };

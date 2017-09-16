@@ -904,6 +904,298 @@ Bicluster is a reference to a hash where the following keys are defined:
     }
 }
  
+
+
+=head2 storeWSGenome
+
+  $return = $obj->storeWSGenome($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.StoreWSGenomeParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreWSGenomeParams is a reference to a hash where the following keys are defined:
+	genome_ref has a value which is a KBaseRelationEngine.ws_genome_obj_ref
+	feature_guids has a value which is a reference to a list where each element is a KBaseRelationEngine.ws_feature_guid
+ws_genome_obj_ref is a string
+ws_feature_guid is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.StoreWSGenomeParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreWSGenomeParams is a reference to a hash where the following keys are defined:
+	genome_ref has a value which is a KBaseRelationEngine.ws_genome_obj_ref
+	feature_guids has a value which is a reference to a list where each element is a KBaseRelationEngine.ws_feature_guid
+ws_genome_obj_ref is a string
+ws_feature_guid is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub storeWSGenome
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function storeWSGenome (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to storeWSGenome:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'storeWSGenome');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.storeWSGenome",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'storeWSGenome',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeWSGenome",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'storeWSGenome',
+				       );
+    }
+}
+ 
+
+
+=head2 connectWSFeatures2RefOrthologs
+
+  $return = $obj->connectWSFeatures2RefOrthologs($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.ConnectWSFeatures2RefOrthologsParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+ConnectWSFeatures2RefOrthologsParams is a reference to a hash where the following keys are defined:
+	ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.ConnectWSFeatures2RefOrthologsParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+ConnectWSFeatures2RefOrthologsParams is a reference to a hash where the following keys are defined:
+	ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub connectWSFeatures2RefOrthologs
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function connectWSFeatures2RefOrthologs (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to connectWSFeatures2RefOrthologs:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'connectWSFeatures2RefOrthologs');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.connectWSFeatures2RefOrthologs",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'connectWSFeatures2RefOrthologs',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method connectWSFeatures2RefOrthologs",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'connectWSFeatures2RefOrthologs',
+				       );
+    }
+}
+ 
+
+
+=head2 connectWSFeatures2RefOTerms
+
+  $return = $obj->connectWSFeatures2RefOTerms($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.ConnectWSFeatures2RefOTermsParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+ConnectWSFeatures2RefOTermsParams is a reference to a hash where the following keys are defined:
+	feature2term_list has a value which is a reference to a hash where the key is a KBaseRelationEngine.ws_feature_guid and the value is a reference to a list where each element is a KBaseRelationEngine.ref_ontology_term_guid
+ws_feature_guid is a string
+ref_ontology_term_guid is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.ConnectWSFeatures2RefOTermsParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+ConnectWSFeatures2RefOTermsParams is a reference to a hash where the following keys are defined:
+	feature2term_list has a value which is a reference to a hash where the key is a KBaseRelationEngine.ws_feature_guid and the value is a reference to a list where each element is a KBaseRelationEngine.ref_ontology_term_guid
+ws_feature_guid is a string
+ref_ontology_term_guid is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	relationships_created has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub connectWSFeatures2RefOTerms
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function connectWSFeatures2RefOTerms (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to connectWSFeatures2RefOTerms:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'connectWSFeatures2RefOTerms');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.connectWSFeatures2RefOTerms",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'connectWSFeatures2RefOTerms',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method connectWSFeatures2RefOTerms",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'connectWSFeatures2RefOTerms',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -947,16 +1239,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'getBiclusters',
+                method_name => 'connectWSFeatures2RefOTerms',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method getBiclusters",
+            error => "Error invoking method connectWSFeatures2RefOTerms",
             status_line => $self->{client}->status_line,
-            method_name => 'getBiclusters',
+            method_name => 'connectWSFeatures2RefOTerms',
         );
     }
 }
@@ -1469,6 +1761,176 @@ bicluster_guids has a value which is a reference to a list where each element is
 
 a reference to a hash where the following keys are defined:
 bicluster_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 ws_genome_obj_ref
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 ws_feature_guid
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 ref_ontology_term_guid
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 StoreWSGenomeParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+genome_ref has a value which is a KBaseRelationEngine.ws_genome_obj_ref
+feature_guids has a value which is a reference to a list where each element is a KBaseRelationEngine.ws_feature_guid
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+genome_ref has a value which is a KBaseRelationEngine.ws_genome_obj_ref
+feature_guids has a value which is a reference to a list where each element is a KBaseRelationEngine.ws_feature_guid
+
+
+=end text
+
+=back
+
+
+
+=head2 ConnectWSFeatures2RefOrthologsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 ConnectWSFeatures2RefOTermsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+feature2term_list has a value which is a reference to a hash where the key is a KBaseRelationEngine.ws_feature_guid and the value is a reference to a list where each element is a KBaseRelationEngine.ref_ontology_term_guid
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+feature2term_list has a value which is a reference to a hash where the key is a KBaseRelationEngine.ws_feature_guid and the value is a reference to a list where each element is a KBaseRelationEngine.ref_ontology_term_guid
 
 
 =end text

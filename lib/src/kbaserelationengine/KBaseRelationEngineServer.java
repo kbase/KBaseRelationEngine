@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "4395a219eb6912a2e2adc2236488b1c3f54800f0";
+    private static final String gitCommitHash = "1317ceb183ad6a5883229ff9a83ed6a20f451ee4";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -176,6 +176,54 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
         //BEGIN getBiclusters
         returnVal = dataProvider.getBiclusters(params);        
         //END getBiclusters
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: storeWSGenome</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.StoreWSGenomeParams StoreWSGenomeParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.storeWSGenome", async=true)
+    public GraphUpdateStat storeWSGenome(StoreWSGenomeParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GraphUpdateStat returnVal = null;
+        //BEGIN storeWSGenome
+        returnVal = dataProvider.storeWSGenome(params);        
+        //END storeWSGenome
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: connectWSFeatures2RefOrthologs</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.ConnectWSFeatures2RefOrthologsParams ConnectWSFeatures2RefOrthologsParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.connectWSFeatures2RefOrthologs", async=true)
+    public GraphUpdateStat connectWSFeatures2RefOrthologs(ConnectWSFeatures2RefOrthologsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GraphUpdateStat returnVal = null;
+        //BEGIN connectWSFeatures2RefOrthologs
+        returnVal = dataProvider.connectWSFeatures2RefOrthologs(params);                
+        //END connectWSFeatures2RefOrthologs
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: connectWSFeatures2RefOTerms</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.ConnectWSFeatures2RefOTermsParams ConnectWSFeatures2RefOTermsParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.connectWSFeatures2RefOTerms", async=true)
+    public GraphUpdateStat connectWSFeatures2RefOTerms(ConnectWSFeatures2RefOTermsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GraphUpdateStat returnVal = null;
+        //BEGIN connectWSFeatures2RefOTerms
+        returnVal = dataProvider.connectWSFeatures2RefOTerms(params);                        
+        //END connectWSFeatures2RefOTerms
         return returnVal;
     }
     @JsonServerMethod(rpc = "KBaseRelationEngine.status")

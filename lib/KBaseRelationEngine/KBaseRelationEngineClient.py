@@ -143,6 +143,45 @@ class KBaseRelationEngine(object):
             'KBaseRelationEngine.getBiclusters',
             [params], self._service_ver, context)
 
+    def storeWSGenome(self, params, context=None):
+        """
+        :param params: instance of type "StoreWSGenomeParams" -> structure:
+           parameter "genome_ref" of type "ws_genome_obj_ref", parameter
+           "feature_guids" of list of type "ws_feature_guid"
+        :returns: instance of type "GraphUpdateStat" -> structure: parameter
+           "nodes_created" of Long, parameter "relationships_created" of
+           Long, parameter "properties_set" of Long
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.storeWSGenome',
+            [params], self._service_ver, context)
+
+    def connectWSFeatures2RefOrthologs(self, params, context=None):
+        """
+        :param params: instance of type
+           "ConnectWSFeatures2RefOrthologsParams" -> structure: parameter
+           "ws2ref_feature_guids" of mapping from String to String
+        :returns: instance of type "GraphUpdateStat" -> structure: parameter
+           "nodes_created" of Long, parameter "relationships_created" of
+           Long, parameter "properties_set" of Long
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.connectWSFeatures2RefOrthologs',
+            [params], self._service_ver, context)
+
+    def connectWSFeatures2RefOTerms(self, params, context=None):
+        """
+        :param params: instance of type "ConnectWSFeatures2RefOTermsParams"
+           -> structure: parameter "feature2term_list" of mapping from type
+           "ws_feature_guid" to list of type "ref_ontology_term_guid"
+        :returns: instance of type "GraphUpdateStat" -> structure: parameter
+           "nodes_created" of Long, parameter "relationships_created" of
+           Long, parameter "properties_set" of Long
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.connectWSFeatures2RefOTerms',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('KBaseRelationEngine.status',
                                         [], self._service_ver, context)
