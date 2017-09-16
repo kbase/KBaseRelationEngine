@@ -59,9 +59,14 @@ module KBaseRelationEngine {
 	} KEAppDescriptor;
 	
 	typedef structure{
-		KEAppDescriptor keapp;
+		KEAppDescriptor app;
 	}StoreKEAppDescriptorParams; 
 	funcdef storeKEAppDescriptor(StoreKEAppDescriptorParams params) returns (GraphUpdateStat) authentication required; 
+	
+	
+	funcdef updateKEAppDescriptor(StoreKEAppDescriptorParams params) returns (GraphUpdateStat) authentication required; 
+	
+	
 	
 	typedef structure{
 		string app_guid;
