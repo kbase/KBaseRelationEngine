@@ -6,12 +6,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.eclipse.jetty.util.StringUtil;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
@@ -212,7 +214,7 @@ public class Neo4jDataProvider {
 							"relations_created",app.getRelationsCreated(),
 							"properties_set",app.getPropertiesSet()));
 			
-			setCounters(stat, res.consume().counters());			
+			updateCounters(stat, res.consume().counters());			
 		} finally {
 			session.close();
 		}	
@@ -267,11 +269,15 @@ public class Neo4jDataProvider {
 		return app;
 	}
 	
-	private void setCounters(GraphUpdateStat stat, SummaryCounters counters){
+	private void updateCounters(GraphUpdateStat stat, SummaryCounters counters){
+		Long nodesCreated = stat.getNodesCreated() != null ? stat.getNodesCreated(): 0;
+		Long relationshipsCreated = stat.getRelationshipsCreated() != null ? stat.getRelationshipsCreated(): 0;
+		Long propertiesSet = stat.getPropertiesSet() != null ? stat.getPropertiesSet(): 0;
+		
 		stat
-			.withNodesCreated((long)counters.nodesCreated())
-			.withRelationshipsCreated((long)counters.relationshipsCreated())
-			.withPropertiesSet((long) counters.propertiesSet());
+			.withNodesCreated(nodesCreated +  counters.nodesCreated())
+			.withRelationshipsCreated(relationshipsCreated + counters.relationshipsCreated())
+			.withPropertiesSet(propertiesSet + counters.propertiesSet());
 	}
 	
 	public GraphUpdateStat storeBiclusters(StoreBiclustersParams params){
@@ -299,7 +305,7 @@ public class Neo4jDataProvider {
 						,"appGuid",bc.getKeappGuid()
 						,"cmpGuid", bc.getCompendiumGuid()
 						,"featureGuids",bc.getFeatureGuids()));			
-				setCounters(stat, res.consume().counters());			
+				updateCounters(stat, res.consume().counters());			
 			}
 			tr.success();
 		} finally {
@@ -389,21 +395,78 @@ public class Neo4jDataProvider {
 		return null;
 	}
 	
+	public GraphUpdateStat storeWSGenome(StoreWSGenomeParams params) {
+		GraphUpdateStat stat = new GraphUpdateStat();		
+		String fguids = String.join(";", params.getFeatureGuids());			
+		Session session = getSession();
+		try{			
+			StatementResult res = session.run("create(g:WSGenome{guid:{gGuid}, wsId:{wsGuid}}) "
+					+ " with g "
+					+ " foreach (fguid in split({fguids},';')  | "
+					+ " create(f:WSFeature{guid:fguid}) "
+					+ " create (f)-[:MY_GENOME]->(g) )",
+					parameters("gGuid", params.getGenomeRef()
+							,"wsGuid", params.getGenomeRef()
+							,"fguids", fguids));			
+			updateCounters(stat, res.consume().counters());			
+		} finally {
+			session.close();
+		}
+		return stat;	
+	}
+
+	public GraphUpdateStat connectWSFeatures2RefOrthologs(ConnectWSFeatures2RefOrthologsParams params) {
+		GraphUpdateStat stat = new GraphUpdateStat();		
+		Session session = getSession();
+		Transaction tr = session.beginTransaction();
+		try{
+			for(Entry<String, String> entry: params.getWs2refFeatureGuids().entrySet()){
+				String wsFeatureGuid = entry.getKey();
+				String refFeatureGuid = entry.getValue();
+				
+				StatementResult res = tr.run(
+					"match(wf:WSFeature{guid:{wsFeatureGuid}}), "
+					+ " (rf:Feature{guid:{refFeatureGuid}})-[r:MY_ORTHOLOG_GROUP]-(og:OrthologGroup)"
+					+ " CREATE (wf)-[:MY_ORTHOLOG_GROUP]->(og)",				
+					parameters(
+						"wsFeatureGuid", wsFeatureGuid
+						,"refFeatureGuid", refFeatureGuid));			
+				updateCounters(stat, res.consume().counters());			
+			}
+			tr.success();
+		} finally {
+			tr.close();
+			session.close();
+		}
+		return stat;	
+	}
+
+	public GraphUpdateStat connectWSFeatures2RefOTerms(ConnectWSFeatures2RefOTermsParams params) {
+		// TODO Auto-generated method stub
+		return null;
+	}	
+	
 	public static void main(String[] args) throws IOException {
 //		new Neo4jDataProvider(null).loadReferenceData();
+		
+//		new Neo4jDataProvider(null).cleanKEAppResults(new CleanKEAppResultsParams().withAppGuid("KEApp1"));
+//		
 //		String[][] _bis = new String[][]{
-//			{"BIC:1234","KEApp1", "KBaseGen123;KBaseGen120;KBaseGen121"},
-//			{"BIC:3422","KEApp1", "KBaseGen101;KBaseGen100;KBaseGen104;KBaseGen111"},
-//			{"BIC:3451","KEApp1", "KBaseGen101;KBaseGen101;KBaseGen104;KBaseGen121"}
+//			{"BIC:1", "CMP:1505431589321","KEApp1", "KBaseGen123;KBaseGen120;KBaseGen121"},
+//			{"BIC:2","CMP:1505431589321","KEApp1", "KBaseGen101;KBaseGen100;KBaseGen104;KBaseGen111"},
+//			{"BIC:3","CMP:1505431589339","KEApp1", "KBaseGen101;KBaseGen101;KBaseGen104;KBaseGen121"}
 //		};
 //		List<Bicluster> biclusters = new ArrayList<Bicluster>();
 //		for(String[] vals: _bis){
 //			biclusters.add(new Bicluster()
 //					.withGuid(vals[0])
-//					.withKeappGuid(vals[1])
-//					.withFeatureGuids(Arrays.asList(vals[2].split(";"))));			
+//					.withCompendiumGuid(vals[1])
+//					.withKeappGuid(vals[2])
+//					.withFeatureGuids(Arrays.asList(vals[3].split(";"))));			
 //		}
 //		new Neo4jDataProvider(null).storeBiclusters(new StoreBiclustersParams().withBiclusters(biclusters) );		
+
+		
 		
 //		List<Bicluster> items = new Neo4jDataProvider(null).getBiclusters(new GetBiclustersParams().withBiclusterGuids(
 //				Arrays.asList(new String[]{"BIC:1234", "BIC:3422"})
@@ -418,10 +481,31 @@ public class Neo4jDataProvider {
 //			System.out.println(item);
 //		}
 
-		new Neo4jDataProvider(null).cleanKEAppResults(new CleanKEAppResultsParams().withAppGuid("KEApp1"));
+//		new Neo4jDataProvider(null).cleanKEAppResults(new CleanKEAppResultsParams().withAppGuid("KEApp1"));
+//		
+//		KEAppDescriptor res = new Neo4jDataProvider(null).getKEAppDescriptor(new GetKEAppDescriptorParams().withAppGuid("KEApp1"));
+//		System.out.println(res);
+
 		
-		KEAppDescriptor res = new Neo4jDataProvider(null).getKEAppDescriptor(new GetKEAppDescriptorParams().withAppGuid("KEApp1"));
-		System.out.println(res);
+//		GraphUpdateStat stat = new Neo4jDataProvider(null).storeWSGenome(new StoreWSGenomeParams()
+//				.withFeatureGuids(Arrays.asList("ws:123/3/2:1","ws:123/3/2:2", "ws:123/3/2:3"))
+//				.withGenomeRef("123/3/2")
+//				);
+//		System.out.println(stat);
+
 		
+//		String[] wsGuids = new String[]{"ws:123/3/2:1", "ws:123/3/2:2", "ws:123/3/2:3"};
+//		String[] rfGuids = new String[]{"KBaseGen1313", "KBaseGen1312", "KBaseGen1314"};
+//		Hashtable<String,String> mm = new Hashtable<String, String>();
+//		for(int i = 0; i < wsGuids.length; i++){
+//			mm.put(wsGuids[i], rfGuids[i]);
+//		}
+//		
+//		GraphUpdateStat stat = new Neo4jDataProvider(null).connectWSFeatures2RefOrthologs(
+//				new ConnectWSFeatures2RefOrthologsParams()
+//				.withWs2refFeatureGuids(mm));
+//		System.out.println(stat);
 	}
+
+
 }
