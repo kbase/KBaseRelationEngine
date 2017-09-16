@@ -6,14 +6,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.eclipse.jetty.util.StringUtil;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
@@ -396,8 +394,15 @@ public class Neo4jDataProvider {
 	}
 	
 	public GraphUpdateStat storeWSGenome(StoreWSGenomeParams params) {
-		GraphUpdateStat stat = new GraphUpdateStat();		
-		String fguids = String.join(";", params.getFeatureGuids());			
+		GraphUpdateStat stat = new GraphUpdateStat();
+//		String fguids = String.join(";", params.getFeatureGuids());			
+		StringBuffer sb = new StringBuffer();
+		for(String guid: params.getFeatureGuids()){
+			if(sb.length() > 0) sb.append(";");
+			sb.append(guid);
+		}
+		String fguids = sb.toString();
+		
 		Session session = getSession();
 		try{			
 			StatementResult res = session.run("create(g:WSGenome{guid:{gGuid}, wsId:{wsGuid}}) "
