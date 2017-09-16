@@ -66,17 +66,33 @@ class KBaseRelationEngine(object):
     def storeKEAppDescriptor(self, params, context=None):
         """
         :param params: instance of type "StoreKEAppDescriptorParams" ->
-           structure: parameter "keapp" of type "KEAppDescriptor" ->
-           structure: parameter "guid" of String, parameter "name" of String,
-           parameter "version" of String, parameter "last_run_epoch" of Long,
-           parameter "nodes_created" of Long, parameter "relations_created"
-           of Long, parameter "properties_set" of Long
+           structure: parameter "app" of type "KEAppDescriptor" -> structure:
+           parameter "guid" of String, parameter "name" of String, parameter
+           "version" of String, parameter "last_run_epoch" of Long, parameter
+           "nodes_created" of Long, parameter "relations_created" of Long,
+           parameter "properties_set" of Long
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
            "nodes_created" of Long, parameter "relationships_created" of
            Long, parameter "properties_set" of Long
         """
         return self._client.call_method(
             'KBaseRelationEngine.storeKEAppDescriptor',
+            [params], self._service_ver, context)
+
+    def updateKEAppDescriptor(self, params, context=None):
+        """
+        :param params: instance of type "StoreKEAppDescriptorParams" ->
+           structure: parameter "app" of type "KEAppDescriptor" -> structure:
+           parameter "guid" of String, parameter "name" of String, parameter
+           "version" of String, parameter "last_run_epoch" of Long, parameter
+           "nodes_created" of Long, parameter "relations_created" of Long,
+           parameter "properties_set" of Long
+        :returns: instance of type "GraphUpdateStat" -> structure: parameter
+           "nodes_created" of Long, parameter "relationships_created" of
+           Long, parameter "properties_set" of Long
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.updateKEAppDescriptor',
             [params], self._service_ver, context)
 
     def cleanKEAppResults(self, params, context=None):

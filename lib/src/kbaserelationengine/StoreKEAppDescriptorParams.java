@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "keapp"
+    "app"
 })
 public class StoreKEAppDescriptorParams {
 
@@ -28,8 +28,8 @@ public class StoreKEAppDescriptorParams {
      * 
      * 
      */
-    @JsonProperty("keapp")
-    private KEAppDescriptor keapp;
+    @JsonProperty("app")
+    private KEAppDescriptor app;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
@@ -37,9 +37,9 @@ public class StoreKEAppDescriptorParams {
      * 
      * 
      */
-    @JsonProperty("keapp")
-    public KEAppDescriptor getKeapp() {
-        return keapp;
+    @JsonProperty("app")
+    public KEAppDescriptor getApp() {
+        return app;
     }
 
     /**
@@ -47,13 +47,13 @@ public class StoreKEAppDescriptorParams {
      * 
      * 
      */
-    @JsonProperty("keapp")
-    public void setKeapp(KEAppDescriptor keapp) {
-        this.keapp = keapp;
+    @JsonProperty("app")
+    public void setApp(KEAppDescriptor app) {
+        this.app = app;
     }
 
-    public StoreKEAppDescriptorParams withKeapp(KEAppDescriptor keapp) {
-        this.keapp = keapp;
+    public StoreKEAppDescriptorParams withApp(KEAppDescriptor app) {
+        this.app = app;
         return this;
     }
 
@@ -69,7 +69,7 @@ public class StoreKEAppDescriptorParams {
 
     @Override
     public String toString() {
-        return ((((("StoreKEAppDescriptorParams"+" [keapp=")+ keapp)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((("StoreKEAppDescriptorParams"+" [app=")+ app)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

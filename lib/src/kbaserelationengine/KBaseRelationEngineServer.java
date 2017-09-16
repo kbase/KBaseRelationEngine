@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "1317ceb183ad6a5883229ff9a83ed6a20f451ee4";
+    private static final String gitCommitHash = "0af6ff577756b0c762ac044ff9ec1c60c4bb7a87";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -97,6 +97,21 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     	checkAdmin(authPart);
     	returnVal = dataProvider.storeKEAppDescriptor(params);
         //END storeKEAppDescriptor
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: updateKEAppDescriptor</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.StoreKEAppDescriptorParams StoreKEAppDescriptorParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.updateKEAppDescriptor", async=true)
+    public GraphUpdateStat updateKEAppDescriptor(StoreKEAppDescriptorParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GraphUpdateStat returnVal = null;
+        //BEGIN updateKEAppDescriptor
+        //END updateKEAppDescriptor
         return returnVal;
     }
 
