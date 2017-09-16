@@ -196,13 +196,13 @@ public class Neo4jDataProvider {
 		KEAppDescriptor app = params.getKeapp();
 		try{
 			StatementResult res = session.run(
-						"merge(a:KEApp{ "
-						+ "guid:{guid},name:{name},"
-						+ "version:{version},"
-						+ "last_run_epoch:{last_run_epoch},"
-						+ "nodes_created: {nodes_created},"
-						+ "relations_created: {relations_created},"
-						+ "properties_set:{properties_set}});",
+						"merge(a:KEApp{guid:{guid}}) "
+						+ " set a.name={name},"
+						+ " a.version={version},"
+						+ " a.last_run_epoch={last_run_epoch},"
+						+ " a.nodes_created={nodes_created},"
+						+ " a.relations_created={relations_created},"
+						+ " a.properties_set={properties_set};",
 					parameters(
 							"guid",app.getGuid(),
 							"name",app.getName(),
@@ -510,6 +510,17 @@ public class Neo4jDataProvider {
 //				new ConnectWSFeatures2RefOrthologsParams()
 //				.withWs2refFeatureGuids(mm));
 //		System.out.println(stat);
+		
+		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
+		.withKeapp(new KEAppDescriptor()
+				.withGuid("KEApp2")
+				.withLastRunEpoch(System.currentTimeMillis())
+				.withName("Expression Biclusters")
+				.withNodesCreated(1L)
+				.withPropertiesSet(1L)
+				.withRelationsCreated(1L)
+				.withVersion("1.0")
+		));			
 	}
 
 
