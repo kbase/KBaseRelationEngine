@@ -333,7 +333,9 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 	properties_set has a value which is an int
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -356,7 +358,9 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 	properties_set has a value which is an int
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -627,7 +631,9 @@ Bicluster is a reference to a hash where the following keys are defined:
 	condition_guids has a value which is a reference to a list where each element is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -648,7 +654,9 @@ Bicluster is a reference to a hash where the following keys are defined:
 	condition_guids has a value which is a reference to a list where each element is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -926,7 +934,9 @@ ws_genome_obj_ref is a string
 ws_feature_guid is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -944,7 +954,9 @@ ws_genome_obj_ref is a string
 ws_feature_guid is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -1023,7 +1035,9 @@ ConnectWSFeatures2RefOrthologsParams is a reference to a hash where the followin
 	ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -1038,7 +1052,9 @@ ConnectWSFeatures2RefOrthologsParams is a reference to a hash where the followin
 	ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -1119,7 +1135,9 @@ ws_feature_guid is a string
 ref_ontology_term_guid is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -1136,7 +1154,9 @@ ws_feature_guid is a string
 ref_ontology_term_guid is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -1298,7 +1318,9 @@ sub _validate_version {
 <pre>
 a reference to a hash where the following keys are defined:
 nodes_created has a value which is an int
+nodes_deleted has a value which is an int
 relationships_created has a value which is an int
+relationships_deleted has a value which is an int
 properties_set has a value which is an int
 
 </pre>
@@ -1309,7 +1331,9 @@ properties_set has a value which is an int
 
 a reference to a hash where the following keys are defined:
 nodes_created has a value which is an int
+nodes_deleted has a value which is an int
 relationships_created has a value which is an int
+relationships_deleted has a value which is an int
 properties_set has a value which is an int
 
 

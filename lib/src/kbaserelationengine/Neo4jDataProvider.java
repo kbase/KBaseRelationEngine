@@ -116,6 +116,7 @@ public class Neo4jDataProvider {
 			StringBuffer statement = new StringBuffer();
 			for(String line = br.readLine(); line != null; line = br.readLine()){
 				line = line.trim();
+				if(line.startsWith("#")) continue;
 				if(line.startsWith(">")){
 					if(!name.startsWith("#") && statement.length() > 0){
 						statements.add(new CypherStatement(name, statement.toString()));
@@ -269,12 +270,16 @@ public class Neo4jDataProvider {
 	
 	private void updateCounters(GraphUpdateStat stat, SummaryCounters counters){
 		Long nodesCreated = stat.getNodesCreated() != null ? stat.getNodesCreated(): 0;
+		Long nodesDeleted = stat.getNodesDeleted() != null ? stat.getNodesDeleted(): 0;
 		Long relationshipsCreated = stat.getRelationshipsCreated() != null ? stat.getRelationshipsCreated(): 0;
+		Long relationshipsDeleted = stat.getRelationshipsDeleted() != null ? stat.getRelationshipsDeleted(): 0;
 		Long propertiesSet = stat.getPropertiesSet() != null ? stat.getPropertiesSet(): 0;
 		
 		stat
 			.withNodesCreated(nodesCreated +  counters.nodesCreated())
+			.withNodesDeleted(nodesDeleted + counters.nodesDeleted())
 			.withRelationshipsCreated(relationshipsCreated + counters.relationshipsCreated())
+			.withRelationshipsDeleted(relationshipsDeleted + counters.relationshipsDeleted())
 			.withPropertiesSet(propertiesSet + counters.propertiesSet());
 	}
 	
@@ -451,8 +456,33 @@ public class Neo4jDataProvider {
 		return null;
 	}	
 	
+	public GraphUpdateStat detachDelete(String type, int batchCount, boolean deleteAll) {
+		GraphUpdateStat stat = new GraphUpdateStat();		
+		Session session = getSession();
+		try{
+			int nodesDeleted = 1;
+			int cycleIdex = 1;
+			while(nodesDeleted > 0){				
+				StatementResult res = session.run("match(t:"+type+") with t limit " + batchCount
+						+ " detach delete t");	
+				SummaryCounters counters = res.consume().counters();
+				updateCounters(stat, counters);
+				nodesDeleted = counters.nodesDeleted();
+				if(!deleteAll) break;
+				System.out.print(".");
+				if(cycleIdex %10 == 0){
+					System.out.println("" + cycleIdex + ": deleted so far=" + stat.getNodesDeleted() + " ");					
+				}
+				cycleIdex++;
+			}
+		}finally{
+			session.close();
+		}
+		return stat;			
+	}
+	
 	public static void main(String[] args) throws IOException {
-//		new Neo4jDataProvider(null).loadReferenceData();
+		new Neo4jDataProvider(null).loadReferenceData();
 		
 //		new Neo4jDataProvider(null).cleanKEAppResults(new CleanKEAppResultsParams().withAppGuid("KEApp1"));
 //		
@@ -511,16 +541,20 @@ public class Neo4jDataProvider {
 //				.withWs2refFeatureGuids(mm));
 //		System.out.println(stat);
 		
-		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
-		.withApp(new KEAppDescriptor()
-				.withGuid("KEApp2")
-				.withLastRunEpoch(System.currentTimeMillis())
-				.withName("Expression Biclusters")
-				.withNodesCreated(1L)
-				.withPropertiesSet(1L)
-				.withRelationsCreated(1L)
-				.withVersion("1.0")
-		));			
+//		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
+//		.withApp(new KEAppDescriptor()
+//				.withGuid("KEApp2")
+//				.withLastRunEpoch(System.currentTimeMillis())
+//				.withName("Expression Biclusters")
+//				.withNodesCreated(1L)
+//				.withPropertiesSet(1L)
+//				.withRelationsCreated(1L)
+//				.withVersion("1.0")
+//		));			
+		
+//		GraphUpdateStat res = new Neo4jDataProvider(null).detachDelete("OrthologGroup", 1000, true);
+//		System.out.println(res);
+		
 	}
 
 

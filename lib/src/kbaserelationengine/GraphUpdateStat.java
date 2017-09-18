@@ -20,15 +20,21 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "nodes_created",
+    "nodes_deleted",
     "relationships_created",
+    "relationships_deleted",
     "properties_set"
 })
 public class GraphUpdateStat {
 
     @JsonProperty("nodes_created")
     private Long nodesCreated;
+    @JsonProperty("nodes_deleted")
+    private Long nodesDeleted;
     @JsonProperty("relationships_created")
     private Long relationshipsCreated;
+    @JsonProperty("relationships_deleted")
+    private Long relationshipsDeleted;
     @JsonProperty("properties_set")
     private Long propertiesSet;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -48,6 +54,21 @@ public class GraphUpdateStat {
         return this;
     }
 
+    @JsonProperty("nodes_deleted")
+    public Long getNodesDeleted() {
+        return nodesDeleted;
+    }
+
+    @JsonProperty("nodes_deleted")
+    public void setNodesDeleted(Long nodesDeleted) {
+        this.nodesDeleted = nodesDeleted;
+    }
+
+    public GraphUpdateStat withNodesDeleted(Long nodesDeleted) {
+        this.nodesDeleted = nodesDeleted;
+        return this;
+    }
+
     @JsonProperty("relationships_created")
     public Long getRelationshipsCreated() {
         return relationshipsCreated;
@@ -60,6 +81,21 @@ public class GraphUpdateStat {
 
     public GraphUpdateStat withRelationshipsCreated(Long relationshipsCreated) {
         this.relationshipsCreated = relationshipsCreated;
+        return this;
+    }
+
+    @JsonProperty("relationships_deleted")
+    public Long getRelationshipsDeleted() {
+        return relationshipsDeleted;
+    }
+
+    @JsonProperty("relationships_deleted")
+    public void setRelationshipsDeleted(Long relationshipsDeleted) {
+        this.relationshipsDeleted = relationshipsDeleted;
+    }
+
+    public GraphUpdateStat withRelationshipsDeleted(Long relationshipsDeleted) {
+        this.relationshipsDeleted = relationshipsDeleted;
         return this;
     }
 
@@ -90,7 +126,7 @@ public class GraphUpdateStat {
 
     @Override
     public String toString() {
-        return ((((((((("GraphUpdateStat"+" [nodesCreated=")+ nodesCreated)+", relationshipsCreated=")+ relationshipsCreated)+", propertiesSet=")+ propertiesSet)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((("GraphUpdateStat"+" [nodesCreated=")+ nodesCreated)+", nodesDeleted=")+ nodesDeleted)+", relationshipsCreated=")+ relationshipsCreated)+", relationshipsDeleted=")+ relationshipsDeleted)+", propertiesSet=")+ propertiesSet)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

@@ -6,7 +6,9 @@ module KBaseRelationEngine {
 
 	typedef structure{
 		int nodes_created;
+		int nodes_deleted;		
 		int relationships_created;
+		int relationships_deleted;		
 		int properties_set;		
 	} GraphUpdateStat;
 

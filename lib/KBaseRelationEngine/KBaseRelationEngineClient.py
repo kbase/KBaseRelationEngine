@@ -72,8 +72,9 @@ class KBaseRelationEngine(object):
            "nodes_created" of Long, parameter "relations_created" of Long,
            parameter "properties_set" of Long
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
-           "nodes_created" of Long, parameter "relationships_created" of
-           Long, parameter "properties_set" of Long
+           "nodes_created" of Long, parameter "nodes_deleted" of Long,
+           parameter "relationships_created" of Long, parameter
+           "relationships_deleted" of Long, parameter "properties_set" of Long
         """
         return self._client.call_method(
             'KBaseRelationEngine.storeKEAppDescriptor',
@@ -110,8 +111,9 @@ class KBaseRelationEngine(object):
            parameter "compendium_guid" of String, parameter "feature_guids"
            of list of String, parameter "condition_guids" of list of String
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
-           "nodes_created" of Long, parameter "relationships_created" of
-           Long, parameter "properties_set" of Long
+           "nodes_created" of Long, parameter "nodes_deleted" of Long,
+           parameter "relationships_created" of Long, parameter
+           "relationships_deleted" of Long, parameter "properties_set" of Long
         """
         return self._client.call_method(
             'KBaseRelationEngine.storeBiclusters',
@@ -149,8 +151,9 @@ class KBaseRelationEngine(object):
            parameter "genome_ref" of type "ws_genome_obj_ref", parameter
            "feature_guids" of list of type "ws_feature_guid"
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
-           "nodes_created" of Long, parameter "relationships_created" of
-           Long, parameter "properties_set" of Long
+           "nodes_created" of Long, parameter "nodes_deleted" of Long,
+           parameter "relationships_created" of Long, parameter
+           "relationships_deleted" of Long, parameter "properties_set" of Long
         """
         return self._client.call_method(
             'KBaseRelationEngine.storeWSGenome',
@@ -162,8 +165,9 @@ class KBaseRelationEngine(object):
            "ConnectWSFeatures2RefOrthologsParams" -> structure: parameter
            "ws2ref_feature_guids" of mapping from String to String
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
-           "nodes_created" of Long, parameter "relationships_created" of
-           Long, parameter "properties_set" of Long
+           "nodes_created" of Long, parameter "nodes_deleted" of Long,
+           parameter "relationships_created" of Long, parameter
+           "relationships_deleted" of Long, parameter "properties_set" of Long
         """
         return self._client.call_method(
             'KBaseRelationEngine.connectWSFeatures2RefOrthologs',
@@ -175,8 +179,9 @@ class KBaseRelationEngine(object):
            -> structure: parameter "feature2term_list" of mapping from type
            "ws_feature_guid" to list of type "ref_ontology_term_guid"
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
-           "nodes_created" of Long, parameter "relationships_created" of
-           Long, parameter "properties_set" of Long
+           "nodes_created" of Long, parameter "nodes_deleted" of Long,
+           parameter "relationships_created" of Long, parameter
+           "relationships_deleted" of Long, parameter "properties_set" of Long
         """
         return self._client.call_method(
             'KBaseRelationEngine.connectWSFeatures2RefOTerms',
