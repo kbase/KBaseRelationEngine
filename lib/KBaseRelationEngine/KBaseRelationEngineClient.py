@@ -108,8 +108,9 @@ class KBaseRelationEngine(object):
         :param params: instance of type "StoreBiclustersParams" -> structure:
            parameter "biclusters" of list of type "Bicluster" -> structure:
            parameter "guid" of String, parameter "keapp_guid" of String,
-           parameter "compendium_guid" of String, parameter "feature_guids"
-           of list of String, parameter "condition_guids" of list of String
+           parameter "compendium_guid" of String, parameter "taxonomy_guid"
+           of String, parameter "feature_guids" of list of String, parameter
+           "condition_guids" of list of String
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
            "nodes_created" of Long, parameter "nodes_deleted" of Long,
            parameter "relationships_created" of Long, parameter
@@ -119,27 +120,16 @@ class KBaseRelationEngine(object):
             'KBaseRelationEngine.storeBiclusters',
             [params], self._service_ver, context)
 
-    def getBiclusterDescriptors(self, params, context=None):
-        """
-        :param params: instance of type "GetBiclusterDescriptorsParams" ->
-           structure: parameter "taxonomy_guid" of String, parameter
-           "keapp_guid" of String, parameter "compendium_guid" of String
-        :returns: instance of list of type "BiclusterDescriptor" ->
-           structure: parameter "guid" of String, parameter "keapp_guid" of
-           String, parameter "compendium_guid" of String
-        """
-        return self._client.call_method(
-            'KBaseRelationEngine.getBiclusterDescriptors',
-            [params], self._service_ver, context)
-
     def getBiclusters(self, params, context=None):
         """
         :param params: instance of type "GetBiclustersParams" -> structure:
-           parameter "bicluster_guids" of list of String
+           parameter "keapp_guid" of String, parameter "taxonomy_guid" of
+           String, parameter "compendium_guid" of String
         :returns: instance of list of type "Bicluster" -> structure:
            parameter "guid" of String, parameter "keapp_guid" of String,
-           parameter "compendium_guid" of String, parameter "feature_guids"
-           of list of String, parameter "condition_guids" of list of String
+           parameter "compendium_guid" of String, parameter "taxonomy_guid"
+           of String, parameter "feature_guids" of list of String, parameter
+           "condition_guids" of list of String
         """
         return self._client.call_method(
             'KBaseRelationEngine.getBiclusters',

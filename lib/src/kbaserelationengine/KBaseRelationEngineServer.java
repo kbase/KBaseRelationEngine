@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "27151d0a9bafd4ec19dfd356255f525e7632b8fc";
+    private static final String gitCommitHash = "99ddc2d55303f0ac49466cdee37f0611b4b5968f";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -144,22 +144,6 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     	checkAdmin(authPart);    	
     	returnVal = dataProvider.storeBiclusters(params);
         //END storeBiclusters
-        return returnVal;
-    }
-
-    /**
-     * <p>Original spec-file function name: getBiclusterDescriptors</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link kbaserelationengine.GetBiclusterDescriptorsParams GetBiclusterDescriptorsParams}
-     * @return   instance of list of type {@link kbaserelationengine.BiclusterDescriptor BiclusterDescriptor}
-     */
-    @JsonServerMethod(rpc = "KBaseRelationEngine.getBiclusterDescriptors", async=true)
-    public List<BiclusterDescriptor> getBiclusterDescriptors(GetBiclusterDescriptorsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        List<BiclusterDescriptor> returnVal = null;
-        //BEGIN getBiclusterDescriptors
-        returnVal = dataProvider.getBiclusterDescriptors(params);
-        //END getBiclusterDescriptors
         return returnVal;
     }
 

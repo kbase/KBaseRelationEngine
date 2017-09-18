@@ -79,6 +79,7 @@ module KBaseRelationEngine {
 		string guid; 
 		string keapp_guid;
 		string compendium_guid;
+		string taxonomy_guid;
 		list<string> feature_guids;
 		list<string> condition_guids;
 	} Bicluster;		
@@ -87,26 +88,14 @@ module KBaseRelationEngine {
 		list<Bicluster> biclusters;
 	} StoreBiclustersParams; 		
 	funcdef storeBiclusters(StoreBiclustersParams params) returns(GraphUpdateStat) authentication required;
-	
+				
 	typedef structure{
-		string guid; 
 		string keapp_guid;
-		string compendium_guid;
-	} BiclusterDescriptor;
-			
-	typedef structure{
 		string taxonomy_guid;
-		string keapp_guid;
 		string compendium_guid;
-	}GetBiclusterDescriptorsParams;	
-	funcdef getBiclusterDescriptors(GetBiclusterDescriptorsParams params) returns (list<BiclusterDescriptor>) authentication required;
-	
-	typedef structure{
-		list<string> bicluster_guids;
-	} GetBiclustersParams;	
-	funcdef getBiclusters(GetBiclustersParams params) returns (list<Bicluster>) authentication required;	
-
-
+	}GetBiclustersParams;	
+	funcdef getBiclusters(GetBiclustersParams params) returns (list<Bicluster>) authentication required;
+		
 	typedef string ws_genome_obj_ref;
 	typedef string ws_feature_guid;
 	typedef string ref_ontology_term_guid;

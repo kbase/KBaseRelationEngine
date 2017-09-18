@@ -358,45 +358,44 @@ public class Neo4jDataProvider {
 	public List<Bicluster> getBiclusters(GetBiclustersParams params) {
 		Session session = getSession();
 		
-		Hashtable<String,Bicluster> guid2bicluster = new Hashtable<String,Bicluster>(); 
 		
-		List<CompendiumDescriptor> cds = new ArrayList<CompendiumDescriptor>();
-		try{			
-			StringBuffer sb = new StringBuffer();
-			for(String guid: params.getBiclusterGuids()){
-				if(sb.length() > 0){
-					sb.append(",");
-				}
-				sb.append("'" + guid + "'");
-			}
-			String guidArray = sb.toString();			
+		List<Bicluster> biclusters = new ArrayList<Bicluster>();
+		try{		
 			
-			// Get biclusters metadata 
-			StatementResult result = session.run( "match(b:Bicluster) where b.guid in [" + guidArray + "] return b.guid, b._appGuid, b.featureGuids;");
-			while ( result.hasNext() )
-			{
-			    Record record = result.next();
-			    Bicluster b = new Bicluster()
-			    		.withCompendiumGuid(null)
-			    		.withConditionGuids(null)
-			    		.withFeatureGuids(new ArrayList(record.get("b.featureGuids").asList()))
-			    		.withGuid(record.get( "b.guid" ).asString())
-			    		.withKeappGuid(record.get( "b._appGuid" ).asString());
-			    					    	
-			    System.out.println(record.get("b.featureGuids").getClass().getName()); 			    
-			    guid2bicluster.put(b.getGuid(), b);
-			}				
+			String matchStatement = "";
+			Value matchParameters = null;
+			if(params.getKeappGuid() != null){
+				matchStatement = "match(b:Bicluster{_appGuid:{appGuid}})--(c:Compendium)--(t:Taxon) ";
+				matchParameters = parameters( "appGuid", params.getKeappGuid() );
+			} else if (params.getTaxonomyGuid() != null){
+				matchStatement = "match(t:Taxon{guid:{taxGuid}})--(c:Compendium)--(b:Bicluster) ";
+				matchParameters = parameters( "taxGuid", params.getTaxonomyGuid() );
+			} else if (params.getCompendiumGuid() != null){
+				matchStatement = "match(c:Compendium{guid:{cmpGuid}})--(b:Bicluster), (c)--(t:Taxon) ";
+				matchParameters = parameters( "cmpGuid", params.getCompendiumGuid() );				
+			}
+			
+			if(matchStatement.length() > 0){
+				String statement = matchStatement + " return b.guid, b._appGuid, b.featureGuids,c.guid,t.guid";
+				StatementResult result = session.run( statement, matchParameters);				
+				while ( result.hasNext() )
+				{
+				    Record record = result.next();
+				    biclusters.add(new Bicluster()
+				    		.withCompendiumGuid(record.get( "c.guid" ).asString())
+				    		.withConditionGuids(null)
+				    		.withFeatureGuids(new ArrayList(record.get("b.featureGuids").asList()))
+				    		.withGuid(record.get( "b.guid" ).asString())
+				    		.withKeappGuid(record.get( "b._appGuid" ).asString())
+				    		.withTaxonomyGuid(record.get( "t.guid" ).asString()));				    		
+				}				
+			}			
+				
 		}finally {
 			session.close();
 		}
-		return new ArrayList<Bicluster>(guid2bicluster.values());
-	}
-	
-	
-	public List<BiclusterDescriptor> getBiclusterDescriptors(GetBiclusterDescriptorsParams params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		return biclusters;
+	}	
 	
 	public GraphUpdateStat storeWSGenome(StoreWSGenomeParams params) {
 		GraphUpdateStat stat = new GraphUpdateStat();
@@ -482,7 +481,7 @@ public class Neo4jDataProvider {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		new Neo4jDataProvider(null).loadReferenceData();
+//		new Neo4jDataProvider(null).loadReferenceData();
 		
 //		new Neo4jDataProvider(null).cleanKEAppResults(new CleanKEAppResultsParams().withAppGuid("KEApp1"));
 //		
@@ -554,6 +553,15 @@ public class Neo4jDataProvider {
 		
 //		GraphUpdateStat res = new Neo4jDataProvider(null).detachDelete("OrthologGroup", 1000, true);
 //		System.out.println(res);
+		
+//		List<Bicluster> items = new Neo4jDataProvider(null).getBiclusters(new GetBiclustersParams()
+//				.withTaxonomyGuid("KBaseTax3163472"));
+////				.withCompendiumGuid("CMP:1505431589412"));
+////				.withKeappGuid("KEApp1"));
+//		for(Bicluster b: items){
+//			System.out.println(b); 
+//		}
+//		System.out.println("Items count: " + items.size());
 		
 	}
 

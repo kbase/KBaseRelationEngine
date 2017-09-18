@@ -627,6 +627,7 @@ Bicluster is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
+	taxonomy_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
@@ -650,6 +651,7 @@ Bicluster is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
+	taxonomy_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
@@ -718,104 +720,6 @@ GraphUpdateStat is a reference to a hash where the following keys are defined:
  
 
 
-=head2 getBiclusterDescriptors
-
-  $return = $obj->getBiclusterDescriptors($params)
-
-=over 4
-
-=item Parameter and return types
-
-=begin html
-
-<pre>
-$params is a KBaseRelationEngine.GetBiclusterDescriptorsParams
-$return is a reference to a list where each element is a KBaseRelationEngine.BiclusterDescriptor
-GetBiclusterDescriptorsParams is a reference to a hash where the following keys are defined:
-	taxonomy_guid has a value which is a string
-	keapp_guid has a value which is a string
-	compendium_guid has a value which is a string
-BiclusterDescriptor is a reference to a hash where the following keys are defined:
-	guid has a value which is a string
-	keapp_guid has a value which is a string
-	compendium_guid has a value which is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-$params is a KBaseRelationEngine.GetBiclusterDescriptorsParams
-$return is a reference to a list where each element is a KBaseRelationEngine.BiclusterDescriptor
-GetBiclusterDescriptorsParams is a reference to a hash where the following keys are defined:
-	taxonomy_guid has a value which is a string
-	keapp_guid has a value which is a string
-	compendium_guid has a value which is a string
-BiclusterDescriptor is a reference to a hash where the following keys are defined:
-	guid has a value which is a string
-	keapp_guid has a value which is a string
-	compendium_guid has a value which is a string
-
-
-=end text
-
-=item Description
-
-
-
-=back
-
-=cut
-
- sub getBiclusterDescriptors
-{
-    my($self, @args) = @_;
-
-# Authentication: required
-
-    if ((my $n = @args) != 1)
-    {
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function getBiclusterDescriptors (received $n, expecting 1)");
-    }
-    {
-	my($params) = @args;
-
-	my @_bad_arguments;
-        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
-        if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to getBiclusterDescriptors:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'getBiclusterDescriptors');
-	}
-    }
-
-    my $url = $self->{url};
-    my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "KBaseRelationEngine.getBiclusterDescriptors",
-	    params => \@args,
-    });
-    if ($result) {
-	if ($result->is_error) {
-	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-					       code => $result->content->{error}->{code},
-					       method_name => 'getBiclusterDescriptors',
-					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-					      );
-	} else {
-	    return wantarray ? @{$result->result} : $result->result->[0];
-	}
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getBiclusterDescriptors",
-					    status_line => $self->{client}->status_line,
-					    method_name => 'getBiclusterDescriptors',
-				       );
-    }
-}
- 
-
-
 =head2 getBiclusters
 
   $return = $obj->getBiclusters($params)
@@ -830,11 +734,14 @@ BiclusterDescriptor is a reference to a hash where the following keys are define
 $params is a KBaseRelationEngine.GetBiclustersParams
 $return is a reference to a list where each element is a KBaseRelationEngine.Bicluster
 GetBiclustersParams is a reference to a hash where the following keys are defined:
-	bicluster_guids has a value which is a reference to a list where each element is a string
+	keapp_guid has a value which is a string
+	taxonomy_guid has a value which is a string
+	compendium_guid has a value which is a string
 Bicluster is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
+	taxonomy_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
 
@@ -847,11 +754,14 @@ Bicluster is a reference to a hash where the following keys are defined:
 $params is a KBaseRelationEngine.GetBiclustersParams
 $return is a reference to a list where each element is a KBaseRelationEngine.Bicluster
 GetBiclustersParams is a reference to a hash where the following keys are defined:
-	bicluster_guids has a value which is a reference to a list where each element is a string
+	keapp_guid has a value which is a string
+	taxonomy_guid has a value which is a string
+	compendium_guid has a value which is a string
 Bicluster is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
+	taxonomy_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
 
@@ -1642,6 +1552,7 @@ a reference to a hash where the following keys are defined:
 guid has a value which is a string
 keapp_guid has a value which is a string
 compendium_guid has a value which is a string
+taxonomy_guid has a value which is a string
 feature_guids has a value which is a reference to a list where each element is a string
 condition_guids has a value which is a reference to a list where each element is a string
 
@@ -1655,6 +1566,7 @@ a reference to a hash where the following keys are defined:
 guid has a value which is a string
 keapp_guid has a value which is a string
 compendium_guid has a value which is a string
+taxonomy_guid has a value which is a string
 feature_guids has a value which is a reference to a list where each element is a string
 condition_guids has a value which is a reference to a list where each element is a string
 
@@ -1695,74 +1607,6 @@ biclusters has a value which is a reference to a list where each element is a KB
 
 
 
-=head2 BiclusterDescriptor
-
-=over 4
-
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-guid has a value which is a string
-keapp_guid has a value which is a string
-compendium_guid has a value which is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-guid has a value which is a string
-keapp_guid has a value which is a string
-compendium_guid has a value which is a string
-
-
-=end text
-
-=back
-
-
-
-=head2 GetBiclusterDescriptorsParams
-
-=over 4
-
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-taxonomy_guid has a value which is a string
-keapp_guid has a value which is a string
-compendium_guid has a value which is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-taxonomy_guid has a value which is a string
-keapp_guid has a value which is a string
-compendium_guid has a value which is a string
-
-
-=end text
-
-=back
-
-
-
 =head2 GetBiclustersParams
 
 =over 4
@@ -1775,7 +1619,9 @@ compendium_guid has a value which is a string
 
 <pre>
 a reference to a hash where the following keys are defined:
-bicluster_guids has a value which is a reference to a list where each element is a string
+keapp_guid has a value which is a string
+taxonomy_guid has a value which is a string
+compendium_guid has a value which is a string
 
 </pre>
 
@@ -1784,7 +1630,9 @@ bicluster_guids has a value which is a reference to a list where each element is
 =begin text
 
 a reference to a hash where the following keys are defined:
-bicluster_guids has a value which is a reference to a list where each element is a string
+keapp_guid has a value which is a string
+taxonomy_guid has a value which is a string
+compendium_guid has a value which is a string
 
 
 =end text
