@@ -481,8 +481,63 @@ public class Neo4jDataProvider {
 	}
 	
 	public GraphUpdateStat storeTermEnrichmentProfiles(StoreTermEnrichmentProfilesParams params) {
-		// TODO Auto-generated method stub
-		return null;
+		GraphUpdateStat stat = new GraphUpdateStat();
+		
+		Session session = getSession();
+		Transaction tr = session.beginTransaction();				
+		try{			
+			for(TermEnrichmentProfile tp: params.getProfiles()){
+				
+				List<String> termGuids = new ArrayList<String>(); 
+				List<Double> pvalues = new ArrayList<Double>(); 
+				List<Long> sampleCounts = new ArrayList<Long>(); 
+				List<Long> expectedCounts = new ArrayList<Long>(); 
+				List<Long> totalCounts = new ArrayList<Long>(); 
+				for(TermEnrichment te: tp.getTerms()){
+					termGuids.add(te.getTermGuid());
+					pvalues.add(te.getPValue());
+					sampleCounts.add(te.getSampleCount());
+					expectedCounts.add(te.getExpectedCount());
+					totalCounts.add(te.getTotalCount());
+				}
+				
+				StatementResult res = tr.run(
+					"create(tp:TermEnrichmentProfile:AppResult{"
+						+ "guid:{tpGuid}"
+						+ ", _appGuid:{appGuid}"
+						+ ", termSpace:{termSpace}"
+						+ ", termGuids:{termGuids}"
+						+ ", pvalues:{pvalues}"
+						+ ", sampleCounts:{sampleCounts}"
+						+ ", expectedCounts:{expectedCounts}"
+						+ ", totalCounts:{totalCounts}"
+						+ "})" 
+						+" with tp" 
+						+" match(a:KEApp{guid:{appGuid}})"
+						+" create (tp)-[:MY_APP]->(a)"
+						
+						+" with tp"
+						+" MATCH (s:" + tp.getSourceGeneSetType() + "{guid:{sGuid}})"
+						+" CREATE (tp)-[:MY_FEATURE_SET]->(s)",
+					parameters(
+						"tpGuid",tp.getGuid()
+						,"appGuid",tp.getKeappGuid()
+						,"termSpace", tp.getTermNamespace()
+						,"termGuids", termGuids
+						,"pvalues",pvalues
+						,"sampleCounts",sampleCounts
+						,"expectedCounts",expectedCounts
+						,"totalCounts",totalCounts
+						,"sGuid", tp.getSourceGeneSetGuid()
+					));			
+				updateCounters(stat, res.consume().counters());			
+			}
+			tr.success();
+		} finally {
+			tr.close();
+			session.close();
+		}
+		return stat;	
 	}
 
 	public List<FeatureTerms> getFeatureTerms(GetFeatureTermsParams params) {
@@ -599,26 +654,64 @@ public class Neo4jDataProvider {
 //		}
 //		System.out.println("Items count: " + items.size());
 		
-		List<FeatureTerms> items = new Neo4jDataProvider(null).getFeatureTerms(new GetFeatureTermsParams()
-				.withTaxonGuid("KBaseTax984557")
-				.withTermSpace("molecular_function"));
-		int fcount = 0;
-		int tcount = 0;
-		int hcount = 0;
-		HashSet<String> h = new HashSet<String>();
-		for(FeatureTerms item: items){
-			System.out.println(item);
-			fcount ++;
-			if(item.getTermGuids().size() > 0){
-				tcount ++;
-			}
-			if(h.contains(item.getFeatureGuid())){
-				hcount++;
-			}
-			h.add(item.getFeatureGuid());
-		}
-		System.out.println(" fcount = " + fcount 
-				+ "\t tcount = " + tcount 
-				+ "\t hcount = " + hcount);
+//		List<FeatureTerms> items = new Neo4jDataProvider(null).getFeatureTerms(new GetFeatureTermsParams()
+//				.withTaxonGuid("KBaseTax984557")
+//				.withTermSpace("molecular_function"));
+//		int fcount = 0;
+//		int tcount = 0;
+//		int hcount = 0;
+//		HashSet<String> h = new HashSet<String>();
+//		for(FeatureTerms item: items){
+//			System.out.println(item);
+//			fcount ++;
+//			if(item.getTermGuids().size() > 0){
+//				tcount ++;
+//			}
+//			if(h.contains(item.getFeatureGuid())){
+//				hcount++;
+//			}
+//			h.add(item.getFeatureGuid());
+//		}
+//		System.out.println(" fcount = " + fcount 
+//				+ "\t tcount = " + tcount 
+//				+ "\t hcount = " + hcount);
+
+//		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
+//		.withApp(new KEAppDescriptor()
+//				.withGuid("KEApp2")
+//				.withLastRunEpoch(System.currentTimeMillis())
+//				.withName("Enrich GO terms")
+//				.withNodesCreated(12342134L)
+//				.withPropertiesSet(242342L)
+//				.withRelationsCreated(145234L)
+//				.withVersion("1.0")
+//		));				
+		
+		GraphUpdateStat stat = new Neo4jDataProvider(null).storeTermEnrichmentProfiles(
+				new StoreTermEnrichmentProfilesParams()
+				.withProfiles(Arrays.asList(
+						new TermEnrichmentProfile()
+						.withGuid("TE:1341234")
+						.withKeappGuid("KEApp2")
+						.withSourceGeneSetGuid("BIC:1505539382330_395")
+						.withSourceGeneSetType("Bicluster")
+						.withTermNamespace("molecular_function")
+						.withTerms(Arrays.asList(
+								new TermEnrichment()
+								.withExpectedCount(10L)
+								.withPValue(0.006)
+								.withSampleCount(4L)
+								.withTermGuid("GO:23423423")
+								.withTotalCount(145L)
+								,
+								new TermEnrichment()
+								.withExpectedCount(12L)
+								.withPValue(0.009)
+								.withSampleCount(3L)
+								.withTermGuid("GO:111")
+								.withTotalCount(200L)))						
+		)));	
+		System.out.println(stat);
+		
 	}
 }

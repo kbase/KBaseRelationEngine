@@ -842,6 +842,8 @@ StoreTermEnrichmentProfilesParams is a reference to a hash where the following k
 TermEnrichmentProfile is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
+	source_gene_set_guid has a value which is a string
+	source_gene_set_type has a value which is a string
 	term_namespace has a value which is a string
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 TermEnrichment is a reference to a hash where the following keys are defined:
@@ -870,6 +872,8 @@ StoreTermEnrichmentProfilesParams is a reference to a hash where the following k
 TermEnrichmentProfile is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
+	source_gene_set_guid has a value which is a string
+	source_gene_set_type has a value which is a string
 	term_namespace has a value which is a string
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 TermEnrichment is a reference to a hash where the following keys are defined:
@@ -1907,6 +1911,8 @@ p_value has a value which is a float
 a reference to a hash where the following keys are defined:
 guid has a value which is a string
 keapp_guid has a value which is a string
+source_gene_set_guid has a value which is a string
+source_gene_set_type has a value which is a string
 term_namespace has a value which is a string
 terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 
@@ -1919,6 +1925,8 @@ terms has a value which is a reference to a list where each element is a KBaseRe
 a reference to a hash where the following keys are defined:
 guid has a value which is a string
 keapp_guid has a value which is a string
+source_gene_set_guid has a value which is a string
+source_gene_set_type has a value which is a string
 term_namespace has a value which is a string
 terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 

@@ -109,6 +109,8 @@ module KBaseRelationEngine {
 	typedef structure{
 		string guid;
 		string keapp_guid;
+		string source_gene_set_guid;
+		string source_gene_set_type;
 		string term_namespace;
 		list<TermEnrichment> terms; 
 	} TermEnrichmentProfile;

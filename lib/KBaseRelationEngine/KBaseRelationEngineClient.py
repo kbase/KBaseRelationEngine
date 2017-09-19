@@ -140,11 +140,12 @@ class KBaseRelationEngine(object):
         :param params: instance of type "StoreTermEnrichmentProfilesParams"
            -> structure: parameter "profiles" of list of type
            "TermEnrichmentProfile" -> structure: parameter "guid" of String,
-           parameter "keapp_guid" of String, parameter "term_namespace" of
-           String, parameter "terms" of list of type "TermEnrichment" ->
-           structure: parameter "term_guid" of String, parameter
-           "sample_count" of Long, parameter "total_count" of Long, parameter
-           "expected_count" of Long, parameter "p_value" of Double
+           parameter "keapp_guid" of String, parameter "source_gene_set_guid"
+           of String, parameter "source_gene_set_type" of String, parameter
+           "term_namespace" of String, parameter "terms" of list of type
+           "TermEnrichment" -> structure: parameter "term_guid" of String,
+           parameter "sample_count" of Long, parameter "total_count" of Long,
+           parameter "expected_count" of Long, parameter "p_value" of Double
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
            "nodes_created" of Long, parameter "nodes_deleted" of Long,
            parameter "relationships_created" of Long, parameter
