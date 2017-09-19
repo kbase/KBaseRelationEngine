@@ -90,22 +90,24 @@ set f.sequence = line.sequence;
 >#Load OrthologGroups: create index
 CREATE INDEX ON :OrthologGroup(guid);
 
->#Load OrthologGroups: create nodes
+>Load OrthologGroups: create nodes and relations
 USING PERIODIC COMMIT 10000
 LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_ORTHOLOGOUS_GROUPS}' AS line FIELDTERMINATOR '\t'
 WITH line
 create (og:OrthologGroup {
-	guid: line.kbgrpid, 
-	source: line.source ,
-	sourceid: line.sourceid
-});
+	guid: line.kbgrpid
+})
+with og, split(line.kbgenes,";") as fguids
+unwind fguids as fguid
+match(f:Feature{guid:fguid})  
+create (f)-[:MY_ORTHOLOG_GROUP]->(og);
 
->#Load OrthologGroups: create relations
-USING PERIODIC COMMIT 10000
-LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_FEATURE_2_ORTHOLOGS}' AS line FIELDTERMINATOR '\t'
-WITH line
-match (f:Feature{guid:line.geneguid}), (og:OrthologGroup{guid:line.ogguid})
-CREATE (f)-[:MY_ORTHOLOG_GROUP]->(og);
+#>#Load OrthologGroups: create relations
+#USING PERIODIC COMMIT 10000
+#LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_FEATURE_2_ORTHOLOGS}' AS line FIELDTERMINATOR '\t'
+#WITH line
+#match (f:Feature{guid:line.geneguid}), (og:OrthologGroup{guid:line.ogguid})
+#CREATE (f)-[:MY_ORTHOLOG_GROUP]->(og);
 
 >#Build indeces: KEApp
 CREATE INDEX ON :KEApp(guid);

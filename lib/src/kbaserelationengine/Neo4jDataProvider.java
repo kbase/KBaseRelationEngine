@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -116,6 +118,7 @@ public class Neo4jDataProvider {
 			StringBuffer statement = new StringBuffer();
 			for(String line = br.readLine(); line != null; line = br.readLine()){
 				line = line.trim();
+				if(line.startsWith("#")) continue;
 				if(line.startsWith(">")){
 					if(!name.startsWith("#") && statement.length() > 0){
 						statements.add(new CypherStatement(name, statement.toString()));
@@ -269,12 +272,16 @@ public class Neo4jDataProvider {
 	
 	private void updateCounters(GraphUpdateStat stat, SummaryCounters counters){
 		Long nodesCreated = stat.getNodesCreated() != null ? stat.getNodesCreated(): 0;
+		Long nodesDeleted = stat.getNodesDeleted() != null ? stat.getNodesDeleted(): 0;
 		Long relationshipsCreated = stat.getRelationshipsCreated() != null ? stat.getRelationshipsCreated(): 0;
+		Long relationshipsDeleted = stat.getRelationshipsDeleted() != null ? stat.getRelationshipsDeleted(): 0;
 		Long propertiesSet = stat.getPropertiesSet() != null ? stat.getPropertiesSet(): 0;
 		
 		stat
 			.withNodesCreated(nodesCreated +  counters.nodesCreated())
+			.withNodesDeleted(nodesDeleted + counters.nodesDeleted())
 			.withRelationshipsCreated(relationshipsCreated + counters.relationshipsCreated())
+			.withRelationshipsDeleted(relationshipsDeleted + counters.relationshipsDeleted())
 			.withPropertiesSet(propertiesSet + counters.propertiesSet());
 	}
 	
@@ -352,46 +359,43 @@ public class Neo4jDataProvider {
 
 	public List<Bicluster> getBiclusters(GetBiclustersParams params) {
 		Session session = getSession();
-		
-		Hashtable<String,Bicluster> guid2bicluster = new Hashtable<String,Bicluster>(); 
-		
-		List<CompendiumDescriptor> cds = new ArrayList<CompendiumDescriptor>();
-		try{			
-			StringBuffer sb = new StringBuffer();
-			for(String guid: params.getBiclusterGuids()){
-				if(sb.length() > 0){
-					sb.append(",");
-				}
-				sb.append("'" + guid + "'");
-			}
-			String guidArray = sb.toString();			
+		List<Bicluster> biclusters = new ArrayList<Bicluster>();
+		try{		
 			
-			// Get biclusters metadata 
-			StatementResult result = session.run( "match(b:Bicluster) where b.guid in [" + guidArray + "] return b.guid, b._appGuid, b.featureGuids;");
-			while ( result.hasNext() )
-			{
-			    Record record = result.next();
-			    Bicluster b = new Bicluster()
-			    		.withCompendiumGuid(null)
-			    		.withConditionGuids(null)
-			    		.withFeatureGuids(new ArrayList(record.get("b.featureGuids").asList()))
-			    		.withGuid(record.get( "b.guid" ).asString())
-			    		.withKeappGuid(record.get( "b._appGuid" ).asString());
-			    					    	
-			    System.out.println(record.get("b.featureGuids").getClass().getName()); 			    
-			    guid2bicluster.put(b.getGuid(), b);
-			}				
+			String matchStatement = "";
+			Value matchParameters = null;
+			if(params.getKeappGuid() != null){
+				matchStatement = "match(b:Bicluster{_appGuid:{appGuid}})--(c:Compendium)--(t:Taxon) ";
+				matchParameters = parameters( "appGuid", params.getKeappGuid() );
+			} else if (params.getTaxonomyGuid() != null){
+				matchStatement = "match(t:Taxon{guid:{taxGuid}})--(c:Compendium)--(b:Bicluster) ";
+				matchParameters = parameters( "taxGuid", params.getTaxonomyGuid() );
+			} else if (params.getCompendiumGuid() != null){
+				matchStatement = "match(c:Compendium{guid:{cmpGuid}})--(b:Bicluster), (c)--(t:Taxon) ";
+				matchParameters = parameters( "cmpGuid", params.getCompendiumGuid() );				
+			}
+			
+			if(matchStatement.length() > 0){
+				String statement = matchStatement + " return b.guid, b._appGuid, b.featureGuids,c.guid,t.guid";
+				StatementResult result = session.run( statement, matchParameters);				
+				while ( result.hasNext() )
+				{
+				    Record record = result.next();
+				    biclusters.add(new Bicluster()
+				    		.withCompendiumGuid(record.get( "c.guid" ).asString())
+				    		.withConditionGuids(null)
+				    		.withFeatureGuids(new ArrayList(record.get("b.featureGuids").asList()))
+				    		.withGuid(record.get( "b.guid" ).asString())
+				    		.withKeappGuid(record.get( "b._appGuid" ).asString())
+				    		.withTaxonomyGuid(record.get( "t.guid" ).asString()));				    		
+				}				
+			}			
+				
 		}finally {
 			session.close();
 		}
-		return new ArrayList<Bicluster>(guid2bicluster.values());
-	}
-	
-	
-	public List<BiclusterDescriptor> getBiclusterDescriptors(GetBiclusterDescriptorsParams params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		return biclusters;
+	}	
 	
 	public GraphUpdateStat storeWSGenome(StoreWSGenomeParams params) {
 		GraphUpdateStat stat = new GraphUpdateStat();
@@ -449,6 +453,122 @@ public class Neo4jDataProvider {
 	public GraphUpdateStat connectWSFeatures2RefOTerms(ConnectWSFeatures2RefOTermsParams params) {
 		// TODO Auto-generated method stub
 		return null;
+	}	
+	
+	public GraphUpdateStat detachDelete(String type, int batchCount, boolean deleteAll) {
+		GraphUpdateStat stat = new GraphUpdateStat();		
+		Session session = getSession();
+		try{
+			int nodesDeleted = 1;
+			int cycleIdex = 1;
+			while(nodesDeleted > 0){				
+				StatementResult res = session.run("match(t:"+type+") with t limit " + batchCount
+						+ " detach delete t");	
+				SummaryCounters counters = res.consume().counters();
+				updateCounters(stat, counters);
+				nodesDeleted = counters.nodesDeleted();
+				if(!deleteAll) break;
+				System.out.print(".");
+				if(cycleIdex %10 == 0){
+					System.out.println("" + cycleIdex + ": deleted so far=" + stat.getNodesDeleted() + " ");					
+				}
+				cycleIdex++;
+			}
+		}finally{
+			session.close();
+		}
+		return stat;			
+	}
+	
+	public GraphUpdateStat storeTermEnrichmentProfiles(StoreTermEnrichmentProfilesParams params) {
+		GraphUpdateStat stat = new GraphUpdateStat();
+		
+		Session session = getSession();
+		Transaction tr = session.beginTransaction();				
+		try{			
+			for(TermEnrichmentProfile tp: params.getProfiles()){
+				
+				List<String> termGuids = new ArrayList<String>(); 
+				List<Double> pvalues = new ArrayList<Double>(); 
+				List<Long> sampleCounts = new ArrayList<Long>(); 
+				List<Long> expectedCounts = new ArrayList<Long>(); 
+				List<Long> totalCounts = new ArrayList<Long>(); 
+				for(TermEnrichment te: tp.getTerms()){
+					termGuids.add(te.getTermGuid());
+					pvalues.add(te.getPValue());
+					sampleCounts.add(te.getSampleCount());
+					expectedCounts.add(te.getExpectedCount());
+					totalCounts.add(te.getTotalCount());
+				}
+				
+				StatementResult res = tr.run(
+					"create(tp:TermEnrichmentProfile:AppResult{"
+						+ "guid:{tpGuid}"
+						+ ", _appGuid:{appGuid}"
+						+ ", termSpace:{termSpace}"
+						+ ", termGuids:{termGuids}"
+						+ ", pvalues:{pvalues}"
+						+ ", sampleCounts:{sampleCounts}"
+						+ ", expectedCounts:{expectedCounts}"
+						+ ", totalCounts:{totalCounts}"
+						+ "})" 
+						+" with tp" 
+						+" match(a:KEApp{guid:{appGuid}})"
+						+" create (tp)-[:MY_APP]->(a)"
+						
+						+" with tp"
+						+" MATCH (s:" + tp.getSourceGeneSetType() + "{guid:{sGuid}})"
+						+" CREATE (tp)-[:MY_FEATURE_SET]->(s)",
+					parameters(
+						"tpGuid",tp.getGuid()
+						,"appGuid",tp.getKeappGuid()
+						,"termSpace", tp.getTermNamespace()
+						,"termGuids", termGuids
+						,"pvalues",pvalues
+						,"sampleCounts",sampleCounts
+						,"expectedCounts",expectedCounts
+						,"totalCounts",totalCounts
+						,"sGuid", tp.getSourceGeneSetGuid()
+					));			
+				updateCounters(stat, res.consume().counters());			
+			}
+			tr.success();
+		} finally {
+			tr.close();
+			session.close();
+		}
+		return stat;	
+	}
+
+	public List<FeatureTerms> getFeatureTerms(GetFeatureTermsParams params) {
+		Session session = getSession();
+		List<FeatureTerms> featureTerms = new ArrayList<FeatureTerms>();
+		try{		
+			StatementResult result = session.run( 
+					"match(tx:Taxon{guid:{tguid}})--(f:Feature)"
+					+ " optional match (f)--(t:GOTerm{space:{space}})"
+					+ " return f.guid, t.guid"
+					, parameters("tguid", params.getTaxonGuid(), 
+							"space",params.getTermSpace()));
+			
+			while ( result.hasNext() )
+			{
+			    Record record = result.next();
+			    
+				List<String> termGuids = new ArrayList<String>();
+				Value termGuid = record.get( "t.guid" );				
+				if(!termGuid.isNull()){
+					termGuids.add(termGuid.asString());
+				}
+				
+			    featureTerms.add(new FeatureTerms()
+			    		.withFeatureGuid(record.get( "f.guid" ).asString())
+			    		.withTermGuids(termGuids));
+			}
+		}finally {
+			session.close();
+		}
+		return featureTerms;
 	}	
 	
 	public static void main(String[] args) throws IOException {
@@ -511,17 +631,87 @@ public class Neo4jDataProvider {
 //				.withWs2refFeatureGuids(mm));
 //		System.out.println(stat);
 		
-		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
-		.withApp(new KEAppDescriptor()
-				.withGuid("KEApp2")
-				.withLastRunEpoch(System.currentTimeMillis())
-				.withName("Expression Biclusters")
-				.withNodesCreated(1L)
-				.withPropertiesSet(1L)
-				.withRelationsCreated(1L)
-				.withVersion("1.0")
-		));			
+//		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
+//		.withApp(new KEAppDescriptor()
+//				.withGuid("KEApp2")
+//				.withLastRunEpoch(System.currentTimeMillis())
+//				.withName("Expression Biclusters")
+//				.withNodesCreated(1L)
+//				.withPropertiesSet(1L)
+//				.withRelationsCreated(1L)
+//				.withVersion("1.0")
+//		));			
+		
+//		GraphUpdateStat res = new Neo4jDataProvider(null).detachDelete("OrthologGroup", 1000, true);
+//		System.out.println(res);
+		
+//		List<Bicluster> items = new Neo4jDataProvider(null).getBiclusters(new GetBiclustersParams()
+//				.withTaxonomyGuid("KBaseTax3163472"));
+////				.withCompendiumGuid("CMP:1505431589412"));
+////				.withKeappGuid("KEApp1"));
+//		for(Bicluster b: items){
+//			System.out.println(b); 
+//		}
+//		System.out.println("Items count: " + items.size());
+		
+//		List<FeatureTerms> items = new Neo4jDataProvider(null).getFeatureTerms(new GetFeatureTermsParams()
+//				.withTaxonGuid("KBaseTax984557")
+//				.withTermSpace("molecular_function"));
+//		int fcount = 0;
+//		int tcount = 0;
+//		int hcount = 0;
+//		HashSet<String> h = new HashSet<String>();
+//		for(FeatureTerms item: items){
+//			System.out.println(item);
+//			fcount ++;
+//			if(item.getTermGuids().size() > 0){
+//				tcount ++;
+//			}
+//			if(h.contains(item.getFeatureGuid())){
+//				hcount++;
+//			}
+//			h.add(item.getFeatureGuid());
+//		}
+//		System.out.println(" fcount = " + fcount 
+//				+ "\t tcount = " + tcount 
+//				+ "\t hcount = " + hcount);
+
+//		new Neo4jDataProvider(null).storeKEAppDescriptor(new StoreKEAppDescriptorParams()
+//		.withApp(new KEAppDescriptor()
+//				.withGuid("KEApp2")
+//				.withLastRunEpoch(System.currentTimeMillis())
+//				.withName("Enrich GO terms")
+//				.withNodesCreated(12342134L)
+//				.withPropertiesSet(242342L)
+//				.withRelationsCreated(145234L)
+//				.withVersion("1.0")
+//		));				
+		
+		GraphUpdateStat stat = new Neo4jDataProvider(null).storeTermEnrichmentProfiles(
+				new StoreTermEnrichmentProfilesParams()
+				.withProfiles(Arrays.asList(
+						new TermEnrichmentProfile()
+						.withGuid("TE:1341234")
+						.withKeappGuid("KEApp2")
+						.withSourceGeneSetGuid("BIC:1505539382330_395")
+						.withSourceGeneSetType("Bicluster")
+						.withTermNamespace("molecular_function")
+						.withTerms(Arrays.asList(
+								new TermEnrichment()
+								.withExpectedCount(10L)
+								.withPValue(0.006)
+								.withSampleCount(4L)
+								.withTermGuid("GO:23423423")
+								.withTotalCount(145L)
+								,
+								new TermEnrichment()
+								.withExpectedCount(12L)
+								.withPValue(0.009)
+								.withSampleCount(3L)
+								.withTermGuid("GO:111")
+								.withTotalCount(200L)))						
+		)));	
+		System.out.println(stat);
+		
 	}
-
-
 }

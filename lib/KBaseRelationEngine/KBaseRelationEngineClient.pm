@@ -333,7 +333,9 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 	properties_set has a value which is an int
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -356,7 +358,9 @@ KEAppDescriptor is a reference to a hash where the following keys are defined:
 	properties_set has a value which is an int
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -412,116 +416,6 @@ GraphUpdateStat is a reference to a hash where the following keys are defined:
         Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeKEAppDescriptor",
 					    status_line => $self->{client}->status_line,
 					    method_name => 'storeKEAppDescriptor',
-				       );
-    }
-}
- 
-
-
-=head2 updateKEAppDescriptor
-
-  $return = $obj->updateKEAppDescriptor($params)
-
-=over 4
-
-=item Parameter and return types
-
-=begin html
-
-<pre>
-$params is a KBaseRelationEngine.StoreKEAppDescriptorParams
-$return is a KBaseRelationEngine.GraphUpdateStat
-StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
-	app has a value which is a KBaseRelationEngine.KEAppDescriptor
-KEAppDescriptor is a reference to a hash where the following keys are defined:
-	guid has a value which is a string
-	name has a value which is a string
-	version has a value which is a string
-	last_run_epoch has a value which is an int
-	nodes_created has a value which is an int
-	relations_created has a value which is an int
-	properties_set has a value which is an int
-GraphUpdateStat is a reference to a hash where the following keys are defined:
-	nodes_created has a value which is an int
-	relationships_created has a value which is an int
-	properties_set has a value which is an int
-
-</pre>
-
-=end html
-
-=begin text
-
-$params is a KBaseRelationEngine.StoreKEAppDescriptorParams
-$return is a KBaseRelationEngine.GraphUpdateStat
-StoreKEAppDescriptorParams is a reference to a hash where the following keys are defined:
-	app has a value which is a KBaseRelationEngine.KEAppDescriptor
-KEAppDescriptor is a reference to a hash where the following keys are defined:
-	guid has a value which is a string
-	name has a value which is a string
-	version has a value which is a string
-	last_run_epoch has a value which is an int
-	nodes_created has a value which is an int
-	relations_created has a value which is an int
-	properties_set has a value which is an int
-GraphUpdateStat is a reference to a hash where the following keys are defined:
-	nodes_created has a value which is an int
-	relationships_created has a value which is an int
-	properties_set has a value which is an int
-
-
-=end text
-
-=item Description
-
-
-
-=back
-
-=cut
-
- sub updateKEAppDescriptor
-{
-    my($self, @args) = @_;
-
-# Authentication: required
-
-    if ((my $n = @args) != 1)
-    {
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function updateKEAppDescriptor (received $n, expecting 1)");
-    }
-    {
-	my($params) = @args;
-
-	my @_bad_arguments;
-        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
-        if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to updateKEAppDescriptor:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'updateKEAppDescriptor');
-	}
-    }
-
-    my $url = $self->{url};
-    my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "KBaseRelationEngine.updateKEAppDescriptor",
-	    params => \@args,
-    });
-    if ($result) {
-	if ($result->is_error) {
-	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-					       code => $result->content->{error}->{code},
-					       method_name => 'updateKEAppDescriptor',
-					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-					      );
-	} else {
-	    return wantarray ? @{$result->result} : $result->result->[0];
-	}
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method updateKEAppDescriptor",
-					    status_line => $self->{client}->status_line,
-					    method_name => 'updateKEAppDescriptor',
 				       );
     }
 }
@@ -733,11 +627,14 @@ Bicluster is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
+	taxonomy_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -754,11 +651,14 @@ Bicluster is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
+	taxonomy_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -820,104 +720,6 @@ GraphUpdateStat is a reference to a hash where the following keys are defined:
  
 
 
-=head2 getBiclusterDescriptors
-
-  $return = $obj->getBiclusterDescriptors($params)
-
-=over 4
-
-=item Parameter and return types
-
-=begin html
-
-<pre>
-$params is a KBaseRelationEngine.GetBiclusterDescriptorsParams
-$return is a reference to a list where each element is a KBaseRelationEngine.BiclusterDescriptor
-GetBiclusterDescriptorsParams is a reference to a hash where the following keys are defined:
-	taxonomy_guid has a value which is a string
-	keapp_guid has a value which is a string
-	compendium_guid has a value which is a string
-BiclusterDescriptor is a reference to a hash where the following keys are defined:
-	guid has a value which is a string
-	keapp_guid has a value which is a string
-	compendium_guid has a value which is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-$params is a KBaseRelationEngine.GetBiclusterDescriptorsParams
-$return is a reference to a list where each element is a KBaseRelationEngine.BiclusterDescriptor
-GetBiclusterDescriptorsParams is a reference to a hash where the following keys are defined:
-	taxonomy_guid has a value which is a string
-	keapp_guid has a value which is a string
-	compendium_guid has a value which is a string
-BiclusterDescriptor is a reference to a hash where the following keys are defined:
-	guid has a value which is a string
-	keapp_guid has a value which is a string
-	compendium_guid has a value which is a string
-
-
-=end text
-
-=item Description
-
-
-
-=back
-
-=cut
-
- sub getBiclusterDescriptors
-{
-    my($self, @args) = @_;
-
-# Authentication: required
-
-    if ((my $n = @args) != 1)
-    {
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function getBiclusterDescriptors (received $n, expecting 1)");
-    }
-    {
-	my($params) = @args;
-
-	my @_bad_arguments;
-        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
-        if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to getBiclusterDescriptors:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'getBiclusterDescriptors');
-	}
-    }
-
-    my $url = $self->{url};
-    my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "KBaseRelationEngine.getBiclusterDescriptors",
-	    params => \@args,
-    });
-    if ($result) {
-	if ($result->is_error) {
-	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-					       code => $result->content->{error}->{code},
-					       method_name => 'getBiclusterDescriptors',
-					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-					      );
-	} else {
-	    return wantarray ? @{$result->result} : $result->result->[0];
-	}
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getBiclusterDescriptors",
-					    status_line => $self->{client}->status_line,
-					    method_name => 'getBiclusterDescriptors',
-				       );
-    }
-}
- 
-
-
 =head2 getBiclusters
 
   $return = $obj->getBiclusters($params)
@@ -932,11 +734,14 @@ BiclusterDescriptor is a reference to a hash where the following keys are define
 $params is a KBaseRelationEngine.GetBiclustersParams
 $return is a reference to a list where each element is a KBaseRelationEngine.Bicluster
 GetBiclustersParams is a reference to a hash where the following keys are defined:
-	bicluster_guids has a value which is a reference to a list where each element is a string
+	keapp_guid has a value which is a string
+	taxonomy_guid has a value which is a string
+	compendium_guid has a value which is a string
 Bicluster is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
+	taxonomy_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
 
@@ -949,11 +754,14 @@ Bicluster is a reference to a hash where the following keys are defined:
 $params is a KBaseRelationEngine.GetBiclustersParams
 $return is a reference to a list where each element is a KBaseRelationEngine.Bicluster
 GetBiclustersParams is a reference to a hash where the following keys are defined:
-	bicluster_guids has a value which is a reference to a list where each element is a string
+	keapp_guid has a value which is a string
+	taxonomy_guid has a value which is a string
+	compendium_guid has a value which is a string
 Bicluster is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
 	compendium_guid has a value which is a string
+	taxonomy_guid has a value which is a string
 	feature_guids has a value which is a reference to a list where each element is a string
 	condition_guids has a value which is a reference to a list where each element is a string
 
@@ -1016,6 +824,224 @@ Bicluster is a reference to a hash where the following keys are defined:
  
 
 
+=head2 storeTermEnrichmentProfiles
+
+  $return = $obj->storeTermEnrichmentProfiles($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.StoreTermEnrichmentProfilesParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
+	profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+TermEnrichmentProfile is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	source_gene_set_guid has a value which is a string
+	source_gene_set_type has a value which is a string
+	term_namespace has a value which is a string
+	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+TermEnrichment is a reference to a hash where the following keys are defined:
+	term_guid has a value which is a string
+	sample_count has a value which is an int
+	total_count has a value which is an int
+	expected_count has a value which is an int
+	p_value has a value which is a float
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
+	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.StoreTermEnrichmentProfilesParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
+	profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+TermEnrichmentProfile is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	source_gene_set_guid has a value which is a string
+	source_gene_set_type has a value which is a string
+	term_namespace has a value which is a string
+	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+TermEnrichment is a reference to a hash where the following keys are defined:
+	term_guid has a value which is a string
+	sample_count has a value which is an int
+	total_count has a value which is an int
+	expected_count has a value which is an int
+	p_value has a value which is a float
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
+	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub storeTermEnrichmentProfiles
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function storeTermEnrichmentProfiles (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to storeTermEnrichmentProfiles:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'storeTermEnrichmentProfiles');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.storeTermEnrichmentProfiles",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'storeTermEnrichmentProfiles',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeTermEnrichmentProfiles",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'storeTermEnrichmentProfiles',
+				       );
+    }
+}
+ 
+
+
+=head2 getFeatureTerms
+
+  $return = $obj->getFeatureTerms($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetFeatureTermsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.FeatureTerms
+GetFeatureTermsParams is a reference to a hash where the following keys are defined:
+	taxon_guid has a value which is a string
+	term_space has a value which is a string
+FeatureTerms is a reference to a hash where the following keys are defined:
+	feature_guid has a value which is a string
+	term_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetFeatureTermsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.FeatureTerms
+GetFeatureTermsParams is a reference to a hash where the following keys are defined:
+	taxon_guid has a value which is a string
+	term_space has a value which is a string
+FeatureTerms is a reference to a hash where the following keys are defined:
+	feature_guid has a value which is a string
+	term_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getFeatureTerms
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getFeatureTerms (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getFeatureTerms:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getFeatureTerms');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getFeatureTerms",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getFeatureTerms',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getFeatureTerms",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getFeatureTerms',
+				       );
+    }
+}
+ 
+
+
 =head2 storeWSGenome
 
   $return = $obj->storeWSGenome($params)
@@ -1036,7 +1062,9 @@ ws_genome_obj_ref is a string
 ws_feature_guid is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -1054,7 +1082,9 @@ ws_genome_obj_ref is a string
 ws_feature_guid is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -1133,7 +1163,9 @@ ConnectWSFeatures2RefOrthologsParams is a reference to a hash where the followin
 	ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -1148,7 +1180,9 @@ ConnectWSFeatures2RefOrthologsParams is a reference to a hash where the followin
 	ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -1229,7 +1263,9 @@ ws_feature_guid is a string
 ref_ontology_term_guid is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 </pre>
@@ -1246,7 +1282,9 @@ ws_feature_guid is a string
 ref_ontology_term_guid is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
 	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
 	properties_set has a value which is an int
 
 
@@ -1408,7 +1446,9 @@ sub _validate_version {
 <pre>
 a reference to a hash where the following keys are defined:
 nodes_created has a value which is an int
+nodes_deleted has a value which is an int
 relationships_created has a value which is an int
+relationships_deleted has a value which is an int
 properties_set has a value which is an int
 
 </pre>
@@ -1419,7 +1459,9 @@ properties_set has a value which is an int
 
 a reference to a hash where the following keys are defined:
 nodes_created has a value which is an int
+nodes_deleted has a value which is an int
 relationships_created has a value which is an int
+relationships_deleted has a value which is an int
 properties_set has a value which is an int
 
 
@@ -1728,6 +1770,7 @@ a reference to a hash where the following keys are defined:
 guid has a value which is a string
 keapp_guid has a value which is a string
 compendium_guid has a value which is a string
+taxonomy_guid has a value which is a string
 feature_guids has a value which is a reference to a list where each element is a string
 condition_guids has a value which is a reference to a list where each element is a string
 
@@ -1741,6 +1784,7 @@ a reference to a hash where the following keys are defined:
 guid has a value which is a string
 keapp_guid has a value which is a string
 compendium_guid has a value which is a string
+taxonomy_guid has a value which is a string
 feature_guids has a value which is a reference to a list where each element is a string
 condition_guids has a value which is a reference to a list where each element is a string
 
@@ -1781,74 +1825,6 @@ biclusters has a value which is a reference to a list where each element is a KB
 
 
 
-=head2 BiclusterDescriptor
-
-=over 4
-
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-guid has a value which is a string
-keapp_guid has a value which is a string
-compendium_guid has a value which is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-guid has a value which is a string
-keapp_guid has a value which is a string
-compendium_guid has a value which is a string
-
-
-=end text
-
-=back
-
-
-
-=head2 GetBiclusterDescriptorsParams
-
-=over 4
-
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-taxonomy_guid has a value which is a string
-keapp_guid has a value which is a string
-compendium_guid has a value which is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-taxonomy_guid has a value which is a string
-keapp_guid has a value which is a string
-compendium_guid has a value which is a string
-
-
-=end text
-
-=back
-
-
-
 =head2 GetBiclustersParams
 
 =over 4
@@ -1861,7 +1837,9 @@ compendium_guid has a value which is a string
 
 <pre>
 a reference to a hash where the following keys are defined:
-bicluster_guids has a value which is a reference to a list where each element is a string
+keapp_guid has a value which is a string
+taxonomy_guid has a value which is a string
+compendium_guid has a value which is a string
 
 </pre>
 
@@ -1870,7 +1848,181 @@ bicluster_guids has a value which is a reference to a list where each element is
 =begin text
 
 a reference to a hash where the following keys are defined:
-bicluster_guids has a value which is a reference to a list where each element is a string
+keapp_guid has a value which is a string
+taxonomy_guid has a value which is a string
+compendium_guid has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 TermEnrichment
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+term_guid has a value which is a string
+sample_count has a value which is an int
+total_count has a value which is an int
+expected_count has a value which is an int
+p_value has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+term_guid has a value which is a string
+sample_count has a value which is an int
+total_count has a value which is an int
+expected_count has a value which is an int
+p_value has a value which is a float
+
+
+=end text
+
+=back
+
+
+
+=head2 TermEnrichmentProfile
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+keapp_guid has a value which is a string
+source_gene_set_guid has a value which is a string
+source_gene_set_type has a value which is a string
+term_namespace has a value which is a string
+terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+keapp_guid has a value which is a string
+source_gene_set_guid has a value which is a string
+source_gene_set_type has a value which is a string
+term_namespace has a value which is a string
+terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+
+
+=end text
+
+=back
+
+
+
+=head2 StoreTermEnrichmentProfilesParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+
+
+=end text
+
+=back
+
+
+
+=head2 FeatureTerms
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+feature_guid has a value which is a string
+term_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+feature_guid has a value which is a string
+term_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetFeatureTermsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+taxon_guid has a value which is a string
+term_space has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+taxon_guid has a value which is a string
+term_space has a value which is a string
 
 
 =end text

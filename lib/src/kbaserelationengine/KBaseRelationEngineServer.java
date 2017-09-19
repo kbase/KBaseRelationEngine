@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "0af6ff577756b0c762ac044ff9ec1c60c4bb7a87";
+    private static final String gitCommitHash = "543fbccad33e273887fccb1be4539264c342f0fd";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -101,21 +101,6 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     }
 
     /**
-     * <p>Original spec-file function name: updateKEAppDescriptor</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link kbaserelationengine.StoreKEAppDescriptorParams StoreKEAppDescriptorParams}
-     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
-     */
-    @JsonServerMethod(rpc = "KBaseRelationEngine.updateKEAppDescriptor", async=true)
-    public GraphUpdateStat updateKEAppDescriptor(StoreKEAppDescriptorParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        GraphUpdateStat returnVal = null;
-        //BEGIN updateKEAppDescriptor
-        //END updateKEAppDescriptor
-        return returnVal;
-    }
-
-    /**
      * <p>Original spec-file function name: cleanKEAppResults</p>
      * <pre>
      * </pre>
@@ -163,22 +148,6 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     }
 
     /**
-     * <p>Original spec-file function name: getBiclusterDescriptors</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link kbaserelationengine.GetBiclusterDescriptorsParams GetBiclusterDescriptorsParams}
-     * @return   instance of list of type {@link kbaserelationengine.BiclusterDescriptor BiclusterDescriptor}
-     */
-    @JsonServerMethod(rpc = "KBaseRelationEngine.getBiclusterDescriptors", async=true)
-    public List<BiclusterDescriptor> getBiclusterDescriptors(GetBiclusterDescriptorsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        List<BiclusterDescriptor> returnVal = null;
-        //BEGIN getBiclusterDescriptors
-        returnVal = dataProvider.getBiclusterDescriptors(params);
-        //END getBiclusterDescriptors
-        return returnVal;
-    }
-
-    /**
      * <p>Original spec-file function name: getBiclusters</p>
      * <pre>
      * </pre>
@@ -191,6 +160,38 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
         //BEGIN getBiclusters
         returnVal = dataProvider.getBiclusters(params);        
         //END getBiclusters
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: storeTermEnrichmentProfiles</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.StoreTermEnrichmentProfilesParams StoreTermEnrichmentProfilesParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.storeTermEnrichmentProfiles", async=true)
+    public GraphUpdateStat storeTermEnrichmentProfiles(StoreTermEnrichmentProfilesParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GraphUpdateStat returnVal = null;
+        //BEGIN storeTermEnrichmentProfiles
+        returnVal = dataProvider.storeTermEnrichmentProfiles(params);        
+        //END storeTermEnrichmentProfiles
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: getFeatureTerms</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetFeatureTermsParams GetFeatureTermsParams}
+     * @return   instance of list of type {@link kbaserelationengine.FeatureTerms FeatureTerms}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getFeatureTerms", async=true)
+    public List<FeatureTerms> getFeatureTerms(GetFeatureTermsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        List<FeatureTerms> returnVal = null;
+        //BEGIN getFeatureTerms
+        returnVal = dataProvider.getFeatureTerms(params);
+        //END getFeatureTerms
         return returnVal;
     }
 
