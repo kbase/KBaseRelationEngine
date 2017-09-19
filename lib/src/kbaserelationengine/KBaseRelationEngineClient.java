@@ -280,6 +280,40 @@ public class KBaseRelationEngineClient {
     }
 
     /**
+     * <p>Original spec-file function name: storeTermEnrichmentProfiles</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.StoreTermEnrichmentProfilesParams StoreTermEnrichmentProfilesParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public GraphUpdateStat storeTermEnrichmentProfiles(StoreTermEnrichmentProfilesParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<GraphUpdateStat>> retType = new TypeReference<List<GraphUpdateStat>>() {};
+        List<GraphUpdateStat> res = caller.jsonrpcCall("KBaseRelationEngine.storeTermEnrichmentProfiles", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: getFeatureTerms</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetFeatureTermsParams GetFeatureTermsParams}
+     * @return   instance of list of type {@link kbaserelationengine.FeatureTerms FeatureTerms}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public List<FeatureTerms> getFeatureTerms(GetFeatureTermsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<List<FeatureTerms>>> retType = new TypeReference<List<List<FeatureTerms>>>() {};
+        List<List<FeatureTerms>> res = caller.jsonrpcCall("KBaseRelationEngine.getFeatureTerms", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: storeWSGenome</p>
      * <pre>
      * </pre>

@@ -135,6 +135,37 @@ class KBaseRelationEngine(object):
             'KBaseRelationEngine.getBiclusters',
             [params], self._service_ver, context)
 
+    def storeTermEnrichmentProfiles(self, params, context=None):
+        """
+        :param params: instance of type "StoreTermEnrichmentProfilesParams"
+           -> structure: parameter "profiles" of list of type
+           "TermEnrichmentProfile" -> structure: parameter "guid" of String,
+           parameter "keapp_guid" of String, parameter "term_namespace" of
+           String, parameter "terms" of list of type "TermEnrichment" ->
+           structure: parameter "term_guid" of String, parameter
+           "sample_count" of Long, parameter "total_count" of Long, parameter
+           "expected_count" of Long, parameter "p_value" of Double
+        :returns: instance of type "GraphUpdateStat" -> structure: parameter
+           "nodes_created" of Long, parameter "nodes_deleted" of Long,
+           parameter "relationships_created" of Long, parameter
+           "relationships_deleted" of Long, parameter "properties_set" of Long
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.storeTermEnrichmentProfiles',
+            [params], self._service_ver, context)
+
+    def getFeatureTerms(self, params, context=None):
+        """
+        :param params: instance of type "GetFeatureTermsParams" -> structure:
+           parameter "taxon_guid" of String, parameter "term_space" of String
+        :returns: instance of list of type "FeatureTerms" -> structure:
+           parameter "feature_guid" of String, parameter "term_guids" of list
+           of String
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.getFeatureTerms',
+            [params], self._service_ver, context)
+
     def storeWSGenome(self, params, context=None):
         """
         :param params: instance of type "StoreWSGenomeParams" -> structure:

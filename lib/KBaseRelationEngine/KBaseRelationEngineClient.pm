@@ -824,6 +824,220 @@ Bicluster is a reference to a hash where the following keys are defined:
  
 
 
+=head2 storeTermEnrichmentProfiles
+
+  $return = $obj->storeTermEnrichmentProfiles($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.StoreTermEnrichmentProfilesParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
+	profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+TermEnrichmentProfile is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	term_namespace has a value which is a string
+	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+TermEnrichment is a reference to a hash where the following keys are defined:
+	term_guid has a value which is a string
+	sample_count has a value which is an int
+	total_count has a value which is an int
+	expected_count has a value which is an int
+	p_value has a value which is a float
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
+	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.StoreTermEnrichmentProfilesParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
+	profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+TermEnrichmentProfile is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	term_namespace has a value which is a string
+	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+TermEnrichment is a reference to a hash where the following keys are defined:
+	term_guid has a value which is a string
+	sample_count has a value which is an int
+	total_count has a value which is an int
+	expected_count has a value which is an int
+	p_value has a value which is a float
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
+	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub storeTermEnrichmentProfiles
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function storeTermEnrichmentProfiles (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to storeTermEnrichmentProfiles:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'storeTermEnrichmentProfiles');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.storeTermEnrichmentProfiles",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'storeTermEnrichmentProfiles',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeTermEnrichmentProfiles",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'storeTermEnrichmentProfiles',
+				       );
+    }
+}
+ 
+
+
+=head2 getFeatureTerms
+
+  $return = $obj->getFeatureTerms($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetFeatureTermsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.FeatureTerms
+GetFeatureTermsParams is a reference to a hash where the following keys are defined:
+	taxon_guid has a value which is a string
+	term_space has a value which is a string
+FeatureTerms is a reference to a hash where the following keys are defined:
+	feature_guid has a value which is a string
+	term_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetFeatureTermsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.FeatureTerms
+GetFeatureTermsParams is a reference to a hash where the following keys are defined:
+	taxon_guid has a value which is a string
+	term_space has a value which is a string
+FeatureTerms is a reference to a hash where the following keys are defined:
+	feature_guid has a value which is a string
+	term_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getFeatureTerms
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getFeatureTerms (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getFeatureTerms:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getFeatureTerms');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getFeatureTerms",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getFeatureTerms',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getFeatureTerms",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getFeatureTerms',
+				       );
+    }
+}
+ 
+
+
 =head2 storeWSGenome
 
   $return = $obj->storeWSGenome($params)
@@ -1633,6 +1847,174 @@ a reference to a hash where the following keys are defined:
 keapp_guid has a value which is a string
 taxonomy_guid has a value which is a string
 compendium_guid has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 TermEnrichment
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+term_guid has a value which is a string
+sample_count has a value which is an int
+total_count has a value which is an int
+expected_count has a value which is an int
+p_value has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+term_guid has a value which is a string
+sample_count has a value which is an int
+total_count has a value which is an int
+expected_count has a value which is an int
+p_value has a value which is a float
+
+
+=end text
+
+=back
+
+
+
+=head2 TermEnrichmentProfile
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+keapp_guid has a value which is a string
+term_namespace has a value which is a string
+terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+keapp_guid has a value which is a string
+term_namespace has a value which is a string
+terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+
+
+=end text
+
+=back
+
+
+
+=head2 StoreTermEnrichmentProfilesParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+
+
+=end text
+
+=back
+
+
+
+=head2 FeatureTerms
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+feature_guid has a value which is a string
+term_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+feature_guid has a value which is a string
+term_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetFeatureTermsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+taxon_guid has a value which is a string
+term_space has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+taxon_guid has a value which is a string
+term_space has a value which is a string
 
 
 =end text

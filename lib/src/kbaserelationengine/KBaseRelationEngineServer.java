@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "99ddc2d55303f0ac49466cdee37f0611b4b5968f";
+    private static final String gitCommitHash = "5b4c50a8e2681861a1fa17d9c98502bfd85f59b5";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -160,6 +160,38 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
         //BEGIN getBiclusters
         returnVal = dataProvider.getBiclusters(params);        
         //END getBiclusters
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: storeTermEnrichmentProfiles</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.StoreTermEnrichmentProfilesParams StoreTermEnrichmentProfilesParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.storeTermEnrichmentProfiles", async=true)
+    public GraphUpdateStat storeTermEnrichmentProfiles(StoreTermEnrichmentProfilesParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GraphUpdateStat returnVal = null;
+        //BEGIN storeTermEnrichmentProfiles
+        returnVal = dataProvider.storeTermEnrichmentProfiles(params);        
+        //END storeTermEnrichmentProfiles
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: getFeatureTerms</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetFeatureTermsParams GetFeatureTermsParams}
+     * @return   instance of list of type {@link kbaserelationengine.FeatureTerms FeatureTerms}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getFeatureTerms", async=true)
+    public List<FeatureTerms> getFeatureTerms(GetFeatureTermsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        List<FeatureTerms> returnVal = null;
+        //BEGIN getFeatureTerms
+        returnVal = dataProvider.getFeatureTerms(params);
+        //END getFeatureTerms
         return returnVal;
     }
 

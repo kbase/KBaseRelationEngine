@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -357,8 +359,6 @@ public class Neo4jDataProvider {
 
 	public List<Bicluster> getBiclusters(GetBiclustersParams params) {
 		Session session = getSession();
-		
-		
 		List<Bicluster> biclusters = new ArrayList<Bicluster>();
 		try{		
 			
@@ -480,6 +480,42 @@ public class Neo4jDataProvider {
 		return stat;			
 	}
 	
+	public GraphUpdateStat storeTermEnrichmentProfiles(StoreTermEnrichmentProfilesParams params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<FeatureTerms> getFeatureTerms(GetFeatureTermsParams params) {
+		Session session = getSession();
+		List<FeatureTerms> featureTerms = new ArrayList<FeatureTerms>();
+		try{		
+			StatementResult result = session.run( 
+					"match(tx:Taxon{guid:{tguid}})--(f:Feature)"
+					+ " optional match (f)--(t:GOTerm{space:{space}})"
+					+ " return f.guid, t.guid"
+					, parameters("tguid", params.getTaxonGuid(), 
+							"space",params.getTermSpace()));
+			
+			while ( result.hasNext() )
+			{
+			    Record record = result.next();
+			    
+				List<String> termGuids = new ArrayList<String>();
+				Value termGuid = record.get( "t.guid" );				
+				if(!termGuid.isNull()){
+					termGuids.add(termGuid.asString());
+				}
+				
+			    featureTerms.add(new FeatureTerms()
+			    		.withFeatureGuid(record.get( "f.guid" ).asString())
+			    		.withTermGuids(termGuids));
+			}
+		}finally {
+			session.close();
+		}
+		return featureTerms;
+	}	
+	
 	public static void main(String[] args) throws IOException {
 //		new Neo4jDataProvider(null).loadReferenceData();
 		
@@ -563,7 +599,26 @@ public class Neo4jDataProvider {
 //		}
 //		System.out.println("Items count: " + items.size());
 		
+		List<FeatureTerms> items = new Neo4jDataProvider(null).getFeatureTerms(new GetFeatureTermsParams()
+				.withTaxonGuid("KBaseTax984557")
+				.withTermSpace("molecular_function"));
+		int fcount = 0;
+		int tcount = 0;
+		int hcount = 0;
+		HashSet<String> h = new HashSet<String>();
+		for(FeatureTerms item: items){
+			System.out.println(item);
+			fcount ++;
+			if(item.getTermGuids().size() > 0){
+				tcount ++;
+			}
+			if(h.contains(item.getFeatureGuid())){
+				hcount++;
+			}
+			h.add(item.getFeatureGuid());
+		}
+		System.out.println(" fcount = " + fcount 
+				+ "\t tcount = " + tcount 
+				+ "\t hcount = " + hcount);
 	}
-
-
 }

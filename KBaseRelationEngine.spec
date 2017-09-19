@@ -95,6 +95,41 @@ module KBaseRelationEngine {
 		string compendium_guid;
 	}GetBiclustersParams;	
 	funcdef getBiclusters(GetBiclustersParams params) returns (list<Bicluster>) authentication required;
+
+		
+	typedef structure{
+		string term_guid;
+		
+    	int sample_count;
+    	int total_count;
+    	int expected_count;
+		float p_value;		
+	} TermEnrichment;
+		
+	typedef structure{
+		string guid;
+		string keapp_guid;
+		string term_namespace;
+		list<TermEnrichment> terms; 
+	} TermEnrichmentProfile;
+	
+	typedef structure{
+		list<TermEnrichmentProfile> profiles;
+	} StoreTermEnrichmentProfilesParams;
+		
+	funcdef storeTermEnrichmentProfiles(StoreTermEnrichmentProfilesParams params) returns(GraphUpdateStat) authentication required;		
+		
+	typedef structure{
+		string feature_guid;
+		list<string> term_guids;
+	} FeatureTerms;	
+		
+	typedef structure{
+		string taxon_guid;
+		string term_space;
+	} GetFeatureTermsParams;
+	funcdef getFeatureTerms(GetFeatureTermsParams params) returns (list<FeatureTerms>) authentication required;
+			
 		
 	typedef string ws_genome_obj_ref;
 	typedef string ws_feature_guid;
