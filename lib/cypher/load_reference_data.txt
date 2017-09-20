@@ -139,3 +139,12 @@ WITH line, c
 MATCH  (f:Feature)
 WHERE  f.guid in split(line.feature_guids,";")
 CREATE (f)-[:MY_COMPENDIUM]->(c);
+
+>#Build indeces: WSGenome
+CREATE INDEX ON :WSGenome(guid);
+
+>#Build indeces: WSFeature
+CREATE INDEX ON :WSFeature(guid);
+
+>#Build indeces: WSFeature
+CREATE INDEX ON :WSFeature(guid);
