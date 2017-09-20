@@ -90,7 +90,7 @@ set f.sequence = line.sequence;
 >#Load OrthologGroups: create index
 CREATE INDEX ON :OrthologGroup(guid);
 
->Load OrthologGroups: create nodes and relations
+>#Load OrthologGroups: create nodes and relations
 USING PERIODIC COMMIT 10000
 LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_ORTHOLOGOUS_GROUPS}' AS line FIELDTERMINATOR '\t'
 WITH line
@@ -148,3 +148,17 @@ CREATE INDEX ON :WSFeature(guid);
 
 >#Build indeces: WSFeature
 CREATE INDEX ON :WSFeature(guid);
+
+>Load FEBA Compendium: create nodes 
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///{FILE_TSV_FEBA}' AS line FIELDTERMINATOR '\t'
+WITH line
+create (c:Compendium {
+	guid: line.guid ,
+	source:line.source ,
+	ws_id: line.ws_id,
+	name:line.name ,
+	description:line.description ,
+	type:line.type 
+	})
+

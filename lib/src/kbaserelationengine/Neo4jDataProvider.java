@@ -331,7 +331,7 @@ public class Neo4jDataProvider {
 				matchStatement = "match(t:Taxon{guid:{tguid}})-[:MY_TAXON]-(c:Compendium) ";
 				matchParameters = parameters( "tguid", params.getTaxonomyGuid() );
 			} else if (params.getDataType()!= null){
-				matchStatement = "match(t:Taxon)-[:MY_TAXON]-(c:Compendium{type:{ctype}}) ";
+				matchStatement = "match (c:Compendium{type:{ctype}}) optional match (c)-[:MY_TAXON]-(t:Taxon) ";
 				matchParameters = parameters( "ctype", params.getDataType() );
 			}
 			
@@ -601,7 +601,8 @@ public class Neo4jDataProvider {
 //		}
 		
 //		List<CompendiumDescriptor> items = new Neo4jDataProvider(null).getCompendiumDescriptors(new GetCompendiumDescriptorsParams()
-//				.withDataType("gene expression"));
+//				.withDataType("gene knockout fitness"));
+////				.withDataType("gene expression"));
 //		for(CompendiumDescriptor item: items){
 //			System.out.println(item);
 //		}
@@ -687,31 +688,31 @@ public class Neo4jDataProvider {
 //				.withVersion("1.0")
 //		));				
 		
-		GraphUpdateStat stat = new Neo4jDataProvider(null).storeTermEnrichmentProfiles(
-				new StoreTermEnrichmentProfilesParams()
-				.withProfiles(Arrays.asList(
-						new TermEnrichmentProfile()
-						.withGuid("TE:1341234")
-						.withKeappGuid("KEApp2")
-						.withSourceGeneSetGuid("BIC:1505539382330_395")
-						.withSourceGeneSetType("Bicluster")
-						.withTermNamespace("molecular_function")
-						.withTerms(Arrays.asList(
-								new TermEnrichment()
-								.withExpectedCount(10L)
-								.withPValue(0.006)
-								.withSampleCount(4L)
-								.withTermGuid("GO:23423423")
-								.withTotalCount(145L)
-								,
-								new TermEnrichment()
-								.withExpectedCount(12L)
-								.withPValue(0.009)
-								.withSampleCount(3L)
-								.withTermGuid("GO:111")
-								.withTotalCount(200L)))						
-		)));	
-		System.out.println(stat);
+//		GraphUpdateStat stat = new Neo4jDataProvider(null).storeTermEnrichmentProfiles(
+//				new StoreTermEnrichmentProfilesParams()
+//				.withProfiles(Arrays.asList(
+//						new TermEnrichmentProfile()
+//						.withGuid("TE:1341234")
+//						.withKeappGuid("KEApp2")
+//						.withSourceGeneSetGuid("BIC:1505539382330_395")
+//						.withSourceGeneSetType("Bicluster")
+//						.withTermNamespace("molecular_function")
+//						.withTerms(Arrays.asList(
+//								new TermEnrichment()
+//								.withExpectedCount(10L)
+//								.withPValue(0.006)
+//								.withSampleCount(4L)
+//								.withTermGuid("GO:23423423")
+//								.withTotalCount(145L)
+//								,
+//								new TermEnrichment()
+//								.withExpectedCount(12L)
+//								.withPValue(0.009)
+//								.withSampleCount(3L)
+//								.withTermGuid("GO:111")
+//								.withTotalCount(200L)))						
+//		)));	
+//		System.out.println(stat);
 		
 	}
 }
