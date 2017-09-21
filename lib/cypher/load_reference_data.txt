@@ -161,4 +161,6 @@ create (c:Compendium {
 	description:line.description ,
 	type:line.type 
 	})
-
+WITH line, c
+MATCH(t:Taxon{guid:line.tax_guid})
+CREATE (c)-[:MY_TAXON]->(t)
