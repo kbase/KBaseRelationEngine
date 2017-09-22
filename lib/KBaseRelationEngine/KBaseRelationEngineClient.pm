@@ -1372,6 +1372,216 @@ Term is a reference to a hash where the following keys are defined:
  
 
 
+=head2 getOrthologGroups
+
+  $return = $obj->getOrthologGroups($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetOrthologGroupsParams
+$return is a KBaseRelationEngine.GetOrthologGroupsOutput
+GetOrthologGroupsParams is a reference to a hash where the following keys are defined:
+	with_term_enrichmnet_profiles has a value which is a KBaseRelationEngine.boolean
+	app_guid has a value which is a string
+boolean is an int
+GetOrthologGroupsOutput is a reference to a hash where the following keys are defined:
+	ortholog_group_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetOrthologGroupsParams
+$return is a KBaseRelationEngine.GetOrthologGroupsOutput
+GetOrthologGroupsParams is a reference to a hash where the following keys are defined:
+	with_term_enrichmnet_profiles has a value which is a KBaseRelationEngine.boolean
+	app_guid has a value which is a string
+boolean is an int
+GetOrthologGroupsOutput is a reference to a hash where the following keys are defined:
+	ortholog_group_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getOrthologGroups
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getOrthologGroups (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getOrthologGroups:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getOrthologGroups');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getOrthologGroups",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getOrthologGroups',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getOrthologGroups",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getOrthologGroups',
+				       );
+    }
+}
+ 
+
+
+=head2 getOrthologTermEnrichmentProfiles
+
+  $return = $obj->getOrthologTermEnrichmentProfiles($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetOrthologTermEnrichmentProfilesParams
+$return is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+GetOrthologTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
+	ortholog_group_guids has a value which is a reference to a list where each element is a string
+	app_guid has a value which is a string
+TermEnrichmentProfile is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	source_gene_set_guid has a value which is a string
+	source_gene_set_type has a value which is a string
+	term_namespace has a value which is a string
+	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+TermEnrichment is a reference to a hash where the following keys are defined:
+	term_guid has a value which is a string
+	term_name has a value which is a string
+	sample_count has a value which is an int
+	total_count has a value which is an int
+	expected_count has a value which is an int
+	p_value has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetOrthologTermEnrichmentProfilesParams
+$return is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+GetOrthologTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
+	ortholog_group_guids has a value which is a reference to a list where each element is a string
+	app_guid has a value which is a string
+TermEnrichmentProfile is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	source_gene_set_guid has a value which is a string
+	source_gene_set_type has a value which is a string
+	term_namespace has a value which is a string
+	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+TermEnrichment is a reference to a hash where the following keys are defined:
+	term_guid has a value which is a string
+	term_name has a value which is a string
+	sample_count has a value which is an int
+	total_count has a value which is an int
+	expected_count has a value which is an int
+	p_value has a value which is a float
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getOrthologTermEnrichmentProfiles
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getOrthologTermEnrichmentProfiles (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getOrthologTermEnrichmentProfiles:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getOrthologTermEnrichmentProfiles');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getOrthologTermEnrichmentProfiles",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getOrthologTermEnrichmentProfiles',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getOrthologTermEnrichmentProfiles",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getOrthologTermEnrichmentProfiles',
+				       );
+    }
+}
+ 
+
+
 =head2 storeWSGenome
 
   $return = $obj->storeWSGenome($params)
@@ -2701,6 +2911,100 @@ term_guids has a value which is a reference to a list where each element is a st
 
 a reference to a hash where the following keys are defined:
 term_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetOrthologGroupsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+with_term_enrichmnet_profiles has a value which is a KBaseRelationEngine.boolean
+app_guid has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+with_term_enrichmnet_profiles has a value which is a KBaseRelationEngine.boolean
+app_guid has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetOrthologGroupsOutput
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+ortholog_group_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+ortholog_group_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetOrthologTermEnrichmentProfilesParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+ortholog_group_guids has a value which is a reference to a list where each element is a string
+app_guid has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+ortholog_group_guids has a value which is a reference to a list where each element is a string
+app_guid has a value which is a string
 
 
 =end text
