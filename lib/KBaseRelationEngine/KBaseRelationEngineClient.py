@@ -234,7 +234,8 @@ class KBaseRelationEngine(object):
         """
         :param params: instance of type
            "GetOrthologTermEnrichmentProfilesParams" -> structure: parameter
-           "ortholog_group_guids" of list of String
+           "ortholog_group_guids" of list of String, parameter "app_guid" of
+           String
         :returns: instance of list of type "TermEnrichmentProfile" ->
            structure: parameter "guid" of String, parameter "keapp_guid" of
            String, parameter "source_gene_set_guid" of String, parameter

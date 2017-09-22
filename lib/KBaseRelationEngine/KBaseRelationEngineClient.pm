@@ -1481,6 +1481,7 @@ $params is a KBaseRelationEngine.GetOrthologTermEnrichmentProfilesParams
 $return is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
 GetOrthologTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
 	ortholog_group_guids has a value which is a reference to a list where each element is a string
+	app_guid has a value which is a string
 TermEnrichmentProfile is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
@@ -1506,6 +1507,7 @@ $params is a KBaseRelationEngine.GetOrthologTermEnrichmentProfilesParams
 $return is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
 GetOrthologTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
 	ortholog_group_guids has a value which is a reference to a list where each element is a string
+	app_guid has a value which is a string
 TermEnrichmentProfile is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	keapp_guid has a value which is a string
@@ -2992,6 +2994,7 @@ ortholog_group_guids has a value which is a reference to a list where each eleme
 <pre>
 a reference to a hash where the following keys are defined:
 ortholog_group_guids has a value which is a reference to a list where each element is a string
+app_guid has a value which is a string
 
 </pre>
 
@@ -3001,6 +3004,7 @@ ortholog_group_guids has a value which is a reference to a list where each eleme
 
 a reference to a hash where the following keys are defined:
 ortholog_group_guids has a value which is a reference to a list where each element is a string
+app_guid has a value which is a string
 
 
 =end text

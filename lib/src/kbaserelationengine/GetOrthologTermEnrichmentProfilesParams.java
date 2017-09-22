@@ -20,12 +20,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "ortholog_group_guids"
+    "ortholog_group_guids",
+    "app_guid"
 })
 public class GetOrthologTermEnrichmentProfilesParams {
 
     @JsonProperty("ortholog_group_guids")
     private List<String> orthologGroupGuids;
+    @JsonProperty("app_guid")
+    private java.lang.String appGuid;
     private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
 
     @JsonProperty("ortholog_group_guids")
@@ -43,6 +46,21 @@ public class GetOrthologTermEnrichmentProfilesParams {
         return this;
     }
 
+    @JsonProperty("app_guid")
+    public java.lang.String getAppGuid() {
+        return appGuid;
+    }
+
+    @JsonProperty("app_guid")
+    public void setAppGuid(java.lang.String appGuid) {
+        this.appGuid = appGuid;
+    }
+
+    public GetOrthologTermEnrichmentProfilesParams withAppGuid(java.lang.String appGuid) {
+        this.appGuid = appGuid;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<java.lang.String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -55,7 +73,7 @@ public class GetOrthologTermEnrichmentProfilesParams {
 
     @Override
     public java.lang.String toString() {
-        return ((((("GetOrthologTermEnrichmentProfilesParams"+" [orthologGroupGuids=")+ orthologGroupGuids)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((("GetOrthologTermEnrichmentProfilesParams"+" [orthologGroupGuids=")+ orthologGroupGuids)+", appGuid=")+ appGuid)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

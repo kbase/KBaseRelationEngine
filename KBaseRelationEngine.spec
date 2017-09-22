@@ -191,6 +191,7 @@ module KBaseRelationEngine {
 	
 	typedef structure{
 		list<string> ortholog_group_guids;
+		string app_guid;
 	}GetOrthologTermEnrichmentProfilesParams;		
 	funcdef getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params) returns(list<TermEnrichmentProfile>)	authentication required;	
 		
