@@ -972,9 +972,9 @@ public class Neo4jDataProvider {
 					+ "--(t:TermEnrichmentProfile)"
 					+ "--(a:KEApp{guid:{appGuid}})"
 					+ " return f.guid, f.name, f.ref_term_guid, t.guid, t.termSpace, t._appGuid, t.termGuids, t.pvalues",					
-					parameters(
-							"fguid", params.getWsFeatureGuid(),
-							"appGuids", params.getKeappGuids()));
+					parameters("",""));
+//							"fguid", params.getWsFeatureGuid(),
+//							"appGuids", params.getKeappGuids()));
 			
 			HashSet<String> allTermGuids = new HashSet<String>();
 			while ( result.hasNext() )
@@ -1009,14 +1009,14 @@ public class Neo4jDataProvider {
 				}				
 			}
 			
-			for( TermEnrichmentProfile p: res.getProfiles()){
-				for(TermEnrichment te: p.getTerms() ){
-					Term t = guid2term.get(te.getTermGuid());
-					if(t != null){
-						te.withTermName(t.getName());
-					}
-				}
-			}
+//			for( TermEnrichmentProfile p: res.getProfiles()){
+//				for(TermEnrichment te: p.getTerms() ){
+//					Term t = guid2term.get(te.getTermGuid());
+//					if(t != null){
+//						te.withTermName(t.getName());
+//					}
+//				}
+//			}
 			
 		}finally {
 			session.close();
