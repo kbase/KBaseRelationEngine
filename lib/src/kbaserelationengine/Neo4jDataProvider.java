@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
@@ -473,6 +474,52 @@ public class Neo4jDataProvider {
 		return stat;	
 	}
 
+	public GraphUpdateStat storeRichWSGenome(StoreRichWSGenomeParams params) {
+		GraphUpdateStat stat = new GraphUpdateStat();		
+		Session session = getSession();
+		Transaction tr = session.beginTransaction();
+		try{
+			// First create genome node
+			StatementResult res;
+			
+			res = tr.run("create(g:WSGenome{guid:{gGuid}, wsId:{wsGuid}}) ",
+					parameters("gGuid", params.getGenomeRef()
+							,"wsGuid", params.getGenomeRef()));					
+			updateCounters(stat, res.consume().counters());			
+			
+			// create features
+			for(WSFeature feature: params.getFeatures()){
+				
+				String refFeatureGuid  = params.getWs2refFeatureGuids().get(feature.getGuid());
+				if(refFeatureGuid==null){
+					refFeatureGuid = "";
+				}
+				
+				res = tr.run(
+					"match(wg:WSGenome{guid:{gGuid}}) "
+					+ " create(wf:WSFeature{guid:{fguid}, name:{fname}, ref_term_guid:{termGuid} }) "
+					+ " with wg,wf "
+					+ " create (wf)-[:MY_GENOME]->(wg) "
+					+ " with wf "
+					+ " match(rf:Feature{guid:{refFeatureGuid}})-[r:MY_ORTHOLOG_GROUP]-(og:OrthologGroup)"
+					+ " CREATE (wf)-[:MY_ORTHOLOG_GROUP]->(og) ",				
+					parameters(
+						"gGuid", params.getGenomeRef()
+						,"fguid", feature.getGuid()
+						,"fname", feature.getName()
+						,"termGuid", feature.getRefTermGuid()
+						,"refFeatureGuid", refFeatureGuid));			
+				updateCounters(stat, res.consume().counters());			
+			}
+			tr.success();
+		} finally {
+			tr.close();
+			session.close();
+		}
+		return stat;	
+	}
+	
+	
 	public GraphUpdateStat connectWSFeatures2RefOrthologs(ConnectWSFeatures2RefOrthologsParams params) {
 		GraphUpdateStat stat = new GraphUpdateStat();		
 		Session session = getSession();
@@ -500,8 +547,29 @@ public class Neo4jDataProvider {
 	}
 
 	public GraphUpdateStat connectWSFeatures2RefOTerms(ConnectWSFeatures2RefOTermsParams params) {
-		// TODO Auto-generated method stub
-		return null;
+		GraphUpdateStat stat = new GraphUpdateStat();		
+		Session session = getSession();
+		Transaction tr = session.beginTransaction();
+		try{
+			for(Entry<String, List<String>> entry: params.getFeature2termList().entrySet()){
+				String wsFeatureGuid = entry.getKey();
+				List<String> termGuids = entry.getValue();
+				
+				// For now, we will just set terms				
+				StatementResult res = tr.run(
+					"match(f:WSFeature{guid:{wsFeatureGuid}}) "
+					+ " set f.termGuids = {termGuids}",
+					parameters(
+						"wsFeatureGuid", wsFeatureGuid
+						,"termGuids", termGuids));			
+				updateCounters(stat, res.consume().counters());			
+			}
+			tr.success();
+		} finally {
+			tr.close();
+			session.close();
+		}
+		return stat;
 	}	
 	
 	public GraphUpdateStat detachDelete(String type, int batchCount, boolean deleteAll) {
@@ -762,6 +830,39 @@ public class Neo4jDataProvider {
 //								.withTotalCount(200L)))						
 //		)));	
 //		System.out.println(stat);
+
+		
+		
+//		String[] wsGuids = new String[]{"ws:111/3/2:1", "ws:111/3/2:2"};
+//		String[] rfGuids = new String[]{"KBaseGen1313", "KBaseGen1312"};
+//		Hashtable<String,String> mm = new Hashtable<String, String>();
+//		for(int i = 0; i < wsGuids.length; i++){
+//			mm.put(wsGuids[i], rfGuids[i]);
+//		}
+//		
+//		GraphUpdateStat stat = new Neo4jDataProvider(null).storeRichWSGenome(new StoreRichWSGenomeParams()
+//				.withGenomeRef("111/3/2")
+//				.withWs2refFeatureGuids(mm)
+//				.withFeatures(Arrays.asList(
+//						new WSFeature()
+//						.withGuid("ws:111/3/2:1")
+//						.withName("name1")
+//						.withRefTermGuid("GO:1231231")
+//						
+//						,new WSFeature()
+//						.withGuid("ws:111/3/2:2")
+//						.withName("name2")
+//						
+//						,new WSFeature()
+//						.withGuid("ws:111/3/2:3")
+//						.withName("name3")
+//						.withRefTermGuid("GO:1231231")
+//						
+//						))
+//		);
+//		System.out.println(stat);		
+		
 		
 	}
+
 }

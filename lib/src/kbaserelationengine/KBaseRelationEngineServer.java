@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "e2e193d8b576eaa95d804b198b61f52a5ee3011b";
+    private static final String gitCommitHash = "e1bb411225f035e8df1f80f121c4e38819e6ee44";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -208,6 +208,23 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
         //BEGIN storeWSGenome
         returnVal = dataProvider.storeWSGenome(params);        
         //END storeWSGenome
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: storeRichWSGenome</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.StoreRichWSGenomeParams StoreRichWSGenomeParams}
+     * @return   instance of type {@link kbaserelationengine.GraphUpdateStat GraphUpdateStat}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.storeRichWSGenome", async=true)
+    public GraphUpdateStat storeRichWSGenome(StoreRichWSGenomeParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GraphUpdateStat returnVal = null;
+        //BEGIN storeRichWSGenome
+    	checkAdmin(authPart);
+    	returnVal = dataProvider.storeRichWSGenome(params);                
+        //END storeRichWSGenome
         return returnVal;
     }
 

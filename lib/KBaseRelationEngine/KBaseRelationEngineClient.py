@@ -181,6 +181,23 @@ class KBaseRelationEngine(object):
             'KBaseRelationEngine.storeWSGenome',
             [params], self._service_ver, context)
 
+    def storeRichWSGenome(self, params, context=None):
+        """
+        :param params: instance of type "StoreRichWSGenomeParams" ->
+           structure: parameter "genome_ref" of type "ws_genome_obj_ref",
+           parameter "features" of list of type "WSFeature" -> structure:
+           parameter "guid" of String, parameter "name" of String, parameter
+           "ref_term_guid" of String, parameter "ws2ref_feature_guids" of
+           mapping from String to String
+        :returns: instance of type "GraphUpdateStat" -> structure: parameter
+           "nodes_created" of Long, parameter "nodes_deleted" of Long,
+           parameter "relationships_created" of Long, parameter
+           "relationships_deleted" of Long, parameter "properties_set" of Long
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.storeRichWSGenome',
+            [params], self._service_ver, context)
+
     def connectWSFeatures2RefOrthologs(self, params, context=None):
         """
         :param params: instance of type
