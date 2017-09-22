@@ -1146,6 +1146,118 @@ GraphUpdateStat is a reference to a hash where the following keys are defined:
  
 
 
+=head2 storeRichWSGenome
+
+  $return = $obj->storeRichWSGenome($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.StoreRichWSGenomeParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreRichWSGenomeParams is a reference to a hash where the following keys are defined:
+	genome_ref has a value which is a KBaseRelationEngine.ws_genome_obj_ref
+	features has a value which is a reference to a list where each element is a KBaseRelationEngine.WSFeature
+	ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
+ws_genome_obj_ref is a string
+WSFeature is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	ref_term_guid has a value which is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
+	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
+	properties_set has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.StoreRichWSGenomeParams
+$return is a KBaseRelationEngine.GraphUpdateStat
+StoreRichWSGenomeParams is a reference to a hash where the following keys are defined:
+	genome_ref has a value which is a KBaseRelationEngine.ws_genome_obj_ref
+	features has a value which is a reference to a list where each element is a KBaseRelationEngine.WSFeature
+	ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
+ws_genome_obj_ref is a string
+WSFeature is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	ref_term_guid has a value which is a string
+GraphUpdateStat is a reference to a hash where the following keys are defined:
+	nodes_created has a value which is an int
+	nodes_deleted has a value which is an int
+	relationships_created has a value which is an int
+	relationships_deleted has a value which is an int
+	properties_set has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub storeRichWSGenome
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function storeRichWSGenome (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to storeRichWSGenome:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'storeRichWSGenome');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.storeRichWSGenome",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'storeRichWSGenome',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeRichWSGenome",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'storeRichWSGenome',
+				       );
+    }
+}
+ 
+
+
 =head2 connectWSFeatures2RefOrthologs
 
   $return = $obj->connectWSFeatures2RefOrthologs($params)
@@ -2133,6 +2245,74 @@ feature_guids has a value which is a reference to a list where each element is a
 a reference to a hash where the following keys are defined:
 genome_ref has a value which is a KBaseRelationEngine.ws_genome_obj_ref
 feature_guids has a value which is a reference to a list where each element is a KBaseRelationEngine.ws_feature_guid
+
+
+=end text
+
+=back
+
+
+
+=head2 WSFeature
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+name has a value which is a string
+ref_term_guid has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+name has a value which is a string
+ref_term_guid has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 StoreRichWSGenomeParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+genome_ref has a value which is a KBaseRelationEngine.ws_genome_obj_ref
+features has a value which is a reference to a list where each element is a KBaseRelationEngine.WSFeature
+ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+genome_ref has a value which is a KBaseRelationEngine.ws_genome_obj_ref
+features has a value which is a reference to a list where each element is a KBaseRelationEngine.WSFeature
+ws2ref_feature_guids has a value which is a reference to a hash where the key is a string and the value is a string
 
 
 =end text

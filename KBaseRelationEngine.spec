@@ -144,6 +144,21 @@ module KBaseRelationEngine {
 	} StoreWSGenomeParams;	
 	funcdef storeWSGenome(StoreWSGenomeParams params) returns (GraphUpdateStat) authentication required;
 
+
+	typedef structure{
+		string guid;
+		string name;
+		string ref_term_guid;
+	} WSFeature;
+	
+	typedef structure{
+		ws_genome_obj_ref genome_ref;
+		list<WSFeature> features;				
+		mapping<string,string> ws2ref_feature_guids;		
+	} StoreRichWSGenomeParams;	
+	funcdef storeRichWSGenome(StoreRichWSGenomeParams params) returns (GraphUpdateStat) authentication required;
+
+
 	typedef structure{
 		mapping<string,string> ws2ref_feature_guids;		
 	} ConnectWSFeatures2RefOrthologsParams;
@@ -154,5 +169,6 @@ module KBaseRelationEngine {
 	} ConnectWSFeatures2RefOTermsParams;
 	funcdef connectWSFeatures2RefOTerms(ConnectWSFeatures2RefOTermsParams params) returns (GraphUpdateStat) authentication required;
 
+	
 	
 };
