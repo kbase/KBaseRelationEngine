@@ -1,6 +1,7 @@
 package kbaserelationengine;
 
 import static org.neo4j.driver.v1.Values.parameters;
+import static org.neo4j.driver.v1.Values.value;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,6 +23,7 @@ import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
 import org.neo4j.driver.v1.Value;
+import org.neo4j.driver.v1.Values;
 import org.neo4j.driver.v1.summary.ResultSummary;
 import org.neo4j.driver.v1.summary.SummaryCounters;
 
@@ -357,27 +359,74 @@ public class Neo4jDataProvider {
 	
 	}
 
+	class CypherWhereBuilder{
+		class Param{
+			String fieldName;
+			String paramName;
+			Object value;
+		}
+		List<Param> params = new ArrayList<Param>();
+		
+		public void init(){
+			params.clear();
+		}
+		
+		public int size(){
+			return params.size();
+		}
+		
+		public void addCondition(String fieldName, String paramName, Object value){
+			Param p = new Param();
+			p.fieldName = fieldName;
+			p.paramName = paramName;
+			p.value = value;
+			params.add(p);
+		}
+		
+		public String toWehreStatement(){
+			StringBuffer sb = new StringBuffer();
+			for(Param p: params){
+				if(sb.length() > 0){
+					sb.append(" and ");
+				}
+				sb.append(" " + p.fieldName + "=" + "{" + p.paramName + "} ");
+			}
+			return sb.toString();
+		}
+		
+		public Value toParameters()
+		{
+			Map<String,Object> ps = new Hashtable<String, Object>();
+			for(Param p: params){
+				ps.put(p.paramName, p.value);
+			}
+			return value(ps);
+		}
+	}
+	
+	
 	public List<Bicluster> getBiclusters(GetBiclustersParams params) {
 		Session session = getSession();
 		List<Bicluster> biclusters = new ArrayList<Bicluster>();
 		try{		
 			
-			String matchStatement = "";
-			Value matchParameters = null;
+			CypherWhereBuilder wb = new CypherWhereBuilder();
 			if(params.getKeappGuid() != null){
-				matchStatement = "match(b:Bicluster{_appGuid:{appGuid}})--(c:Compendium)--(t:Taxon) ";
-				matchParameters = parameters( "appGuid", params.getKeappGuid() );
-			} else if (params.getTaxonomyGuid() != null){
-				matchStatement = "match(t:Taxon{guid:{taxGuid}})--(c:Compendium)--(b:Bicluster) ";
-				matchParameters = parameters( "taxGuid", params.getTaxonomyGuid() );
-			} else if (params.getCompendiumGuid() != null){
-				matchStatement = "match(c:Compendium{guid:{cmpGuid}})--(b:Bicluster), (c)--(t:Taxon) ";
-				matchParameters = parameters( "cmpGuid", params.getCompendiumGuid() );				
+				wb.addCondition("b._appGuid", "appGuid", params.getKeappGuid());
 			}
-			
-			if(matchStatement.length() > 0){
-				String statement = matchStatement + " return b.guid, b._appGuid, b.featureGuids,c.guid,t.guid";
-				StatementResult result = session.run( statement, matchParameters);				
+			if (params.getTaxonomyGuid() != null){
+				wb.addCondition("t.guid", "tGuid", params.getTaxonomyGuid());
+			}
+			if (params.getCompendiumGuid() != null){
+				wb.addCondition("c.guid", "cGuid", params.getCompendiumGuid());
+			}
+						
+			if(wb.size() > 0){
+				String statement =
+						"match(b:Bicluster)--(c:Compendium)--(t:Taxon) "
+						+ " where " + wb.toWehreStatement()
+						+ " return b.guid, b._appGuid, b.featureGuids,c.guid,t.guid";
+				StatementResult result = session.run( statement, wb.toParameters());				
 				while ( result.hasNext() )
 				{
 				    Record record = result.next();
@@ -647,9 +696,9 @@ public class Neo4jDataProvider {
 //		System.out.println(res);
 		
 //		List<Bicluster> items = new Neo4jDataProvider(null).getBiclusters(new GetBiclustersParams()
-//				.withTaxonomyGuid("KBaseTax3163472"));
-////				.withCompendiumGuid("CMP:1505431589412"));
-////				.withKeappGuid("KEApp1"));
+////				.withTaxonomyGuid("KBaseTax3163472"));
+////				.withCompendiumGuid("CMP:1505431589412")
+//				.withKeappGuid("KEApp1"));
 //		for(Bicluster b: items){
 //			System.out.println(b); 
 //		}
