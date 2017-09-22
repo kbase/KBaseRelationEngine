@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "111d7b878f557567a61d48ead557a98076da5d21";
+    private static final String gitCommitHash = "b9b0f8983edf88855b76dabffac03057b3f6a423";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -200,11 +200,11 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
      * <pre>
      * </pre>
      * @param   params   instance of type {@link kbaserelationengine.GetWSFeatureTermPairsParams GetWSFeatureTermPairsParams}
-     * @return   instance of type {@link kbaserelationengine.GetWSFeatureTermPairsOutput GetWSFeatureTermPairsOutput}
+     * @return   instance of list of type {@link kbaserelationengine.WSFeatureTermPair WSFeatureTermPair}
      */
     @JsonServerMethod(rpc = "KBaseRelationEngine.getWSFeatureTermPairs", async=true)
-    public GetWSFeatureTermPairsOutput getWSFeatureTermPairs(GetWSFeatureTermPairsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        GetWSFeatureTermPairsOutput returnVal = null;
+    public List<WSFeatureTermPair> getWSFeatureTermPairs(GetWSFeatureTermPairsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        List<WSFeatureTermPair> returnVal = null;
         //BEGIN getWSFeatureTermPairs
     	returnVal = dataProvider.getWSFeatureTermPairs(params);                        
         //END getWSFeatureTermPairs

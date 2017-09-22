@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
- * <p>Original spec-file type: GetWSFeatureTermPairsOutput</p>
+ * <p>Original spec-file type: WSFeatureTermPair</p>
  * 
  * 
  */
@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "target_term_guid",
     "target_term_name"
 })
-public class GetWSFeatureTermPairsOutput {
+public class WSFeatureTermPair {
 
     @JsonProperty("feature_guid")
     private String featureGuid;
@@ -52,7 +52,7 @@ public class GetWSFeatureTermPairsOutput {
         this.featureGuid = featureGuid;
     }
 
-    public GetWSFeatureTermPairsOutput withFeatureGuid(String featureGuid) {
+    public WSFeatureTermPair withFeatureGuid(String featureGuid) {
         this.featureGuid = featureGuid;
         return this;
     }
@@ -67,7 +67,7 @@ public class GetWSFeatureTermPairsOutput {
         this.featureName = featureName;
     }
 
-    public GetWSFeatureTermPairsOutput withFeatureName(String featureName) {
+    public WSFeatureTermPair withFeatureName(String featureName) {
         this.featureName = featureName;
         return this;
     }
@@ -82,7 +82,7 @@ public class GetWSFeatureTermPairsOutput {
         this.refTermGuid = refTermGuid;
     }
 
-    public GetWSFeatureTermPairsOutput withRefTermGuid(String refTermGuid) {
+    public WSFeatureTermPair withRefTermGuid(String refTermGuid) {
         this.refTermGuid = refTermGuid;
         return this;
     }
@@ -97,7 +97,7 @@ public class GetWSFeatureTermPairsOutput {
         this.refTermName = refTermName;
     }
 
-    public GetWSFeatureTermPairsOutput withRefTermName(String refTermName) {
+    public WSFeatureTermPair withRefTermName(String refTermName) {
         this.refTermName = refTermName;
         return this;
     }
@@ -112,7 +112,7 @@ public class GetWSFeatureTermPairsOutput {
         this.targetTermGuid = targetTermGuid;
     }
 
-    public GetWSFeatureTermPairsOutput withTargetTermGuid(String targetTermGuid) {
+    public WSFeatureTermPair withTargetTermGuid(String targetTermGuid) {
         this.targetTermGuid = targetTermGuid;
         return this;
     }
@@ -127,7 +127,7 @@ public class GetWSFeatureTermPairsOutput {
         this.targetTermName = targetTermName;
     }
 
-    public GetWSFeatureTermPairsOutput withTargetTermName(String targetTermName) {
+    public WSFeatureTermPair withTargetTermName(String targetTermName) {
         this.targetTermName = targetTermName;
         return this;
     }
@@ -144,7 +144,7 @@ public class GetWSFeatureTermPairsOutput {
 
     @Override
     public String toString() {
-        return ((((((((((((((("GetWSFeatureTermPairsOutput"+" [featureGuid=")+ featureGuid)+", featureName=")+ featureName)+", refTermGuid=")+ refTermGuid)+", refTermName=")+ refTermName)+", targetTermGuid=")+ targetTermGuid)+", targetTermName=")+ targetTermName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((("WSFeatureTermPair"+" [featureGuid=")+ featureGuid)+", featureName=")+ featureName)+", refTermGuid=")+ refTermGuid)+", refTermName=")+ refTermName)+", targetTermGuid=")+ targetTermGuid)+", targetTermName=")+ targetTermName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
