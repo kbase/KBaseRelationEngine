@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "e1bb411225f035e8df1f80f121c4e38819e6ee44";
+    private static final String gitCommitHash = "111d7b878f557567a61d48ead557a98076da5d21";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -180,6 +180,38 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     }
 
     /**
+     * <p>Original spec-file function name: getWSFeatureTermEnrichmentProfiles</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetWSFeatureTermEnrichmentProfilesParams GetWSFeatureTermEnrichmentProfilesParams}
+     * @return   instance of type {@link kbaserelationengine.GetWSFeatureTermEnrichmentProfilesOutput GetWSFeatureTermEnrichmentProfilesOutput}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getWSFeatureTermEnrichmentProfiles", async=true)
+    public GetWSFeatureTermEnrichmentProfilesOutput getWSFeatureTermEnrichmentProfiles(GetWSFeatureTermEnrichmentProfilesParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GetWSFeatureTermEnrichmentProfilesOutput returnVal = null;
+        //BEGIN getWSFeatureTermEnrichmentProfiles
+    	returnVal = dataProvider.getWSFeatureTermEnrichmentProfiles(params);                                
+        //END getWSFeatureTermEnrichmentProfiles
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: getWSFeatureTermPairs</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetWSFeatureTermPairsParams GetWSFeatureTermPairsParams}
+     * @return   instance of type {@link kbaserelationengine.GetWSFeatureTermPairsOutput GetWSFeatureTermPairsOutput}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getWSFeatureTermPairs", async=true)
+    public GetWSFeatureTermPairsOutput getWSFeatureTermPairs(GetWSFeatureTermPairsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GetWSFeatureTermPairsOutput returnVal = null;
+        //BEGIN getWSFeatureTermPairs
+    	returnVal = dataProvider.getWSFeatureTermPairs(params);                        
+        //END getWSFeatureTermPairs
+        return returnVal;
+    }
+
+    /**
      * <p>Original spec-file function name: getFeatureTerms</p>
      * <pre>
      * </pre>
@@ -192,6 +224,22 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
         //BEGIN getFeatureTerms
         returnVal = dataProvider.getFeatureTerms(params);
         //END getFeatureTerms
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: getTerms</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetTermsParams GetTermsParams}
+     * @return   instance of list of type {@link kbaserelationengine.Term Term}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getTerms", async=true)
+    public List<Term> getTerms(GetTermsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        List<Term> returnVal = null;
+        //BEGIN getTerms
+        returnVal = dataProvider.getTerms(params);
+        //END getTerms
         return returnVal;
     }
 

@@ -144,8 +144,9 @@ class KBaseRelationEngine(object):
            of String, parameter "source_gene_set_type" of String, parameter
            "term_namespace" of String, parameter "terms" of list of type
            "TermEnrichment" -> structure: parameter "term_guid" of String,
-           parameter "sample_count" of Long, parameter "total_count" of Long,
-           parameter "expected_count" of Long, parameter "p_value" of Double
+           parameter "term_name" of String, parameter "sample_count" of Long,
+           parameter "total_count" of Long, parameter "expected_count" of
+           Long, parameter "p_value" of Double
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
            "nodes_created" of Long, parameter "nodes_deleted" of Long,
            parameter "relationships_created" of Long, parameter
@@ -153,6 +154,44 @@ class KBaseRelationEngine(object):
         """
         return self._client.call_method(
             'KBaseRelationEngine.storeTermEnrichmentProfiles',
+            [params], self._service_ver, context)
+
+    def getWSFeatureTermEnrichmentProfiles(self, params, context=None):
+        """
+        :param params: instance of type
+           "GetWSFeatureTermEnrichmentProfilesParams" -> structure: parameter
+           "ws_feature_guid" of String, parameter "ortholog_profiles" of type
+           "boolean", parameter "keapp_guids" of list of String
+        :returns: instance of type "GetWSFeatureTermEnrichmentProfilesOutput"
+           -> structure: parameter "feature_guid" of String, parameter
+           "feature_name" of String, parameter "ref_term_guid" of String,
+           parameter "ref_term_name" of String, parameter "profiles" of list
+           of type "TermEnrichmentProfile" -> structure: parameter "guid" of
+           String, parameter "keapp_guid" of String, parameter
+           "source_gene_set_guid" of String, parameter "source_gene_set_type"
+           of String, parameter "term_namespace" of String, parameter "terms"
+           of list of type "TermEnrichment" -> structure: parameter
+           "term_guid" of String, parameter "term_name" of String, parameter
+           "sample_count" of Long, parameter "total_count" of Long, parameter
+           "expected_count" of Long, parameter "p_value" of Double
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.getWSFeatureTermEnrichmentProfiles',
+            [params], self._service_ver, context)
+
+    def getWSFeatureTermPairs(self, params, context=None):
+        """
+        :param params: instance of type "GetWSFeatureTermPairsParams" ->
+           structure: parameter "ws_genome_guid" of String, parameter
+           "target_keapp_guid" of String
+        :returns: instance of type "GetWSFeatureTermPairsOutput" ->
+           structure: parameter "feature_guid" of String, parameter
+           "feature_name" of String, parameter "ref_term_guid" of String,
+           parameter "ref_term_name" of String, parameter "target_term_guid"
+           of String, parameter "target_term_name" of String
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.getWSFeatureTermPairs',
             [params], self._service_ver, context)
 
     def getFeatureTerms(self, params, context=None):
@@ -165,6 +204,18 @@ class KBaseRelationEngine(object):
         """
         return self._client.call_method(
             'KBaseRelationEngine.getFeatureTerms',
+            [params], self._service_ver, context)
+
+    def getTerms(self, params, context=None):
+        """
+        :param params: instance of type "GetTermsParams" -> structure:
+           parameter "term_guids" of list of String
+        :returns: instance of list of type "Term" -> structure: parameter
+           "guid" of String, parameter "name" of String, parameter "space" of
+           String
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.getTerms',
             [params], self._service_ver, context)
 
     def storeWSGenome(self, params, context=None):
