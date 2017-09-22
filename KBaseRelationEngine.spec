@@ -146,13 +146,13 @@ module KBaseRelationEngine {
 		string ref_term_name;
 		string target_term_guid;
 		string target_term_name;
-	} GetWSFeatureTermPairsOutput;
+	} WSFeatureTermPair;
 	 
 	typedef structure{
 		string ws_genome_guid;
 		string target_keapp_guid;		
 	}GetWSFeatureTermPairsParams; 		
-	funcdef getWSFeatureTermPairs(GetWSFeatureTermPairsParams params) returns(GetWSFeatureTermPairsOutput) authentication required;
+	funcdef getWSFeatureTermPairs(GetWSFeatureTermPairsParams params) returns(list<WSFeatureTermPair>) authentication required;
 		
 		
 	typedef structure{

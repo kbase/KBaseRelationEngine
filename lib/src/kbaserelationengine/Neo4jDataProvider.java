@@ -869,10 +869,18 @@ public class Neo4jDataProvider {
 //		}
 		
 		
-		GetWSFeatureTermEnrichmentProfilesOutput res = new Neo4jDataProvider(null).getWSFeatureTermEnrichmentProfiles(new GetWSFeatureTermEnrichmentProfilesParams()
-				.withWsFeatureGuid("ws:25582/31/1:feature/PGA1_RS02590")
-				.withKeappGuids(Arrays.asList("KEApp5","KEApp6","KEApp7")));
+//		GetWSFeatureTermEnrichmentProfilesOutput res = new Neo4jDataProvider(null).getWSFeatureTermEnrichmentProfiles(new GetWSFeatureTermEnrichmentProfilesParams()
+//				.withWsFeatureGuid("ws:25582/31/1:feature/PGA1_RS02590")
+//				.withKeappGuids(Arrays.asList("KEApp5","KEApp6","KEApp7")));
+//		System.out.println(res);
+		
+
+		 List<WSFeatureTermPair> res = new Neo4jDataProvider(null).getWSFeatureTermPairs(new GetWSFeatureTermPairsParams()
+				.withWsGenomeGuid("25582/31/1")
+				.withTargetKeappGuid("_test"));
 		System.out.println(res);
+		
+		
 		
 	}
 
@@ -959,39 +967,50 @@ public class Neo4jDataProvider {
 		return res;
 	}
 
-	public GetWSFeatureTermPairsOutput getWSFeatureTermPairs(GetWSFeatureTermPairsParams params) {
-		final String KBASE_PROFILE_APP_GUID = "KEApp7";
-		GetWSFeatureTermPairsOutput res = new GetWSFeatureTermPairsOutput();				
+	public List<WSFeatureTermPair> getWSFeatureTermPairs(GetWSFeatureTermPairsParams params) {
+		List<WSFeatureTermPair> tps = new ArrayList<WSFeatureTermPair>();				
 		Session session = getSession();
 		try{			
 			StatementResult result = session.run( 
 					
 					"match(g:WSGenome{guid:{gGuid}})"
-					+ "(f:WSFeature)"
+					+ "--(f:WSFeature)"
 					+ "--(og:OrthologGroup)"
 					+ "--(t:TermEnrichmentProfile)"
 					+ "--(a:KEApp{guid:{appGuid}})"
-					+ " return f.guid, f.name, f.ref_term_guid, t.guid, t.termSpace, t._appGuid, t.termGuids, t.pvalues",					
-					parameters("",""));
-//							"fguid", params.getWsFeatureGuid(),
-//							"appGuids", params.getKeappGuids()));
+					+ " return f.guid, f.name, f.ref_term_guid, t.termGuids, t.pvalues",					
+					parameters(
+							"gGuid", params.getWsGenomeGuid(),
+							"appGuid", params.getTargetKeappGuid()));
 			
 			HashSet<String> allTermGuids = new HashSet<String>();
 			while ( result.hasNext() )
 			{
 			    Record record = result.next();
-			    res
+			    if( record.get( "f.ref_term_guid" ).isNull() ) continue;
+			    
+			    
+			    List<String> termGuids = new ArrayList(record.get("t.termGuids").asList());			    
+			    List<Double> pValues   = new ArrayList(record.get("t.pvalues").asList());
+			    
+			    String bestTermGuid = termGuids.get(0);
+			    double bestPValue = pValues.get(0);
+			    for(int i = 1; i < pValues.size(); i++){
+			    	if(pValues.get(i) < bestPValue ){
+			    		bestTermGuid = termGuids.get(i);
+			    		bestPValue = pValues.get(i);
+			    	}
+			    }
+			    
+			    WSFeatureTermPair tp = new WSFeatureTermPair()
 			    	.withFeatureGuid(record.get( "f.guid" ).asString())
 			    	.withFeatureName(record.get( "f.name" ).asString())
 			    	.withRefTermGuid(record.get( "f.ref_term_guid" ).isNull()? null: record.get( "f.ref_term_guid" ).asString())
-			    	
-			    	.withFeatureGuid("")
-			    	.withFeatureName("")
-			    	.withRefTermGuid("")
-			    	.withRefTermName("")
-			    	.withTargetTermGuid("");
-			    	
-			
+			    	.withTargetTermGuid(bestTermGuid);
+			    
+			    tps.add(tp);
+			    allTermGuids.add(tp.getRefTermGuid());
+			    allTermGuids.add(tp.getTargetTermGuid());
 			}	
 			
 			// Get GO Term names
@@ -1001,27 +1020,24 @@ public class Neo4jDataProvider {
 			for(Term term: terms){
 				guid2term.put(term.getGuid(), term);
 			}
-			
-			if(res.getRefTermGuid() != null){
-				Term t = guid2term.get(res.getRefTermGuid());
+
+			for( WSFeatureTermPair tp: tps){
+				Term t;
+				t = guid2term.get(tp.getRefTermGuid());
 				if(t != null){
-					res.withRefTermName( t.getName())  ;
-				}				
+					tp.setRefTermName(t.getName()); 
+				}
+				
+				t = guid2term.get(tp.getTargetTermGuid());
+				if(t != null){
+					tp.setTargetTermName(t.getName()); 
+				}
 			}
-			
-//			for( TermEnrichmentProfile p: res.getProfiles()){
-//				for(TermEnrichment te: p.getTerms() ){
-//					Term t = guid2term.get(te.getTermGuid());
-//					if(t != null){
-//						te.withTermName(t.getName());
-//					}
-//				}
-//			}
 			
 		}finally {
 			session.close();
 		}
-		return res;
+		return tps;
 	}
 
 	public List<Term> getTerms(GetTermsParams params) {

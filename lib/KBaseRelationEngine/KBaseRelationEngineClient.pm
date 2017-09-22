@@ -1094,11 +1094,11 @@ TermEnrichment is a reference to a hash where the following keys are defined:
 
 <pre>
 $params is a KBaseRelationEngine.GetWSFeatureTermPairsParams
-$return is a KBaseRelationEngine.GetWSFeatureTermPairsOutput
+$return is a reference to a list where each element is a KBaseRelationEngine.WSFeatureTermPair
 GetWSFeatureTermPairsParams is a reference to a hash where the following keys are defined:
 	ws_genome_guid has a value which is a string
 	target_keapp_guid has a value which is a string
-GetWSFeatureTermPairsOutput is a reference to a hash where the following keys are defined:
+WSFeatureTermPair is a reference to a hash where the following keys are defined:
 	feature_guid has a value which is a string
 	feature_name has a value which is a string
 	ref_term_guid has a value which is a string
@@ -1113,11 +1113,11 @@ GetWSFeatureTermPairsOutput is a reference to a hash where the following keys ar
 =begin text
 
 $params is a KBaseRelationEngine.GetWSFeatureTermPairsParams
-$return is a KBaseRelationEngine.GetWSFeatureTermPairsOutput
+$return is a reference to a list where each element is a KBaseRelationEngine.WSFeatureTermPair
 GetWSFeatureTermPairsParams is a reference to a hash where the following keys are defined:
 	ws_genome_guid has a value which is a string
 	target_keapp_guid has a value which is a string
-GetWSFeatureTermPairsOutput is a reference to a hash where the following keys are defined:
+WSFeatureTermPair is a reference to a hash where the following keys are defined:
 	feature_guid has a value which is a string
 	feature_name has a value which is a string
 	ref_term_guid has a value which is a string
@@ -2509,7 +2509,7 @@ keapp_guids has a value which is a reference to a list where each element is a s
 
 
 
-=head2 GetWSFeatureTermPairsOutput
+=head2 WSFeatureTermPair
 
 =over 4
 

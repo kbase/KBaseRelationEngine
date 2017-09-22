@@ -184,11 +184,11 @@ class KBaseRelationEngine(object):
         :param params: instance of type "GetWSFeatureTermPairsParams" ->
            structure: parameter "ws_genome_guid" of String, parameter
            "target_keapp_guid" of String
-        :returns: instance of type "GetWSFeatureTermPairsOutput" ->
-           structure: parameter "feature_guid" of String, parameter
-           "feature_name" of String, parameter "ref_term_guid" of String,
-           parameter "ref_term_name" of String, parameter "target_term_guid"
-           of String, parameter "target_term_name" of String
+        :returns: instance of list of type "WSFeatureTermPair" -> structure:
+           parameter "feature_guid" of String, parameter "feature_name" of
+           String, parameter "ref_term_guid" of String, parameter
+           "ref_term_name" of String, parameter "target_term_guid" of String,
+           parameter "target_term_name" of String
         """
         return self._client.call_method(
             'KBaseRelationEngine.getWSFeatureTermPairs',
