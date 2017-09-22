@@ -848,6 +848,7 @@ TermEnrichmentProfile is a reference to a hash where the following keys are defi
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 TermEnrichment is a reference to a hash where the following keys are defined:
 	term_guid has a value which is a string
+	term_name has a value which is a string
 	sample_count has a value which is an int
 	total_count has a value which is an int
 	expected_count has a value which is an int
@@ -878,6 +879,7 @@ TermEnrichmentProfile is a reference to a hash where the following keys are defi
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 TermEnrichment is a reference to a hash where the following keys are defined:
 	term_guid has a value which is a string
+	term_name has a value which is a string
 	sample_count has a value which is an int
 	total_count has a value which is an int
 	expected_count has a value which is an int
@@ -942,6 +944,240 @@ GraphUpdateStat is a reference to a hash where the following keys are defined:
         Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method storeTermEnrichmentProfiles",
 					    status_line => $self->{client}->status_line,
 					    method_name => 'storeTermEnrichmentProfiles',
+				       );
+    }
+}
+ 
+
+
+=head2 getWSFeatureTermEnrichmentProfiles
+
+  $return = $obj->getWSFeatureTermEnrichmentProfiles($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetWSFeatureTermEnrichmentProfilesParams
+$return is a KBaseRelationEngine.GetWSFeatureTermEnrichmentProfilesOutput
+GetWSFeatureTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
+	ws_feature_guid has a value which is a string
+	ortholog_profiles has a value which is a KBaseRelationEngine.boolean
+	keapp_guids has a value which is a reference to a list where each element is a string
+boolean is an int
+GetWSFeatureTermEnrichmentProfilesOutput is a reference to a hash where the following keys are defined:
+	feature_guid has a value which is a string
+	feature_name has a value which is a string
+	ref_term_guid has a value which is a string
+	ref_term_name has a value which is a string
+	profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+TermEnrichmentProfile is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	source_gene_set_guid has a value which is a string
+	source_gene_set_type has a value which is a string
+	term_namespace has a value which is a string
+	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+TermEnrichment is a reference to a hash where the following keys are defined:
+	term_guid has a value which is a string
+	term_name has a value which is a string
+	sample_count has a value which is an int
+	total_count has a value which is an int
+	expected_count has a value which is an int
+	p_value has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetWSFeatureTermEnrichmentProfilesParams
+$return is a KBaseRelationEngine.GetWSFeatureTermEnrichmentProfilesOutput
+GetWSFeatureTermEnrichmentProfilesParams is a reference to a hash where the following keys are defined:
+	ws_feature_guid has a value which is a string
+	ortholog_profiles has a value which is a KBaseRelationEngine.boolean
+	keapp_guids has a value which is a reference to a list where each element is a string
+boolean is an int
+GetWSFeatureTermEnrichmentProfilesOutput is a reference to a hash where the following keys are defined:
+	feature_guid has a value which is a string
+	feature_name has a value which is a string
+	ref_term_guid has a value which is a string
+	ref_term_name has a value which is a string
+	profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+TermEnrichmentProfile is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	keapp_guid has a value which is a string
+	source_gene_set_guid has a value which is a string
+	source_gene_set_type has a value which is a string
+	term_namespace has a value which is a string
+	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+TermEnrichment is a reference to a hash where the following keys are defined:
+	term_guid has a value which is a string
+	term_name has a value which is a string
+	sample_count has a value which is an int
+	total_count has a value which is an int
+	expected_count has a value which is an int
+	p_value has a value which is a float
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getWSFeatureTermEnrichmentProfiles
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getWSFeatureTermEnrichmentProfiles (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getWSFeatureTermEnrichmentProfiles:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getWSFeatureTermEnrichmentProfiles');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getWSFeatureTermEnrichmentProfiles",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getWSFeatureTermEnrichmentProfiles',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getWSFeatureTermEnrichmentProfiles",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getWSFeatureTermEnrichmentProfiles',
+				       );
+    }
+}
+ 
+
+
+=head2 getWSFeatureTermPairs
+
+  $return = $obj->getWSFeatureTermPairs($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetWSFeatureTermPairsParams
+$return is a KBaseRelationEngine.GetWSFeatureTermPairsOutput
+GetWSFeatureTermPairsParams is a reference to a hash where the following keys are defined:
+	ws_genome_guid has a value which is a string
+	target_keapp_guid has a value which is a string
+GetWSFeatureTermPairsOutput is a reference to a hash where the following keys are defined:
+	feature_guid has a value which is a string
+	feature_name has a value which is a string
+	ref_term_guid has a value which is a string
+	ref_term_name has a value which is a string
+	target_term_guid has a value which is a string
+	target_term_name has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetWSFeatureTermPairsParams
+$return is a KBaseRelationEngine.GetWSFeatureTermPairsOutput
+GetWSFeatureTermPairsParams is a reference to a hash where the following keys are defined:
+	ws_genome_guid has a value which is a string
+	target_keapp_guid has a value which is a string
+GetWSFeatureTermPairsOutput is a reference to a hash where the following keys are defined:
+	feature_guid has a value which is a string
+	feature_name has a value which is a string
+	ref_term_guid has a value which is a string
+	ref_term_name has a value which is a string
+	target_term_guid has a value which is a string
+	target_term_name has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getWSFeatureTermPairs
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getWSFeatureTermPairs (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getWSFeatureTermPairs:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getWSFeatureTermPairs');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getWSFeatureTermPairs",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getWSFeatureTermPairs',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getWSFeatureTermPairs",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getWSFeatureTermPairs',
 				       );
     }
 }
@@ -1036,6 +1272,100 @@ FeatureTerms is a reference to a hash where the following keys are defined:
         Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getFeatureTerms",
 					    status_line => $self->{client}->status_line,
 					    method_name => 'getFeatureTerms',
+				       );
+    }
+}
+ 
+
+
+=head2 getTerms
+
+  $return = $obj->getTerms($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a KBaseRelationEngine.GetTermsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.Term
+GetTermsParams is a reference to a hash where the following keys are defined:
+	term_guids has a value which is a reference to a list where each element is a string
+Term is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	space has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a KBaseRelationEngine.GetTermsParams
+$return is a reference to a list where each element is a KBaseRelationEngine.Term
+GetTermsParams is a reference to a hash where the following keys are defined:
+	term_guids has a value which is a reference to a list where each element is a string
+Term is a reference to a hash where the following keys are defined:
+	guid has a value which is a string
+	name has a value which is a string
+	space has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub getTerms
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function getTerms (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to getTerms:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'getTerms');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "KBaseRelationEngine.getTerms",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'getTerms',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method getTerms",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'getTerms',
 				       );
     }
 }
@@ -1545,6 +1875,32 @@ sub _validate_version {
 
 
 
+=head2 boolean
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+an int
+</pre>
+
+=end html
+
+=begin text
+
+an int
+
+=end text
+
+=back
+
+
+
 =head2 GraphUpdateStat
 
 =over 4
@@ -1984,6 +2340,7 @@ compendium_guid has a value which is a string
 <pre>
 a reference to a hash where the following keys are defined:
 term_guid has a value which is a string
+term_name has a value which is a string
 sample_count has a value which is an int
 total_count has a value which is an int
 expected_count has a value which is an int
@@ -1997,6 +2354,7 @@ p_value has a value which is a float
 
 a reference to a hash where the following keys are defined:
 term_guid has a value which is a string
+term_name has a value which is a string
 sample_count has a value which is an int
 total_count has a value which is an int
 expected_count has a value which is an int
@@ -2079,6 +2437,150 @@ profiles has a value which is a reference to a list where each element is a KBas
 
 
 
+=head2 GetWSFeatureTermEnrichmentProfilesOutput
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+feature_guid has a value which is a string
+feature_name has a value which is a string
+ref_term_guid has a value which is a string
+ref_term_name has a value which is a string
+profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+feature_guid has a value which is a string
+feature_name has a value which is a string
+ref_term_guid has a value which is a string
+ref_term_name has a value which is a string
+profiles has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichmentProfile
+
+
+=end text
+
+=back
+
+
+
+=head2 GetWSFeatureTermEnrichmentProfilesParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+ws_feature_guid has a value which is a string
+ortholog_profiles has a value which is a KBaseRelationEngine.boolean
+keapp_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+ws_feature_guid has a value which is a string
+ortholog_profiles has a value which is a KBaseRelationEngine.boolean
+keapp_guids has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetWSFeatureTermPairsOutput
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+feature_guid has a value which is a string
+feature_name has a value which is a string
+ref_term_guid has a value which is a string
+ref_term_name has a value which is a string
+target_term_guid has a value which is a string
+target_term_name has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+feature_guid has a value which is a string
+feature_name has a value which is a string
+ref_term_guid has a value which is a string
+ref_term_name has a value which is a string
+target_term_guid has a value which is a string
+target_term_name has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetWSFeatureTermPairsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+ws_genome_guid has a value which is a string
+target_keapp_guid has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+ws_genome_guid has a value which is a string
+target_keapp_guid has a value which is a string
+
+
+=end text
+
+=back
+
+
+
 =head2 FeatureTerms
 
 =over 4
@@ -2135,6 +2637,70 @@ term_space has a value which is a string
 a reference to a hash where the following keys are defined:
 taxon_guid has a value which is a string
 term_space has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 Term
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+name has a value which is a string
+space has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+guid has a value which is a string
+name has a value which is a string
+space has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 GetTermsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+term_guids has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+term_guids has a value which is a reference to a list where each element is a string
 
 
 =end text

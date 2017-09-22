@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "term_guid",
+    "term_name",
     "sample_count",
     "total_count",
     "expected_count",
@@ -29,6 +30,8 @@ public class TermEnrichment {
 
     @JsonProperty("term_guid")
     private String termGuid;
+    @JsonProperty("term_name")
+    private String termName;
     @JsonProperty("sample_count")
     private Long sampleCount;
     @JsonProperty("total_count")
@@ -51,6 +54,21 @@ public class TermEnrichment {
 
     public TermEnrichment withTermGuid(String termGuid) {
         this.termGuid = termGuid;
+        return this;
+    }
+
+    @JsonProperty("term_name")
+    public String getTermName() {
+        return termName;
+    }
+
+    @JsonProperty("term_name")
+    public void setTermName(String termName) {
+        this.termName = termName;
+    }
+
+    public TermEnrichment withTermName(String termName) {
+        this.termName = termName;
         return this;
     }
 
@@ -126,7 +144,7 @@ public class TermEnrichment {
 
     @Override
     public String toString() {
-        return ((((((((((((("TermEnrichment"+" [termGuid=")+ termGuid)+", sampleCount=")+ sampleCount)+", totalCount=")+ totalCount)+", expectedCount=")+ expectedCount)+", pValue=")+ pValue)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((("TermEnrichment"+" [termGuid=")+ termGuid)+", termName=")+ termName)+", sampleCount=")+ sampleCount)+", totalCount=")+ totalCount)+", expectedCount=")+ expectedCount)+", pValue=")+ pValue)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

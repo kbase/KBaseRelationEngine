@@ -862,7 +862,190 @@ public class Neo4jDataProvider {
 //		);
 //		System.out.println(stat);		
 		
+//		List<Term> terms = new Neo4jDataProvider(null).getTerms(new GetTermsParams()
+//				.withTermGuids(Arrays.asList("GO:0000001","GO:0000003")));
+//		for(Term t: terms){
+//			System.out.println(t);
+//		}
 		
+		
+		GetWSFeatureTermEnrichmentProfilesOutput res = new Neo4jDataProvider(null).getWSFeatureTermEnrichmentProfiles(new GetWSFeatureTermEnrichmentProfilesParams()
+				.withWsFeatureGuid("ws:25582/31/1:feature/PGA1_RS02590")
+				.withKeappGuids(Arrays.asList("KEApp5","KEApp6","KEApp7")));
+		System.out.println(res);
+		
+	}
+
+	public GetWSFeatureTermEnrichmentProfilesOutput getWSFeatureTermEnrichmentProfiles(
+			GetWSFeatureTermEnrichmentProfilesParams params) {
+				
+		GetWSFeatureTermEnrichmentProfilesOutput res = new GetWSFeatureTermEnrichmentProfilesOutput();
+		Session session = getSession();
+		try{			
+			StatementResult result = session.run( 
+					
+					"match(f:WSFeature{guid:{fguid}})"
+					+ "--(og:OrthologGroup)"
+					+ "--(t:TermEnrichmentProfile)"
+					+ "--(a:KEApp)"
+					+ " where a.guid in {appGuids}"
+					+ " return f.guid, f.name, f.ref_term_guid, t.guid, t.termSpace, t._appGuid, t.termGuids, t.pvalues",					
+					parameters(
+							"fguid", params.getWsFeatureGuid(),
+							"appGuids", params.getKeappGuids()));
+			
+			HashSet<String> allTermGuids = new HashSet<String>();
+			List<TermEnrichmentProfile> profiles = new ArrayList<TermEnrichmentProfile>();
+			while ( result.hasNext() )
+			{
+			    Record record = result.next();
+			    res
+			    	.withFeatureGuid(record.get( "f.guid" ).asString())
+			    	.withFeatureName(record.get( "f.name" ).asString())
+			    	.withRefTermGuid(record.get( "f.ref_term_guid" ).isNull()? null: record.get( "f.ref_term_guid" ).asString())
+			    	.withRefTermName(null)
+			    	.withProfiles(null);
+			
+			    if(res.getRefTermGuid() != null){
+			    	allTermGuids.add(res.getRefTermGuid());
+			    }
+			    			    			    
+			    TermEnrichmentProfile profile = new TermEnrichmentProfile();
+			    profile.withGuid(record.get( "t.guid" ).asString());
+			    profile.withKeappGuid(record.get( "t._addGuid" ).asString());
+			    profile.withTermNamespace(record.get( "t.termSpace" ).asString());
+			    profile.withTerms(new ArrayList<TermEnrichment>());
+
+			    List<String> termGuids = new ArrayList(record.get("t.termGuids").asList());			    
+			    List<Double> pValues   = new ArrayList(record.get("t.pvalues").asList());
+			    for(int i = 0; i < termGuids.size(); i++){
+				    TermEnrichment te = new TermEnrichment();
+				    te.withTermGuid(termGuids.get(i));
+				    te.withPValue(pValues.get(i));
+				    allTermGuids.add(te.getTermGuid());
+				    profile.getTerms().add(te);
+			    }
+		    	profiles.add(profile);
+			}	
+			res.withProfiles(profiles);
+			
+			// Get GO Term names
+			List<Term> terms = getTerms(new GetTermsParams()
+					.withTermGuids( new ArrayList<String>(allTermGuids)));			
+			Map<String, Term> guid2term = new Hashtable<String,Term>();
+			for(Term term: terms){
+				guid2term.put(term.getGuid(), term);
+			}
+			
+			if(res.getRefTermGuid() != null){
+				Term t = guid2term.get(res.getRefTermGuid());
+				if(t != null){
+					res.withRefTermName( t.getName())  ;
+				}				
+			}
+			
+			for( TermEnrichmentProfile p: res.getProfiles()){
+				for(TermEnrichment te: p.getTerms() ){
+					Term t = guid2term.get(te.getTermGuid());
+					if(t != null){
+						te.withTermName(t.getName());
+					}
+				}
+			}
+			
+		}finally {
+			session.close();
+		}
+		return res;
+	}
+
+	public GetWSFeatureTermPairsOutput getWSFeatureTermPairs(GetWSFeatureTermPairsParams params) {
+		final String KBASE_PROFILE_APP_GUID = "KEApp7";
+		GetWSFeatureTermPairsOutput res = new GetWSFeatureTermPairsOutput();				
+		Session session = getSession();
+		try{			
+			StatementResult result = session.run( 
+					
+					"match(g:WSGenome{guid:{gGuid}})"
+					+ "(f:WSFeature)"
+					+ "--(og:OrthologGroup)"
+					+ "--(t:TermEnrichmentProfile)"
+					+ "--(a:KEApp{guid:{appGuid}})"
+					+ " return f.guid, f.name, f.ref_term_guid, t.guid, t.termSpace, t._appGuid, t.termGuids, t.pvalues",					
+					parameters(
+							"fguid", params.getWsFeatureGuid(),
+							"appGuids", params.getKeappGuids()));
+			
+			HashSet<String> allTermGuids = new HashSet<String>();
+			while ( result.hasNext() )
+			{
+			    Record record = result.next();
+			    res
+			    	.withFeatureGuid(record.get( "f.guid" ).asString())
+			    	.withFeatureName(record.get( "f.name" ).asString())
+			    	.withRefTermGuid(record.get( "f.ref_term_guid" ).isNull()? null: record.get( "f.ref_term_guid" ).asString())
+			    	
+			    	.withFeatureGuid("")
+			    	.withFeatureName("")
+			    	.withRefTermGuid("")
+			    	.withRefTermName("")
+			    	.withTargetTermGuid("");
+			    	
+			
+			}	
+			
+			// Get GO Term names
+			List<Term> terms = getTerms(new GetTermsParams()
+					.withTermGuids( new ArrayList<String>(allTermGuids)));			
+			Map<String, Term> guid2term = new Hashtable<String,Term>();
+			for(Term term: terms){
+				guid2term.put(term.getGuid(), term);
+			}
+			
+			if(res.getRefTermGuid() != null){
+				Term t = guid2term.get(res.getRefTermGuid());
+				if(t != null){
+					res.withRefTermName( t.getName())  ;
+				}				
+			}
+			
+			for( TermEnrichmentProfile p: res.getProfiles()){
+				for(TermEnrichment te: p.getTerms() ){
+					Term t = guid2term.get(te.getTermGuid());
+					if(t != null){
+						te.withTermName(t.getName());
+					}
+				}
+			}
+			
+		}finally {
+			session.close();
+		}
+		return res;
+	}
+
+	public List<Term> getTerms(GetTermsParams params) {
+		List<Term> terms = new ArrayList<Term>();
+		Session session = getSession();
+		try{			
+			StatementResult result = session.run( 					
+					"match(t:GOTerm) where t.guid in {tguids} "
+					+ " return t.guid, t.name, t.space",
+					parameters(
+							"tguids", params.getTermGuids()));
+			
+			while ( result.hasNext() )
+			{
+			    Record record = result.next();
+			    terms.add(new Term()
+			    		.withGuid(record.get( "t.guid" ).asString())
+			    		.withName(record.get( "t.name" ).asString())
+			    		.withSpace(record.get( "t.space" ).asString()));
+			}	
+		}finally {
+			session.close();
+		}
+		return terms;
 	}
 
 }

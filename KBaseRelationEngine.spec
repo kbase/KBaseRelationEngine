@@ -3,7 +3,8 @@ A KBase module: KBaseRelationEngine
 */
 
 module KBaseRelationEngine {
-
+	typedef int boolean;
+	
 	typedef structure{
 		int nodes_created;
 		int nodes_deleted;		
@@ -99,6 +100,7 @@ module KBaseRelationEngine {
 		
 	typedef structure{
 		string term_guid;
+		string term_name;
 		
     	int sample_count;
     	int total_count;
@@ -117,9 +119,41 @@ module KBaseRelationEngine {
 	
 	typedef structure{
 		list<TermEnrichmentProfile> profiles;
-	} StoreTermEnrichmentProfilesParams;
-		
+	} StoreTermEnrichmentProfilesParams;		
 	funcdef storeTermEnrichmentProfiles(StoreTermEnrichmentProfilesParams params) returns(GraphUpdateStat) authentication required;		
+		
+		
+	typedef structure{
+		string feature_guid;
+		string feature_name;
+		string ref_term_guid;
+		string ref_term_name;
+		list<TermEnrichmentProfile> profiles; 
+	} GetWSFeatureTermEnrichmentProfilesOutput;
+		
+	typedef structure{
+		string ws_feature_guid;
+		boolean ortholog_profiles;
+		list<string> keapp_guids;
+	}GetWSFeatureTermEnrichmentProfilesParams;	
+	funcdef getWSFeatureTermEnrichmentProfiles(GetWSFeatureTermEnrichmentProfilesParams params)	returns(GetWSFeatureTermEnrichmentProfilesOutput) authentication required;
+		
+		
+	typedef structure{
+		string feature_guid;
+		string feature_name;
+		string ref_term_guid;
+		string ref_term_name;
+		string target_term_guid;
+		string target_term_name;
+	} GetWSFeatureTermPairsOutput;
+	 
+	typedef structure{
+		string ws_genome_guid;
+		string target_keapp_guid;		
+	}GetWSFeatureTermPairsParams; 		
+	funcdef getWSFeatureTermPairs(GetWSFeatureTermPairsParams params) returns(GetWSFeatureTermPairsOutput) authentication required;
+		
 		
 	typedef structure{
 		string feature_guid;
@@ -132,6 +166,17 @@ module KBaseRelationEngine {
 	} GetFeatureTermsParams;
 	funcdef getFeatureTerms(GetFeatureTermsParams params) returns (list<FeatureTerms>) authentication required;
 			
+			
+	typedef structure{
+		string guid;
+		string name;
+		string space;
+	} Term;		
+		
+	typedef structure{
+		list<string> term_guids;
+	} GetTermsParams;
+	funcdef getTerms(GetTermsParams params) returns(list<Term>) authentication required;
 		
 	typedef string ws_genome_obj_ref;
 	typedef string ws_feature_guid;
