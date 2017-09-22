@@ -875,12 +875,15 @@ public class Neo4jDataProvider {
 //		System.out.println(res);
 		
 
-		 List<WSFeatureTermPair> res = new Neo4jDataProvider(null).getWSFeatureTermPairs(new GetWSFeatureTermPairsParams()
-				.withWsGenomeGuid("25582/31/1")
-				.withTargetKeappGuid("_test"));
+//		 List<WSFeatureTermPair> res = new Neo4jDataProvider(null).getWSFeatureTermPairs(new GetWSFeatureTermPairsParams()
+//				.withWsGenomeGuid("25582/31/1")
+//				.withTargetKeappGuid("_test"));
+//		System.out.println(res);
+		
+		 GetOrthologGroupsOutput res = new Neo4jDataProvider(null).getOrthologGroups(new GetOrthologGroupsParams()
+				 .withAppGuid("KEApp2"));
 		System.out.println(res);
-		
-		
+		System.out.println(res.getOrthologGroupGuids().size());
 		
 	}
 
@@ -1062,6 +1065,37 @@ public class Neo4jDataProvider {
 			session.close();
 		}
 		return terms;
+	}
+
+	public GetOrthologGroupsOutput getOrthologGroups(GetOrthologGroupsParams params) {
+		List<String> orthologGuids = new ArrayList<String>();
+		Session session = getSession();
+		try{			
+			StatementResult result = session.run( 		
+					"match(a:KEApp{guid:{appGuid}})"
+					+ "<-[:MY_APP]-(p:TermEnrichmentProfile)"
+					+ "--(b:Bicluster)"
+					+ "--(f:Feature)"
+					+ "--(og:OrthologGroup) "
+					+ " return distinct og.guid",					
+					parameters(
+							"appGuid", params.getAppGuid()));
+			
+			while ( result.hasNext() )
+			{
+			    Record record = result.next();
+			    orthologGuids.add(record.get( "og.guid" ).asString());
+			}	
+		}finally {
+			session.close();
+		}
+		return  new GetOrthologGroupsOutput().withOrthologGroupGuids(orthologGuids);
+	}
+
+	public List<TermEnrichmentProfile> getOrthologTermEnrichmentProfiles(
+			GetOrthologTermEnrichmentProfilesParams params) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

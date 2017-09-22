@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "b9b0f8983edf88855b76dabffac03057b3f6a423";
+    private static final String gitCommitHash = "587b1b1dafdd5563ebf697177fa06e545dbc16eb";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -240,6 +240,38 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
         //BEGIN getTerms
         returnVal = dataProvider.getTerms(params);
         //END getTerms
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: getOrthologGroups</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetOrthologGroupsParams GetOrthologGroupsParams}
+     * @return   instance of type {@link kbaserelationengine.GetOrthologGroupsOutput GetOrthologGroupsOutput}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getOrthologGroups", async=true)
+    public GetOrthologGroupsOutput getOrthologGroups(GetOrthologGroupsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GetOrthologGroupsOutput returnVal = null;
+        //BEGIN getOrthologGroups
+    	returnVal = dataProvider.getOrthologGroups(params);                                
+        //END getOrthologGroups
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: getOrthologTermEnrichmentProfiles</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetOrthologTermEnrichmentProfilesParams GetOrthologTermEnrichmentProfilesParams}
+     * @return   instance of list of type {@link kbaserelationengine.TermEnrichmentProfile TermEnrichmentProfile}
+     */
+    @JsonServerMethod(rpc = "KBaseRelationEngine.getOrthologTermEnrichmentProfiles", async=true)
+    public List<TermEnrichmentProfile> getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        List<TermEnrichmentProfile> returnVal = null;
+        //BEGIN getOrthologTermEnrichmentProfiles
+    	returnVal = dataProvider.getOrthologTermEnrichmentProfiles(params);                                        
+        //END getOrthologTermEnrichmentProfiles
         return returnVal;
     }
 

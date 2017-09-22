@@ -365,6 +365,40 @@ public class KBaseRelationEngineClient {
     }
 
     /**
+     * <p>Original spec-file function name: getOrthologGroups</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetOrthologGroupsParams GetOrthologGroupsParams}
+     * @return   instance of type {@link kbaserelationengine.GetOrthologGroupsOutput GetOrthologGroupsOutput}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public GetOrthologGroupsOutput getOrthologGroups(GetOrthologGroupsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<GetOrthologGroupsOutput>> retType = new TypeReference<List<GetOrthologGroupsOutput>>() {};
+        List<GetOrthologGroupsOutput> res = caller.jsonrpcCall("KBaseRelationEngine.getOrthologGroups", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: getOrthologTermEnrichmentProfiles</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link kbaserelationengine.GetOrthologTermEnrichmentProfilesParams GetOrthologTermEnrichmentProfilesParams}
+     * @return   instance of list of type {@link kbaserelationengine.TermEnrichmentProfile TermEnrichmentProfile}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public List<TermEnrichmentProfile> getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<List<TermEnrichmentProfile>>> retType = new TypeReference<List<List<TermEnrichmentProfile>>>() {};
+        List<List<TermEnrichmentProfile>> res = caller.jsonrpcCall("KBaseRelationEngine.getOrthologTermEnrichmentProfiles", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: storeWSGenome</p>
      * <pre>
      * </pre>

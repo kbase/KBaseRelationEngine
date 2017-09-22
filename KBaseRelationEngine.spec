@@ -178,10 +178,26 @@ module KBaseRelationEngine {
 	} GetTermsParams;
 	funcdef getTerms(GetTermsParams params) returns(list<Term>) authentication required;
 		
+		
+	typedef structure{
+		boolean with_term_enrichmnet_profiles;
+		string app_guid;
+	} GetOrthologGroupsParams;
+		
+	typedef structure{
+		list<string> ortholog_group_guids;
+	} GetOrthologGroupsOutput;	
+	funcdef getOrthologGroups(GetOrthologGroupsParams params) returns(GetOrthologGroupsOutput) authentication required;
+	
+	typedef structure{
+		list<string> ortholog_group_guids;
+	}GetOrthologTermEnrichmentProfilesParams;		
+	funcdef getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params) returns(list<TermEnrichmentProfile>)	authentication required;	
+		
+		
 	typedef string ws_genome_obj_ref;
 	typedef string ws_feature_guid;
 	typedef string ref_ontology_term_guid;
-
 
 	typedef structure{
 		ws_genome_obj_ref genome_ref;

@@ -218,6 +218,37 @@ class KBaseRelationEngine(object):
             'KBaseRelationEngine.getTerms',
             [params], self._service_ver, context)
 
+    def getOrthologGroups(self, params, context=None):
+        """
+        :param params: instance of type "GetOrthologGroupsParams" ->
+           structure: parameter "with_term_enrichmnet_profiles" of type
+           "boolean", parameter "app_guid" of String
+        :returns: instance of type "GetOrthologGroupsOutput" -> structure:
+           parameter "ortholog_group_guids" of list of String
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.getOrthologGroups',
+            [params], self._service_ver, context)
+
+    def getOrthologTermEnrichmentProfiles(self, params, context=None):
+        """
+        :param params: instance of type
+           "GetOrthologTermEnrichmentProfilesParams" -> structure: parameter
+           "ortholog_group_guids" of list of String
+        :returns: instance of list of type "TermEnrichmentProfile" ->
+           structure: parameter "guid" of String, parameter "keapp_guid" of
+           String, parameter "source_gene_set_guid" of String, parameter
+           "source_gene_set_type" of String, parameter "term_namespace" of
+           String, parameter "terms" of list of type "TermEnrichment" ->
+           structure: parameter "term_guid" of String, parameter "term_name"
+           of String, parameter "sample_count" of Long, parameter
+           "total_count" of Long, parameter "expected_count" of Long,
+           parameter "p_value" of Double
+        """
+        return self._client.call_method(
+            'KBaseRelationEngine.getOrthologTermEnrichmentProfiles',
+            [params], self._service_ver, context)
+
     def storeWSGenome(self, params, context=None):
         """
         :param params: instance of type "StoreWSGenomeParams" -> structure:
