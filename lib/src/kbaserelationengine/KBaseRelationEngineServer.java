@@ -29,7 +29,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "3c6595a756a849e73b9d361c8a31f2622fe86af0";
+    private static final String gitCommitHash = "66c406e170c2c7dcb18c9a296a61d458fbb73330";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();
@@ -264,11 +264,11 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
      * <pre>
      * </pre>
      * @param   params   instance of type {@link kbaserelationengine.GetOrthologTermEnrichmentProfilesParams GetOrthologTermEnrichmentProfilesParams}
-     * @return   instance of list of type {@link kbaserelationengine.TermEnrichmentProfile TermEnrichmentProfile}
+     * @return   instance of type {@link kbaserelationengine.GetOrthologTermEnrichmentProfilesOutput GetOrthologTermEnrichmentProfilesOutput}
      */
     @JsonServerMethod(rpc = "KBaseRelationEngine.getOrthologTermEnrichmentProfiles", async=true)
-    public List<TermEnrichmentProfile> getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        List<TermEnrichmentProfile> returnVal = null;
+    public GetOrthologTermEnrichmentProfilesOutput getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        GetOrthologTermEnrichmentProfilesOutput returnVal = null;
         //BEGIN getOrthologTermEnrichmentProfiles
     	returnVal = dataProvider.getOrthologTermEnrichmentProfiles(params);                                        
         //END getOrthologTermEnrichmentProfiles

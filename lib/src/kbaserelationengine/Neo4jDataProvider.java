@@ -873,14 +873,15 @@ public class Neo4jDataProvider {
 		Session session = getSession();
 		try{			
 			StatementResult result = session.run( 		
-					"match(a:KEApp{guid:{appGuid}})"
+					"match(a:KEApp)"
 					+ "<-[:MY_APP]-(p:TermEnrichmentProfile)"
 					+ "--(b:Bicluster)"
 					+ "--(f:Feature)"
 					+ "--(og:OrthologGroup) "
+					+ " where a.guid in {appGuids}"
 					+ " return distinct og.guid",					
 					parameters(
-							"appGuid", params.getAppGuid()));
+							"appGuids", params.getAppGuids()));
 			
 			while ( result.hasNext() )
 			{
@@ -893,27 +894,37 @@ public class Neo4jDataProvider {
 		return  new GetOrthologGroupsOutput().withOrthologGroupGuids(orthologGuids);
 	}
 
-	public List<TermEnrichmentProfile> getOrthologTermEnrichmentProfiles(
+	public GetOrthologTermEnrichmentProfilesOutput getOrthologTermEnrichmentProfiles(
 			GetOrthologTermEnrichmentProfilesParams params) {
-		List<TermEnrichmentProfile> profiles = new ArrayList<TermEnrichmentProfile>();
+		
+		Map<String,List<TermEnrichmentProfile>> ortholog2profiles = 
+				new Hashtable<String,List<TermEnrichmentProfile>>();
 		Session session = getSession();
 		try{			
 			StatementResult result = session.run( 		
-					"match(a:KEApp{guid:{appGuid}})"
+					"match(a:KEApp)"
 					+ "<-[:MY_APP]-(p:TermEnrichmentProfile)"
 					+ "--(b:Bicluster)"
 					+ "--(f:Feature)"
 					+ "--(og:OrthologGroup) "
-					+ " where og.guid in {ogGuids}"
-					+ " return p.guid, p.termSpace, p._appGuid, "
+					+ " where og.guid in {ogGuids} and a.guid in {appGuids}"
+					+ " return og.guid, "
+					+ " p.guid, p.termSpace, p._appGuid, "
 					+ " p.termGuids, p.pvalues, p.sampleCounts, p.totalCounts",					
 					parameters(
-							"appGuid", params.getAppGuid(),
+							"appGuids", params.getAppGuids(),
 							"ogGuids", params.getOrthologGroupGuids()));
-			
 			while ( result.hasNext() )
 			{
 			    Record record = result.next();
+			    String ogGuid = record.get( "og.guid" ).asString();
+			    List<TermEnrichmentProfile> profiles = ortholog2profiles.get(ogGuid);
+			    if(profiles == null){
+			    	profiles = new ArrayList<TermEnrichmentProfile>();
+			    	ortholog2profiles.put(ogGuid, profiles);
+			    }
+			    
+			    
 			    TermEnrichmentProfile profile = new TermEnrichmentProfile();
 			    profile.withGuid(record.get( "p.guid" ).asString());
 			    profile.withKeappGuid(record.get( "p._appGuid" ).asString());
@@ -938,7 +949,8 @@ public class Neo4jDataProvider {
 		}finally {
 			session.close();
 		}
-		return profiles;		
+		return new GetOrthologTermEnrichmentProfilesOutput()
+				.withOrtholog2profiles(ortholog2profiles);		
 	}
 	public static void main(String[] args) throws IOException {
 //		new Neo4jDataProvider(null).loadReferenceData();
@@ -1132,18 +1144,20 @@ public class Neo4jDataProvider {
 //				.withTargetKeappGuid("_test"));
 //		System.out.println(res);
 		
-//		 GetOrthologGroupsOutput res = new Neo4jDataProvider(null).getOrthologGroups(new GetOrthologGroupsParams()
-//				 .withAppGuid("KEApp2"));
-//		System.out.println(res);
-//		System.out.println(res.getOrthologGroupGuids().size());
+		 GetOrthologGroupsOutput res = new Neo4jDataProvider(null).getOrthologGroups(new GetOrthologGroupsParams()
+				 .withAppGuids(Arrays.asList("KEApp2", "KEApp4")  ));
+		System.out.println(res);
+		System.out.println(res.getOrthologGroupGuids().size());
 		
-		  List<TermEnrichmentProfile> profiles = new Neo4jDataProvider(null).getOrthologTermEnrichmentProfiles(new GetOrthologTermEnrichmentProfilesParams()
-				  .withOrthologGroupGuids(Arrays.asList("KBHgp686499","KBHgp624154"))
-				  .withAppGuid("KEApp2")
-				 );
-		for(TermEnrichmentProfile p: profiles){
-			System.out.println(p);			
-		}
+//		  GetOrthologTermEnrichmentProfilesOutput res = new Neo4jDataProvider(null).getOrthologTermEnrichmentProfiles(new GetOrthologTermEnrichmentProfilesParams()
+//				  .withOrthologGroupGuids(Arrays.asList("KBHgp686499","KBHgp624154"))
+//				  .withAppGuids(Arrays.asList("KEApp2", "KEApp4")  )
+//				 );
+//		for(Entry<String, List<TermEnrichmentProfile>> entry: res.getOrtholog2profiles().entrySet()){
+//			System.out.println(entry.getKey());
+//			System.out.println(entry.getValue());
+//			System.out.println();
+//		}
 //		System.out.println(res);		
 	}
 
