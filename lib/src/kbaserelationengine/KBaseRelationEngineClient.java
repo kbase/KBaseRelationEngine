@@ -386,15 +386,15 @@ public class KBaseRelationEngineClient {
      * <pre>
      * </pre>
      * @param   params   instance of type {@link kbaserelationengine.GetOrthologTermEnrichmentProfilesParams GetOrthologTermEnrichmentProfilesParams}
-     * @return   instance of list of type {@link kbaserelationengine.TermEnrichmentProfile TermEnrichmentProfile}
+     * @return   instance of type {@link kbaserelationengine.GetOrthologTermEnrichmentProfilesOutput GetOrthologTermEnrichmentProfilesOutput}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public List<TermEnrichmentProfile> getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public GetOrthologTermEnrichmentProfilesOutput getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
-        TypeReference<List<List<TermEnrichmentProfile>>> retType = new TypeReference<List<List<TermEnrichmentProfile>>>() {};
-        List<List<TermEnrichmentProfile>> res = caller.jsonrpcCall("KBaseRelationEngine.getOrthologTermEnrichmentProfiles", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        TypeReference<List<GetOrthologTermEnrichmentProfilesOutput>> retType = new TypeReference<List<GetOrthologTermEnrichmentProfilesOutput>>() {};
+        List<GetOrthologTermEnrichmentProfilesOutput> res = caller.jsonrpcCall("KBaseRelationEngine.getOrthologTermEnrichmentProfiles", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

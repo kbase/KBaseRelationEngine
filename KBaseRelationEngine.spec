@@ -181,7 +181,7 @@ module KBaseRelationEngine {
 		
 	typedef structure{
 		boolean with_term_enrichmnet_profiles;
-		string app_guid;
+		list<string> app_guids;
 	} GetOrthologGroupsParams;
 		
 	typedef structure{
@@ -189,11 +189,16 @@ module KBaseRelationEngine {
 	} GetOrthologGroupsOutput;	
 	funcdef getOrthologGroups(GetOrthologGroupsParams params) returns(GetOrthologGroupsOutput) authentication required;
 	
+	
+	typedef structure{
+		mapping<string,list<TermEnrichmentProfile>> ortholog2profiles;
+	} GetOrthologTermEnrichmentProfilesOutput;
+	
 	typedef structure{
 		list<string> ortholog_group_guids;
-		string app_guid;
+		list<string> app_guids;
 	}GetOrthologTermEnrichmentProfilesParams;		
-	funcdef getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params) returns(list<TermEnrichmentProfile>)	authentication required;	
+	funcdef getOrthologTermEnrichmentProfiles(GetOrthologTermEnrichmentProfilesParams params) returns(GetOrthologTermEnrichmentProfilesOutput)	authentication required;	
 		
 		
 	typedef string ws_genome_obj_ref;
