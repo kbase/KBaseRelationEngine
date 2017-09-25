@@ -174,6 +174,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     public GraphUpdateStat storeTermEnrichmentProfiles(StoreTermEnrichmentProfilesParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         GraphUpdateStat returnVal = null;
         //BEGIN storeTermEnrichmentProfiles
+    	checkAdmin(authPart);
         returnVal = dataProvider.storeTermEnrichmentProfiles(params);        
         //END storeTermEnrichmentProfiles
         return returnVal;
@@ -286,6 +287,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     public GraphUpdateStat storeWSGenome(StoreWSGenomeParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         GraphUpdateStat returnVal = null;
         //BEGIN storeWSGenome
+    	checkAdmin(authPart);
         returnVal = dataProvider.storeWSGenome(params);        
         //END storeWSGenome
         return returnVal;
@@ -319,6 +321,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     public GraphUpdateStat connectWSFeatures2RefOrthologs(ConnectWSFeatures2RefOrthologsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         GraphUpdateStat returnVal = null;
         //BEGIN connectWSFeatures2RefOrthologs
+    	checkAdmin(authPart);
         returnVal = dataProvider.connectWSFeatures2RefOrthologs(params);                
         //END connectWSFeatures2RefOrthologs
         return returnVal;
@@ -335,6 +338,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     public GraphUpdateStat connectWSFeatures2RefOTerms(ConnectWSFeatures2RefOTermsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         GraphUpdateStat returnVal = null;
         //BEGIN connectWSFeatures2RefOTerms
+    	checkAdmin(authPart);
         returnVal = dataProvider.connectWSFeatures2RefOTerms(params);                        
         //END connectWSFeatures2RefOTerms
         return returnVal;

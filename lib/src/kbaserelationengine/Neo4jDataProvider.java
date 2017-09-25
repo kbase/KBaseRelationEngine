@@ -1133,21 +1133,30 @@ public class Neo4jDataProvider {
 //		}
 		
 		
-//		GetWSFeatureTermEnrichmentProfilesOutput res = new Neo4jDataProvider(null).getWSFeatureTermEnrichmentProfiles(new GetWSFeatureTermEnrichmentProfilesParams()
-//				.withWsFeatureGuid("ws:25582/31/1:feature/PGA1_RS02590")
-//				.withKeappGuids(Arrays.asList("KEApp5","KEApp6","KEApp7")));
-//		System.out.println(res);
+		GetWSFeatureTermEnrichmentProfilesOutput res = new Neo4jDataProvider(null).getWSFeatureTermEnrichmentProfiles(new GetWSFeatureTermEnrichmentProfilesParams()
+				.withWsFeatureGuid("ws:25582/34/1:feature/PGA1_RS12430")
+				.withKeappGuids(Arrays.asList("KEApp5","KEApp6","KEApp7")));
+		for(TermEnrichmentProfile profile: res.getProfiles()){
+			System.out.println(profile.getKeappGuid());
+			for(TermEnrichment t: profile.getTerms()){
+				System.out.println("\ttermGuid: " + t.getTermGuid());
+				System.out.println("\ttermGuid: " + t.getPValue());
+				System.out.println();
+			}
+		}
 		
 
 //		 List<WSFeatureTermPair> res = new Neo4jDataProvider(null).getWSFeatureTermPairs(new GetWSFeatureTermPairsParams()
 //				.withWsGenomeGuid("25582/31/1")
-//				.withTargetKeappGuid("_test"));
+//				.withTargetKeappGuid("KEApp5"));
 //		System.out.println(res);
 		
-		 GetOrthologGroupsOutput res = new Neo4jDataProvider(null).getOrthologGroups(new GetOrthologGroupsParams()
-				 .withAppGuids(Arrays.asList("KEApp2", "KEApp4")  ));
-		System.out.println(res);
-		System.out.println(res.getOrthologGroupGuids().size());
+		
+//		 GetOrthologGroupsOutput res = new Neo4jDataProvider(null).getOrthologGroups(new GetOrthologGroupsParams()
+//				 .withAppGuids(Arrays.asList("KEApp2", "KEApp4")  ));
+//		System.out.println(res);
+//		System.out.println(res.getOrthologGroupGuids().size());
+
 		
 //		  GetOrthologTermEnrichmentProfilesOutput res = new Neo4jDataProvider(null).getOrthologTermEnrichmentProfiles(new GetOrthologTermEnrichmentProfilesParams()
 //				  .withOrthologGroupGuids(Arrays.asList("KBHgp686499","KBHgp624154"))
