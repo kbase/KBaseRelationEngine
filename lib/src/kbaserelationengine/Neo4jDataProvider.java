@@ -817,8 +817,8 @@ public class Neo4jDataProvider {
 			    	.withFeatureName( toString( record, "f.name")) 
 			    	.withFeatureFunction( toString(record, "f.function") )
 			    	.withFeatureAliases(toStringList(record,"f.feature_aliases") ) 
-			    	.withWithExpression(record.get("t.with_expression").isNull()? 0L : 1L)
-			    	.withWithFitness(record.get("t.with_fitness").isNull()? 0L : 1L)
+			    	.withWithExpression(toLong(record,"t.with_expression"))
+			    	.withWithFitness(toLong(record,"t.with_fitness"))
 			    	.withRefTermGuid(record.get( "f.ref_term_guid" ).isNull()? null: record.get( "f.ref_term_guid" ).asString())
 			    	.withTargetTermGuid(bestTermGuid);
 			    
@@ -852,6 +852,11 @@ public class Neo4jDataProvider {
 			session.close();
 		}
 		return tps;
+	}
+	
+	private Long toLong(Record record, String fname){
+		Value val = record.get(fname);
+		return val.isNull() ? 0L: val.asLong();
 	}
 	
 	private List<String> toStringList(Record record, String fname) {
