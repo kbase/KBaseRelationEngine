@@ -187,10 +187,10 @@ class KBaseRelationEngine(object):
         :returns: instance of list of type "WSFeatureTermPair" -> structure:
            parameter "feature_guid" of String, parameter "feature_name" of
            String, parameter "feature_function" of String, parameter
-           "feature_aliases" of String, parameter "with_expression" of type
-           "boolean", parameter "with_fitness" of type "boolean", parameter
-           "ref_term_guid" of String, parameter "ref_term_name" of String,
-           parameter "target_term_guid" of String, parameter
+           "feature_aliases" of list of String, parameter "with_expression"
+           of type "boolean", parameter "with_fitness" of type "boolean",
+           parameter "ref_term_guid" of String, parameter "ref_term_name" of
+           String, parameter "target_term_guid" of String, parameter
            "target_term_name" of String
         """
         return self._client.call_method(
@@ -274,8 +274,9 @@ class KBaseRelationEngine(object):
            structure: parameter "genome_ref" of type "ws_genome_obj_ref",
            parameter "features" of list of type "WSFeature" -> structure:
            parameter "guid" of String, parameter "name" of String, parameter
-           "ref_term_guid" of String, parameter "ws2ref_feature_guids" of
-           mapping from String to String
+           "function" of String, parameter "aliases" of list of String,
+           parameter "ref_term_guid" of String, parameter
+           "ws2ref_feature_guids" of mapping from String to String
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
            "nodes_created" of Long, parameter "nodes_deleted" of Long,
            parameter "relationships_created" of Long, parameter

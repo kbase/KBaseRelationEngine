@@ -143,7 +143,7 @@ module KBaseRelationEngine {
 		string feature_guid;
 		string feature_name;
 		string feature_function;
-		string feature_aliases;
+		list<string> feature_aliases;
 		boolean with_expression;
 		boolean with_fitness;		
 		string ref_term_guid;
@@ -219,6 +219,8 @@ module KBaseRelationEngine {
 	typedef structure{
 		string guid;
 		string name;
+		string function;
+		list<string> aliases;		
 		string ref_term_guid;
 	} WSFeature;
 	

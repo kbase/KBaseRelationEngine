@@ -497,7 +497,7 @@ public class Neo4jDataProvider {
 				
 				res = tr.run(
 					"match(wg:WSGenome{guid:{gGuid}}) "
-					+ " create(wf:WSFeature{guid:{fguid}, name:{fname}, ref_term_guid:{termGuid} }) "
+					+ " create(wf:WSFeature{guid:{fguid}, name:{fname}, function:{ffunction}, aliases:{faliases}, ref_term_guid:{termGuid} }) "
 					+ " with wg,wf "
 					+ " create (wf)-[:MY_GENOME]->(wg) "
 					+ " with wf "
@@ -507,6 +507,8 @@ public class Neo4jDataProvider {
 						"gGuid", params.getGenomeRef()
 						,"fguid", feature.getGuid()
 						,"fname", feature.getName()
+						,"ffunction", feature.getFunction()
+						, "faliases", feature.getAliases()
 						,"termGuid", feature.getRefTermGuid()
 						,"refFeatureGuid", refFeatureGuid));			
 				updateCounters(stat, res.consume().counters());			
@@ -810,7 +812,7 @@ public class Neo4jDataProvider {
 			    	.withFeatureGuid( toString(record,"f.guid" ))
 			    	.withFeatureName( toString( record, "f.name")) 
 			    	.withFeatureFunction( toString(record, "f.function") )
-			    	.withFeatureAliases(toString(record,"f.feature_aliases") ) 
+			    	.withFeatureAliases(toStringList(record,"f.feature_aliases") ) 
 			    	.withWithExpression(record.get("t.with_expression").isNull()? 0L : 1L)
 			    	.withWithFitness(record.get("t.with_fitness").isNull()? 0L : 1L)
 			    	.withRefTermGuid(record.get( "f.ref_term_guid" ).isNull()? null: record.get( "f.ref_term_guid" ).asString())
@@ -848,6 +850,17 @@ public class Neo4jDataProvider {
 		return tps;
 	}
 	
+	private List<String> toStringList(Record record, String fname) {
+		List<String> items = new ArrayList<String>();		
+		Value val = record.get(fname);
+		if(!val.isNull()){
+			for(Object item :val.asList()){
+				items.add(item.toString());
+			}
+		}
+		return items;
+	}
+
 	public String toString(Record record, String fname){
 		Value val = record.get(fname);
 		return val != null ? val.asString(): null;

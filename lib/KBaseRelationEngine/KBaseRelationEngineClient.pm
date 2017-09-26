@@ -1102,7 +1102,7 @@ WSFeatureTermPair is a reference to a hash where the following keys are defined:
 	feature_guid has a value which is a string
 	feature_name has a value which is a string
 	feature_function has a value which is a string
-	feature_aliases has a value which is a string
+	feature_aliases has a value which is a reference to a list where each element is a string
 	with_expression has a value which is a KBaseRelationEngine.boolean
 	with_fitness has a value which is a KBaseRelationEngine.boolean
 	ref_term_guid has a value which is a string
@@ -1126,7 +1126,7 @@ WSFeatureTermPair is a reference to a hash where the following keys are defined:
 	feature_guid has a value which is a string
 	feature_name has a value which is a string
 	feature_function has a value which is a string
-	feature_aliases has a value which is a string
+	feature_aliases has a value which is a reference to a list where each element is a string
 	with_expression has a value which is a KBaseRelationEngine.boolean
 	with_fitness has a value which is a KBaseRelationEngine.boolean
 	ref_term_guid has a value which is a string
@@ -1721,6 +1721,8 @@ ws_genome_obj_ref is a string
 WSFeature is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	name has a value which is a string
+	function has a value which is a string
+	aliases has a value which is a reference to a list where each element is a string
 	ref_term_guid has a value which is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
@@ -1745,6 +1747,8 @@ ws_genome_obj_ref is a string
 WSFeature is a reference to a hash where the following keys are defined:
 	guid has a value which is a string
 	name has a value which is a string
+	function has a value which is a string
+	aliases has a value which is a reference to a list where each element is a string
 	ref_term_guid has a value which is a string
 GraphUpdateStat is a reference to a hash where the following keys are defined:
 	nodes_created has a value which is an int
@@ -2748,7 +2752,7 @@ a reference to a hash where the following keys are defined:
 feature_guid has a value which is a string
 feature_name has a value which is a string
 feature_function has a value which is a string
-feature_aliases has a value which is a string
+feature_aliases has a value which is a reference to a list where each element is a string
 with_expression has a value which is a KBaseRelationEngine.boolean
 with_fitness has a value which is a KBaseRelationEngine.boolean
 ref_term_guid has a value which is a string
@@ -2766,7 +2770,7 @@ a reference to a hash where the following keys are defined:
 feature_guid has a value which is a string
 feature_name has a value which is a string
 feature_function has a value which is a string
-feature_aliases has a value which is a string
+feature_aliases has a value which is a reference to a list where each element is a string
 with_expression has a value which is a KBaseRelationEngine.boolean
 with_fitness has a value which is a KBaseRelationEngine.boolean
 ref_term_guid has a value which is a string
@@ -3189,6 +3193,8 @@ feature_guids has a value which is a reference to a list where each element is a
 a reference to a hash where the following keys are defined:
 guid has a value which is a string
 name has a value which is a string
+function has a value which is a string
+aliases has a value which is a reference to a list where each element is a string
 ref_term_guid has a value which is a string
 
 </pre>
@@ -3200,6 +3206,8 @@ ref_term_guid has a value which is a string
 a reference to a hash where the following keys are defined:
 guid has a value which is a string
 name has a value which is a string
+function has a value which is a string
+aliases has a value which is a reference to a list where each element is a string
 ref_term_guid has a value which is a string
 
 

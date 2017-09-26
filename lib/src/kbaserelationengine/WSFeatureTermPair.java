@@ -2,6 +2,7 @@
 package kbaserelationengine;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -33,83 +34,83 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class WSFeatureTermPair {
 
     @JsonProperty("feature_guid")
-    private String featureGuid;
+    private java.lang.String featureGuid;
     @JsonProperty("feature_name")
-    private String featureName;
+    private java.lang.String featureName;
     @JsonProperty("feature_function")
-    private String featureFunction;
+    private java.lang.String featureFunction;
     @JsonProperty("feature_aliases")
-    private String featureAliases;
+    private List<String> featureAliases;
     @JsonProperty("with_expression")
     private Long withExpression;
     @JsonProperty("with_fitness")
     private Long withFitness;
     @JsonProperty("ref_term_guid")
-    private String refTermGuid;
+    private java.lang.String refTermGuid;
     @JsonProperty("ref_term_name")
-    private String refTermName;
+    private java.lang.String refTermName;
     @JsonProperty("target_term_guid")
-    private String targetTermGuid;
+    private java.lang.String targetTermGuid;
     @JsonProperty("target_term_name")
-    private String targetTermName;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private java.lang.String targetTermName;
+    private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
 
     @JsonProperty("feature_guid")
-    public String getFeatureGuid() {
+    public java.lang.String getFeatureGuid() {
         return featureGuid;
     }
 
     @JsonProperty("feature_guid")
-    public void setFeatureGuid(String featureGuid) {
+    public void setFeatureGuid(java.lang.String featureGuid) {
         this.featureGuid = featureGuid;
     }
 
-    public WSFeatureTermPair withFeatureGuid(String featureGuid) {
+    public WSFeatureTermPair withFeatureGuid(java.lang.String featureGuid) {
         this.featureGuid = featureGuid;
         return this;
     }
 
     @JsonProperty("feature_name")
-    public String getFeatureName() {
+    public java.lang.String getFeatureName() {
         return featureName;
     }
 
     @JsonProperty("feature_name")
-    public void setFeatureName(String featureName) {
+    public void setFeatureName(java.lang.String featureName) {
         this.featureName = featureName;
     }
 
-    public WSFeatureTermPair withFeatureName(String featureName) {
+    public WSFeatureTermPair withFeatureName(java.lang.String featureName) {
         this.featureName = featureName;
         return this;
     }
 
     @JsonProperty("feature_function")
-    public String getFeatureFunction() {
+    public java.lang.String getFeatureFunction() {
         return featureFunction;
     }
 
     @JsonProperty("feature_function")
-    public void setFeatureFunction(String featureFunction) {
+    public void setFeatureFunction(java.lang.String featureFunction) {
         this.featureFunction = featureFunction;
     }
 
-    public WSFeatureTermPair withFeatureFunction(String featureFunction) {
+    public WSFeatureTermPair withFeatureFunction(java.lang.String featureFunction) {
         this.featureFunction = featureFunction;
         return this;
     }
 
     @JsonProperty("feature_aliases")
-    public String getFeatureAliases() {
+    public List<String> getFeatureAliases() {
         return featureAliases;
     }
 
     @JsonProperty("feature_aliases")
-    public void setFeatureAliases(String featureAliases) {
+    public void setFeatureAliases(List<String> featureAliases) {
         this.featureAliases = featureAliases;
     }
 
-    public WSFeatureTermPair withFeatureAliases(String featureAliases) {
+    public WSFeatureTermPair withFeatureAliases(List<String> featureAliases) {
         this.featureAliases = featureAliases;
         return this;
     }
@@ -145,77 +146,77 @@ public class WSFeatureTermPair {
     }
 
     @JsonProperty("ref_term_guid")
-    public String getRefTermGuid() {
+    public java.lang.String getRefTermGuid() {
         return refTermGuid;
     }
 
     @JsonProperty("ref_term_guid")
-    public void setRefTermGuid(String refTermGuid) {
+    public void setRefTermGuid(java.lang.String refTermGuid) {
         this.refTermGuid = refTermGuid;
     }
 
-    public WSFeatureTermPair withRefTermGuid(String refTermGuid) {
+    public WSFeatureTermPair withRefTermGuid(java.lang.String refTermGuid) {
         this.refTermGuid = refTermGuid;
         return this;
     }
 
     @JsonProperty("ref_term_name")
-    public String getRefTermName() {
+    public java.lang.String getRefTermName() {
         return refTermName;
     }
 
     @JsonProperty("ref_term_name")
-    public void setRefTermName(String refTermName) {
+    public void setRefTermName(java.lang.String refTermName) {
         this.refTermName = refTermName;
     }
 
-    public WSFeatureTermPair withRefTermName(String refTermName) {
+    public WSFeatureTermPair withRefTermName(java.lang.String refTermName) {
         this.refTermName = refTermName;
         return this;
     }
 
     @JsonProperty("target_term_guid")
-    public String getTargetTermGuid() {
+    public java.lang.String getTargetTermGuid() {
         return targetTermGuid;
     }
 
     @JsonProperty("target_term_guid")
-    public void setTargetTermGuid(String targetTermGuid) {
+    public void setTargetTermGuid(java.lang.String targetTermGuid) {
         this.targetTermGuid = targetTermGuid;
     }
 
-    public WSFeatureTermPair withTargetTermGuid(String targetTermGuid) {
+    public WSFeatureTermPair withTargetTermGuid(java.lang.String targetTermGuid) {
         this.targetTermGuid = targetTermGuid;
         return this;
     }
 
     @JsonProperty("target_term_name")
-    public String getTargetTermName() {
+    public java.lang.String getTargetTermName() {
         return targetTermName;
     }
 
     @JsonProperty("target_term_name")
-    public void setTargetTermName(String targetTermName) {
+    public void setTargetTermName(java.lang.String targetTermName) {
         this.targetTermName = targetTermName;
     }
 
-    public WSFeatureTermPair withTargetTermName(String targetTermName) {
+    public WSFeatureTermPair withTargetTermName(java.lang.String targetTermName) {
         this.targetTermName = targetTermName;
         return this;
     }
 
     @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
+    public Map<java.lang.String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
 
     @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
+    public void setAdditionalProperties(java.lang.String name, Object value) {
         this.additionalProperties.put(name, value);
     }
 
     @Override
-    public String toString() {
+    public java.lang.String toString() {
         return ((((((((((((((((((((((("WSFeatureTermPair"+" [featureGuid=")+ featureGuid)+", featureName=")+ featureName)+", featureFunction=")+ featureFunction)+", featureAliases=")+ featureAliases)+", withExpression=")+ withExpression)+", withFitness=")+ withFitness)+", refTermGuid=")+ refTermGuid)+", refTermName=")+ refTermName)+", targetTermGuid=")+ targetTermGuid)+", targetTermName=")+ targetTermName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
