@@ -113,6 +113,8 @@ module KBaseRelationEngine {
 		string keapp_guid;
 		string source_gene_set_guid;
 		string source_gene_set_type;
+		boolean with_expression;
+		boolean with_fitness;				
 		string term_namespace;
 		list<TermEnrichment> terms; 
 	} TermEnrichmentProfile;
@@ -143,7 +145,7 @@ module KBaseRelationEngine {
 		string feature_guid;
 		string feature_name;
 		string feature_function;
-		string feature_aliases;
+		list<string> feature_aliases;
 		boolean with_expression;
 		boolean with_fitness;		
 		string ref_term_guid;
@@ -219,6 +221,8 @@ module KBaseRelationEngine {
 	typedef structure{
 		string guid;
 		string name;
+		string function;
+		list<string> aliases;		
 		string ref_term_guid;
 	} WSFeature;
 	
