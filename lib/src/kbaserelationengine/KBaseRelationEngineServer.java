@@ -13,9 +13,6 @@ import us.kbase.common.service.RpcContext;
 //BEGIN_HEADER
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 //END_HEADER
 
@@ -29,7 +26,7 @@ public class KBaseRelationEngineServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://github.com/psnovichkov/KBaseRelationEngine.git";
-    private static final String gitCommitHash = "66c406e170c2c7dcb18c9a296a61d458fbb73330";
+    private static final String gitCommitHash = "a6cc19a305a44ca9a03d93095479247a61a63c94";
 
     //BEGIN_CLASS_HEADER
     Set<String> admins  = new HashSet<String>();

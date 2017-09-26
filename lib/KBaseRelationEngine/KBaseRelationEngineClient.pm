@@ -1101,10 +1101,15 @@ GetWSFeatureTermPairsParams is a reference to a hash where the following keys ar
 WSFeatureTermPair is a reference to a hash where the following keys are defined:
 	feature_guid has a value which is a string
 	feature_name has a value which is a string
+	feature_function has a value which is a string
+	feature_aliases has a value which is a string
+	with_expression has a value which is a KBaseRelationEngine.boolean
+	with_fitness has a value which is a KBaseRelationEngine.boolean
 	ref_term_guid has a value which is a string
 	ref_term_name has a value which is a string
 	target_term_guid has a value which is a string
 	target_term_name has a value which is a string
+boolean is an int
 
 </pre>
 
@@ -1120,10 +1125,15 @@ GetWSFeatureTermPairsParams is a reference to a hash where the following keys ar
 WSFeatureTermPair is a reference to a hash where the following keys are defined:
 	feature_guid has a value which is a string
 	feature_name has a value which is a string
+	feature_function has a value which is a string
+	feature_aliases has a value which is a string
+	with_expression has a value which is a KBaseRelationEngine.boolean
+	with_fitness has a value which is a KBaseRelationEngine.boolean
 	ref_term_guid has a value which is a string
 	ref_term_name has a value which is a string
 	target_term_guid has a value which is a string
 	target_term_name has a value which is a string
+boolean is an int
 
 
 =end text
@@ -2737,6 +2747,10 @@ keapp_guids has a value which is a reference to a list where each element is a s
 a reference to a hash where the following keys are defined:
 feature_guid has a value which is a string
 feature_name has a value which is a string
+feature_function has a value which is a string
+feature_aliases has a value which is a string
+with_expression has a value which is a KBaseRelationEngine.boolean
+with_fitness has a value which is a KBaseRelationEngine.boolean
 ref_term_guid has a value which is a string
 ref_term_name has a value which is a string
 target_term_guid has a value which is a string
@@ -2751,6 +2765,10 @@ target_term_name has a value which is a string
 a reference to a hash where the following keys are defined:
 feature_guid has a value which is a string
 feature_name has a value which is a string
+feature_function has a value which is a string
+feature_aliases has a value which is a string
+with_expression has a value which is a KBaseRelationEngine.boolean
+with_fitness has a value which is a KBaseRelationEngine.boolean
 ref_term_guid has a value which is a string
 ref_term_name has a value which is a string
 target_term_guid has a value which is a string
