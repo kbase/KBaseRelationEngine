@@ -21,6 +21,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "feature_guid",
     "feature_name",
+    "feature_function",
+    "feature_aliases",
+    "with_expression",
+    "with_fitness",
     "ref_term_guid",
     "ref_term_name",
     "target_term_guid",
@@ -32,6 +36,14 @@ public class WSFeatureTermPair {
     private String featureGuid;
     @JsonProperty("feature_name")
     private String featureName;
+    @JsonProperty("feature_function")
+    private String featureFunction;
+    @JsonProperty("feature_aliases")
+    private String featureAliases;
+    @JsonProperty("with_expression")
+    private Long withExpression;
+    @JsonProperty("with_fitness")
+    private Long withFitness;
     @JsonProperty("ref_term_guid")
     private String refTermGuid;
     @JsonProperty("ref_term_name")
@@ -69,6 +81,66 @@ public class WSFeatureTermPair {
 
     public WSFeatureTermPair withFeatureName(String featureName) {
         this.featureName = featureName;
+        return this;
+    }
+
+    @JsonProperty("feature_function")
+    public String getFeatureFunction() {
+        return featureFunction;
+    }
+
+    @JsonProperty("feature_function")
+    public void setFeatureFunction(String featureFunction) {
+        this.featureFunction = featureFunction;
+    }
+
+    public WSFeatureTermPair withFeatureFunction(String featureFunction) {
+        this.featureFunction = featureFunction;
+        return this;
+    }
+
+    @JsonProperty("feature_aliases")
+    public String getFeatureAliases() {
+        return featureAliases;
+    }
+
+    @JsonProperty("feature_aliases")
+    public void setFeatureAliases(String featureAliases) {
+        this.featureAliases = featureAliases;
+    }
+
+    public WSFeatureTermPair withFeatureAliases(String featureAliases) {
+        this.featureAliases = featureAliases;
+        return this;
+    }
+
+    @JsonProperty("with_expression")
+    public Long getWithExpression() {
+        return withExpression;
+    }
+
+    @JsonProperty("with_expression")
+    public void setWithExpression(Long withExpression) {
+        this.withExpression = withExpression;
+    }
+
+    public WSFeatureTermPair withWithExpression(Long withExpression) {
+        this.withExpression = withExpression;
+        return this;
+    }
+
+    @JsonProperty("with_fitness")
+    public Long getWithFitness() {
+        return withFitness;
+    }
+
+    @JsonProperty("with_fitness")
+    public void setWithFitness(Long withFitness) {
+        this.withFitness = withFitness;
+    }
+
+    public WSFeatureTermPair withWithFitness(Long withFitness) {
+        this.withFitness = withFitness;
         return this;
     }
 
@@ -144,7 +216,7 @@ public class WSFeatureTermPair {
 
     @Override
     public String toString() {
-        return ((((((((((((((("WSFeatureTermPair"+" [featureGuid=")+ featureGuid)+", featureName=")+ featureName)+", refTermGuid=")+ refTermGuid)+", refTermName=")+ refTermName)+", targetTermGuid=")+ targetTermGuid)+", targetTermName=")+ targetTermName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((("WSFeatureTermPair"+" [featureGuid=")+ featureGuid)+", featureName=")+ featureName)+", featureFunction=")+ featureFunction)+", featureAliases=")+ featureAliases)+", withExpression=")+ withExpression)+", withFitness=")+ withFitness)+", refTermGuid=")+ refTermGuid)+", refTermName=")+ refTermName)+", targetTermGuid=")+ targetTermGuid)+", targetTermName=")+ targetTermName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

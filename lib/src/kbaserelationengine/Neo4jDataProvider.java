@@ -782,7 +782,7 @@ public class Neo4jDataProvider {
 					+ "--(og:OrthologGroup)"
 					+ "--(t:TermEnrichmentProfile)"
 					+ "--(a:KEApp{guid:{appGuid}})"
-					+ " return f.guid, f.name, f.ref_term_guid, t.termGuids, t.pvalues",					
+					+ " return f.guid, f.name, f.aliases, f.function, f.ref_term_guid, t.termGuids, t.pvalues, t.with_expression, t.with_fitness",					
 					parameters(
 							"gGuid", params.getWsGenomeGuid(),
 							"appGuid", params.getTargetKeappGuid()));
@@ -805,10 +805,14 @@ public class Neo4jDataProvider {
 			    		bestPValue = pValues.get(i);
 			    	}
 			    }
-			    
+			    //t.with_expression, t.with_fitness
 			    WSFeatureTermPair tp = new WSFeatureTermPair()
-			    	.withFeatureGuid(record.get( "f.guid" ).asString())
-			    	.withFeatureName(record.get( "f.name" ).asString())
+			    	.withFeatureGuid( toString(record,"f.guid" ))
+			    	.withFeatureName( toString( record, "f.name")) 
+			    	.withFeatureFunction( toString(record, "f.function") )
+			    	.withFeatureAliases(toString(record,"f.feature_aliases") ) 
+			    	.withWithExpression(record.get("t.with_expression").isNull()? 0L : 1L)
+			    	.withWithFitness(record.get("t.with_fitness").isNull()? 0L : 1L)
 			    	.withRefTermGuid(record.get( "f.ref_term_guid" ).isNull()? null: record.get( "f.ref_term_guid" ).asString())
 			    	.withTargetTermGuid(bestTermGuid);
 			    
@@ -842,6 +846,11 @@ public class Neo4jDataProvider {
 			session.close();
 		}
 		return tps;
+	}
+	
+	public String toString(Record record, String fname){
+		Value val = record.get(fname);
+		return val != null ? val.asString(): null;
 	}
 
 	public List<Term> getTerms(GetTermsParams params) {
@@ -1133,23 +1142,23 @@ public class Neo4jDataProvider {
 //		}
 		
 		
-		GetWSFeatureTermEnrichmentProfilesOutput res = new Neo4jDataProvider(null).getWSFeatureTermEnrichmentProfiles(new GetWSFeatureTermEnrichmentProfilesParams()
-				.withWsFeatureGuid("ws:25582/34/1:feature/PGA1_RS12430")
-				.withKeappGuids(Arrays.asList("KEApp5","KEApp6","KEApp7")));
-		for(TermEnrichmentProfile profile: res.getProfiles()){
-			System.out.println(profile.getKeappGuid());
-			for(TermEnrichment t: profile.getTerms()){
-				System.out.println("\ttermGuid: " + t.getTermGuid());
-				System.out.println("\ttermGuid: " + t.getPValue());
-				System.out.println();
-			}
-		}
+//		GetWSFeatureTermEnrichmentProfilesOutput res = new Neo4jDataProvider(null).getWSFeatureTermEnrichmentProfiles(new GetWSFeatureTermEnrichmentProfilesParams()
+//				.withWsFeatureGuid("ws:25582/34/1:feature/PGA1_RS12430")
+//				.withKeappGuids(Arrays.asList("KEApp5","KEApp6","KEApp7")));
+//		for(TermEnrichmentProfile profile: res.getProfiles()){
+//			System.out.println(profile.getKeappGuid());
+//			for(TermEnrichment t: profile.getTerms()){
+//				System.out.println("\ttermGuid: " + t.getTermGuid());
+//				System.out.println("\ttermGuid: " + t.getPValue());
+//				System.out.println();
+//			}
+//		}
 		
 
-//		 List<WSFeatureTermPair> res = new Neo4jDataProvider(null).getWSFeatureTermPairs(new GetWSFeatureTermPairsParams()
-//				.withWsGenomeGuid("25582/31/1")
-//				.withTargetKeappGuid("KEApp5"));
-//		System.out.println(res);
+		 List<WSFeatureTermPair> res = new Neo4jDataProvider(null).getWSFeatureTermPairs(new GetWSFeatureTermPairsParams()
+				.withWsGenomeGuid("25582/31/1")
+				.withTargetKeappGuid("KEApp7"));
+		System.out.println(res);
 		
 		
 //		 GetOrthologGroupsOutput res = new Neo4jDataProvider(null).getOrthologGroups(new GetOrthologGroupsParams()

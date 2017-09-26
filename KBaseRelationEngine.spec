@@ -142,6 +142,10 @@ module KBaseRelationEngine {
 	typedef structure{
 		string feature_guid;
 		string feature_name;
+		string feature_function;
+		string feature_aliases;
+		boolean with_expression;
+		boolean with_fitness;		
 		string ref_term_guid;
 		string ref_term_name;
 		string target_term_guid;
