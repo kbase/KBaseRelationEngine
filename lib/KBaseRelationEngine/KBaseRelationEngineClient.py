@@ -142,11 +142,12 @@ class KBaseRelationEngine(object):
            "TermEnrichmentProfile" -> structure: parameter "guid" of String,
            parameter "keapp_guid" of String, parameter "source_gene_set_guid"
            of String, parameter "source_gene_set_type" of String, parameter
-           "term_namespace" of String, parameter "terms" of list of type
-           "TermEnrichment" -> structure: parameter "term_guid" of String,
-           parameter "term_name" of String, parameter "sample_count" of Long,
-           parameter "total_count" of Long, parameter "expected_count" of
-           Long, parameter "p_value" of Double
+           "with_expression" of type "boolean", parameter "with_fitness" of
+           type "boolean", parameter "term_namespace" of String, parameter
+           "terms" of list of type "TermEnrichment" -> structure: parameter
+           "term_guid" of String, parameter "term_name" of String, parameter
+           "sample_count" of Long, parameter "total_count" of Long, parameter
+           "expected_count" of Long, parameter "p_value" of Double
         :returns: instance of type "GraphUpdateStat" -> structure: parameter
            "nodes_created" of Long, parameter "nodes_deleted" of Long,
            parameter "relationships_created" of Long, parameter
@@ -169,11 +170,13 @@ class KBaseRelationEngine(object):
            of type "TermEnrichmentProfile" -> structure: parameter "guid" of
            String, parameter "keapp_guid" of String, parameter
            "source_gene_set_guid" of String, parameter "source_gene_set_type"
-           of String, parameter "term_namespace" of String, parameter "terms"
-           of list of type "TermEnrichment" -> structure: parameter
-           "term_guid" of String, parameter "term_name" of String, parameter
-           "sample_count" of Long, parameter "total_count" of Long, parameter
-           "expected_count" of Long, parameter "p_value" of Double
+           of String, parameter "with_expression" of type "boolean",
+           parameter "with_fitness" of type "boolean", parameter
+           "term_namespace" of String, parameter "terms" of list of type
+           "TermEnrichment" -> structure: parameter "term_guid" of String,
+           parameter "term_name" of String, parameter "sample_count" of Long,
+           parameter "total_count" of Long, parameter "expected_count" of
+           Long, parameter "p_value" of Double
         """
         return self._client.call_method(
             'KBaseRelationEngine.getWSFeatureTermEnrichmentProfiles',
@@ -244,11 +247,13 @@ class KBaseRelationEngine(object):
            to list of type "TermEnrichmentProfile" -> structure: parameter
            "guid" of String, parameter "keapp_guid" of String, parameter
            "source_gene_set_guid" of String, parameter "source_gene_set_type"
-           of String, parameter "term_namespace" of String, parameter "terms"
-           of list of type "TermEnrichment" -> structure: parameter
-           "term_guid" of String, parameter "term_name" of String, parameter
-           "sample_count" of Long, parameter "total_count" of Long, parameter
-           "expected_count" of Long, parameter "p_value" of Double
+           of String, parameter "with_expression" of type "boolean",
+           parameter "with_fitness" of type "boolean", parameter
+           "term_namespace" of String, parameter "terms" of list of type
+           "TermEnrichment" -> structure: parameter "term_guid" of String,
+           parameter "term_name" of String, parameter "sample_count" of Long,
+           parameter "total_count" of Long, parameter "expected_count" of
+           Long, parameter "p_value" of Double
         """
         return self._client.call_method(
             'KBaseRelationEngine.getOrthologTermEnrichmentProfiles',

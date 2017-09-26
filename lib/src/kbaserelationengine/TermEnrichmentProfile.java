@@ -24,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "keapp_guid",
     "source_gene_set_guid",
     "source_gene_set_type",
+    "with_expression",
+    "with_fitness",
     "term_namespace",
     "terms"
 })
@@ -37,6 +39,10 @@ public class TermEnrichmentProfile {
     private String sourceGeneSetGuid;
     @JsonProperty("source_gene_set_type")
     private String sourceGeneSetType;
+    @JsonProperty("with_expression")
+    private Long withExpression;
+    @JsonProperty("with_fitness")
+    private Long withFitness;
     @JsonProperty("term_namespace")
     private String termNamespace;
     @JsonProperty("terms")
@@ -103,6 +109,36 @@ public class TermEnrichmentProfile {
         return this;
     }
 
+    @JsonProperty("with_expression")
+    public Long getWithExpression() {
+        return withExpression;
+    }
+
+    @JsonProperty("with_expression")
+    public void setWithExpression(Long withExpression) {
+        this.withExpression = withExpression;
+    }
+
+    public TermEnrichmentProfile withWithExpression(Long withExpression) {
+        this.withExpression = withExpression;
+        return this;
+    }
+
+    @JsonProperty("with_fitness")
+    public Long getWithFitness() {
+        return withFitness;
+    }
+
+    @JsonProperty("with_fitness")
+    public void setWithFitness(Long withFitness) {
+        this.withFitness = withFitness;
+    }
+
+    public TermEnrichmentProfile withWithFitness(Long withFitness) {
+        this.withFitness = withFitness;
+        return this;
+    }
+
     @JsonProperty("term_namespace")
     public String getTermNamespace() {
         return termNamespace;
@@ -145,7 +181,7 @@ public class TermEnrichmentProfile {
 
     @Override
     public String toString() {
-        return ((((((((((((((("TermEnrichmentProfile"+" [guid=")+ guid)+", keappGuid=")+ keappGuid)+", sourceGeneSetGuid=")+ sourceGeneSetGuid)+", sourceGeneSetType=")+ sourceGeneSetType)+", termNamespace=")+ termNamespace)+", terms=")+ terms)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((("TermEnrichmentProfile"+" [guid=")+ guid)+", keappGuid=")+ keappGuid)+", sourceGeneSetGuid=")+ sourceGeneSetGuid)+", sourceGeneSetType=")+ sourceGeneSetType)+", withExpression=")+ withExpression)+", withFitness=")+ withFitness)+", termNamespace=")+ termNamespace)+", terms=")+ terms)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

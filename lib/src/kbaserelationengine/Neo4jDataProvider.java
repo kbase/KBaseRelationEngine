@@ -508,7 +508,7 @@ public class Neo4jDataProvider {
 						,"fguid", feature.getGuid()
 						,"fname", feature.getName()
 						,"ffunction", feature.getFunction()
-						, "faliases", feature.getAliases()
+						,"faliases", feature.getAliases()
 						,"termGuid", feature.getRefTermGuid()
 						,"refFeatureGuid", refFeatureGuid));			
 				updateCounters(stat, res.consume().counters());			
@@ -619,7 +619,7 @@ public class Neo4jDataProvider {
 					expectedCounts.add(te.getExpectedCount());
 					totalCounts.add(te.getTotalCount());
 				}
-				
+								
 				StatementResult res = tr.run(
 					"create(tp:TermEnrichmentProfile:AppResult{"
 						+ "guid:{tpGuid}"
@@ -630,6 +630,8 @@ public class Neo4jDataProvider {
 						+ ", sampleCounts:{sampleCounts}"
 						+ ", expectedCounts:{expectedCounts}"
 						+ ", totalCounts:{totalCounts}"
+						+ ", with_expression:{with_expression}"
+						+ ", with_fitness:{with_fitness}"
 						+ "})" 
 						+" with tp" 
 						+" match(a:KEApp{guid:{appGuid}})"
@@ -648,6 +650,8 @@ public class Neo4jDataProvider {
 						,"expectedCounts",expectedCounts
 						,"totalCounts",totalCounts
 						,"sGuid", tp.getSourceGeneSetGuid()
+						,"with_expression", tp.getWithExpression()
+						,"with_fitness", tp.getWithFitness()
 					));			
 				updateCounters(stat, res.consume().counters());			
 			}

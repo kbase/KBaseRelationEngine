@@ -113,6 +113,8 @@ module KBaseRelationEngine {
 		string keapp_guid;
 		string source_gene_set_guid;
 		string source_gene_set_type;
+		boolean with_expression;
+		boolean with_fitness;				
 		string term_namespace;
 		list<TermEnrichment> terms; 
 	} TermEnrichmentProfile;

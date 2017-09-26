@@ -844,8 +844,11 @@ TermEnrichmentProfile is a reference to a hash where the following keys are defi
 	keapp_guid has a value which is a string
 	source_gene_set_guid has a value which is a string
 	source_gene_set_type has a value which is a string
+	with_expression has a value which is a KBaseRelationEngine.boolean
+	with_fitness has a value which is a KBaseRelationEngine.boolean
 	term_namespace has a value which is a string
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+boolean is an int
 TermEnrichment is a reference to a hash where the following keys are defined:
 	term_guid has a value which is a string
 	term_name has a value which is a string
@@ -875,8 +878,11 @@ TermEnrichmentProfile is a reference to a hash where the following keys are defi
 	keapp_guid has a value which is a string
 	source_gene_set_guid has a value which is a string
 	source_gene_set_type has a value which is a string
+	with_expression has a value which is a KBaseRelationEngine.boolean
+	with_fitness has a value which is a KBaseRelationEngine.boolean
 	term_namespace has a value which is a string
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+boolean is an int
 TermEnrichment is a reference to a hash where the following keys are defined:
 	term_guid has a value which is a string
 	term_name has a value which is a string
@@ -979,6 +985,8 @@ TermEnrichmentProfile is a reference to a hash where the following keys are defi
 	keapp_guid has a value which is a string
 	source_gene_set_guid has a value which is a string
 	source_gene_set_type has a value which is a string
+	with_expression has a value which is a KBaseRelationEngine.boolean
+	with_fitness has a value which is a KBaseRelationEngine.boolean
 	term_namespace has a value which is a string
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 TermEnrichment is a reference to a hash where the following keys are defined:
@@ -1013,6 +1021,8 @@ TermEnrichmentProfile is a reference to a hash where the following keys are defi
 	keapp_guid has a value which is a string
 	source_gene_set_guid has a value which is a string
 	source_gene_set_type has a value which is a string
+	with_expression has a value which is a KBaseRelationEngine.boolean
+	with_fitness has a value which is a KBaseRelationEngine.boolean
 	term_namespace has a value which is a string
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 TermEnrichment is a reference to a hash where the following keys are defined:
@@ -1499,8 +1509,11 @@ TermEnrichmentProfile is a reference to a hash where the following keys are defi
 	keapp_guid has a value which is a string
 	source_gene_set_guid has a value which is a string
 	source_gene_set_type has a value which is a string
+	with_expression has a value which is a KBaseRelationEngine.boolean
+	with_fitness has a value which is a KBaseRelationEngine.boolean
 	term_namespace has a value which is a string
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+boolean is an int
 TermEnrichment is a reference to a hash where the following keys are defined:
 	term_guid has a value which is a string
 	term_name has a value which is a string
@@ -1527,8 +1540,11 @@ TermEnrichmentProfile is a reference to a hash where the following keys are defi
 	keapp_guid has a value which is a string
 	source_gene_set_guid has a value which is a string
 	source_gene_set_type has a value which is a string
+	with_expression has a value which is a KBaseRelationEngine.boolean
+	with_fitness has a value which is a KBaseRelationEngine.boolean
 	term_namespace has a value which is a string
 	terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
+boolean is an int
 TermEnrichment is a reference to a hash where the following keys are defined:
 	term_guid has a value which is a string
 	term_name has a value which is a string
@@ -2611,6 +2627,8 @@ guid has a value which is a string
 keapp_guid has a value which is a string
 source_gene_set_guid has a value which is a string
 source_gene_set_type has a value which is a string
+with_expression has a value which is a KBaseRelationEngine.boolean
+with_fitness has a value which is a KBaseRelationEngine.boolean
 term_namespace has a value which is a string
 terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 
@@ -2625,6 +2643,8 @@ guid has a value which is a string
 keapp_guid has a value which is a string
 source_gene_set_guid has a value which is a string
 source_gene_set_type has a value which is a string
+with_expression has a value which is a KBaseRelationEngine.boolean
+with_fitness has a value which is a KBaseRelationEngine.boolean
 term_namespace has a value which is a string
 terms has a value which is a reference to a list where each element is a KBaseRelationEngine.TermEnrichment
 
